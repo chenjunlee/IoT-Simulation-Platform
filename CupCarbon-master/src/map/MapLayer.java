@@ -66,6 +66,7 @@ import device.Device;
 import device.DeviceList;
 import device.MapObject;
 import device.DirectionalSensorNode;
+import device.FunctionalSensorNode;
 import device.Mobile;
 import device.NetworkLoader;
 import device.SensorNode;
@@ -362,7 +363,14 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 			repaint();
 		}
-		
+		// create an action for add functional sensor
+		// add by yiwei
+		if (lastKey == '9') {
+			CupAction action = new CupActionAddSensor(new FunctionalSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 60, -1, 30*86400, "general purpose"));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();
 			for(SensorNode sensor : DeviceList.sensors) {

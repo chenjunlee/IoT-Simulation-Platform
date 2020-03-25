@@ -910,4 +910,12 @@ public abstract class Device extends MapObject implements Cloneable {
 		return 0;
 	}
 	
+	// add method get duration and roi
+	public double getSUDuration() {
+		return 30*86400;
+	}
+	
+	public String getSURoi() {
+		return "general purpose";
+	}
 }

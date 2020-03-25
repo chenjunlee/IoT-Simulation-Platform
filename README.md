@@ -1,27 +1,31 @@
 # IoT-Simulation-Platform
 The course project for CS682 UMASS Boston 2020 Spring
 
+## If the program cannot compile and run correctly, rebuild the project with Eclipse at version java 1.8!!!
+### [Modification Log](modification_log.md)
 ## Read Documents to understand how CupCarbon works
-[Link to CupCarbon transmit analysis (draft)](data_transmit.md)
+* [CupCarbon transmit analysis (draft)](data_transmit.md)
 
 
-[Link to CupCarbon send_command diagram](send_command.pdf)
+* [CupCarbon send_command diagram](send_command.pdf)
 
 
-[Link to editable CupCarbon send_command diagram](send_command.drawio)
+* [Editable CupCarbon send_command diagram](send_command.drawio)
 
 
-[Link to CupCarbon send_operation diagram](send_operation.pdf)
+* [CupCarbon send_operation diagram](send_operation.pdf)
 
 
-[Link to editable CupCarbon send_operation diagram](send_operation.drawio)
+* [Editable CupCarbon send_operation diagram](send_operation.drawio)
 
 
-[Link to CupCarbon modules diagram](modules.pdf)
+* [CupCarbon modules diagram](modules.pdf)
 
 
-[Link to editable CupCarbon modules diagram](modules.drawio)
+* [Editable CupCarbon modules diagram](modules.drawio)
 
 
 
-* Use draw.io and import the drawio file to edit the diagram.
+
+
+Use draw.io and import the drawio file to edit the diagram.

@@ -30,6 +30,10 @@ import device.Device;
  */
 public abstract class SensorUnit {
 
+	// region of interest, duration of service
+	// add by yiwei
+	protected double duration = 30 * 86400;
+	protected String regionOfInterest = "general usage";
 	protected double radius = 10;
 	protected double longitude;
 	protected double latitude;
@@ -138,6 +142,15 @@ public abstract class SensorUnit {
 	
 	public double getDirection() {
 		return direction;
+	}
+	
+	// get duration and roi
+	public double getDuration() {
+		return duration;
+	}
+	
+	public String getRegionOfInterest() {
+		return regionOfInterest;
 	}
 	
 	public void setCoverage(double coverage) {

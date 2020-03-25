@@ -836,4 +836,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return getSensorUnit().getDirection();
 	}
 	
+	public double getSUDuration() {
+		return getSensorUnit().getDuration();
+	}
+	
+	public String getSURoi() {
+		return getSensorUnit().getRegionOfInterest();
+	}
+	
 }

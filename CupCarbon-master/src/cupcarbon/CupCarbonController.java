@@ -29,6 +29,8 @@ import action.CupActionModifDeviceRadius;
 import action.CupActionModifDeviceScriptFile;
 import action.CupActionModifDirectionalSensorUnitCoverage;
 import action.CupActionModifDirectionalSensorUnitDirection;
+import action.CupActionModifFunctionalSensorUnitDuraction;
+import action.CupActionModifFunctionalSensorUnitRoi;
 import action.CupActionModifRadioCR;
 import action.CupActionModifRadioCh;
 import action.CupActionModifRadioConsoRxModel;
@@ -134,6 +136,14 @@ public class CupCarbonController implements Initializable {
 	protected FaultInjector faultInjector = null;
 
 	ConsoleWindow console ;
+	
+	// duration and roi
+	// add by yiwei
+	@FXML
+	private TextField suDuration ;
+	
+	@FXML
+	private TextField suRoi ;
 	
 	@FXML
 	private TextField suCoverage ;
@@ -758,7 +768,13 @@ public class CupCarbonController implements Initializable {
 		WorldMap.addNodeInMap('4');
 		mapFocus();
 	}
-
+	// UI interaction method to create functional sensor node
+	// add by yiwei
+	@FXML
+	public void addFunctionalSensor() {
+		WorldMap.addNodeInMap('9');
+		mapFocus();
+	}
 	@FXML
 	public void addBaseStation() {
 		WorldMap.addNodeInMap('5');
@@ -1432,6 +1448,42 @@ public class CupCarbonController implements Initializable {
 		MapLayer.repaint();
 	}
 	
+	// add UI interaction method duration and roi
+	public void suDurationApply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				double currentDuration = sensor.getSensorUnit().getDuration();
+				double sDuration = Double.parseDouble(suDuration.getText());
+				if(sDuration<10) sDuration = 10.0;
+				suDuration.setText(""+sDuration);
+				CupActionModifFunctionalSensorUnitDuraction action = new CupActionModifFunctionalSensorUnitDuraction(sensor, currentDuration,
+						sDuration);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
+	
+	public void suRoiApply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				String currentRoi = sensor.getSensorUnit().getRegionOfInterest();
+				String sRoi = suRoi.getText();
+				if(sRoi == "") sRoi = "general purpose";
+				suRoi.setText(""+sRoi);
+				CupActionModifFunctionalSensorUnitRoi action = new CupActionModifFunctionalSensorUnitRoi(sensor, currentRoi,
+						sRoi);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
 	@FXML
 	public void suCoverageApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -2174,6 +2226,9 @@ public class CupCarbonController implements Initializable {
 					
 					suCoverage.setText("" + currentDevice.getSUCoverage());
 					suDirection.setText("" + currentDevice.getSUDirection());
+					// get duration and roi
+					suDuration.setText("" + currentDevice.getSUDuration());
+					suRoi.setText("" + currentDevice.getSURoi());
 					
 					device_emax.setText("" + currentDevice.getBatteryLevel());
 					device_eSensing.setText("" + currentDevice.getESensing());
