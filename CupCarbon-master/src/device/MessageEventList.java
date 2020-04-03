@@ -104,8 +104,8 @@ public class MessageEventList {
 				// type=2 : Broadcast sending 
 				if ((type == 0) || (type == 2)) {	
 					if (errorBitsOk || (type == 2)) {
-						
-						rSensor.addMessageToBuffer(messageEventList.get(0).getMessage());
+						// set default function for send message to buffer to only add to buffer 1
+						rSensor.addMessageToBuffer(messageEventList.get(0).getMessage(), 1);
 						
 						if(rSensor.getScript().getCurrent().isWait()) {
 							rSensor.setEvent(0);

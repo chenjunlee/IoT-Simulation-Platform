@@ -22,7 +22,8 @@ public class Command_WAIT extends Command {
 	public double execute() {
 		double event = 0 ;
 
-		if (sensor.dataAvailable()) {			
+		// default execute on buffer 1
+		if (sensor.dataAvailable(1)) {			
 			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
 			return 0 ;

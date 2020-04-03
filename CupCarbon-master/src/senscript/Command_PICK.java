@@ -15,7 +15,8 @@ public class Command_PICK extends Command {
 	@Override
 	public double execute() {
 		WisenSimulation.simLog.add("S" + sensor.getId() + " PICK");
-		sensor.pickMessage(arg);
+		// default on pick message on buffer 1
+		sensor.pickMessage(arg,1);
 		return 0 ;
 	}
 

@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -68,11 +69,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected Random rnd = new Random();
 	protected double variation = rnd.nextGaussian();
 		
-	//
-	protected int bufferSize = 102400;//100Ko or 1Mo=1048476;
-	protected int bufferIndex = 0 ;
-	protected byte [] buffer = new byte [bufferSize];
-	protected boolean bufferReady = false;
+	// Buffer List
+	protected ArrayList<Buffer> bufferList = new ArrayList<>();
+	
+	//100Ko or 1Mo=1048476;
+//	protected int bufferSize = 102400;
+//	protected int bufferIndex = 0 ;
+//	protected byte [] buffer = new byte [bufferSize];
+//	protected boolean bufferReady = false;
 	protected double drssi = 0; // rssi in distance (meter)
 	
 	/**
@@ -333,14 +337,15 @@ public abstract class SensorNode extends DeviceWithRadio {
 			drawTheCenter(g, x, y);
 			
 			if (drawBatteryLevel) {
-				battery.draw(g, x, y);
-				g.setColor(UColor.WHITE_LTRANSPARENT);
-				g.fillRect(x-20, y-25, 6, 50);
-				g.setColor(Color.DARK_GRAY);
-				g.fillRect(x-20, y-(int)(bufferIndex*1.0/bufferSize*100./2.)+25, 6, (int)(bufferIndex*1.0/bufferSize*100./2.));
-				if(MapLayer.dark) g.setColor(Color.WHITE);
-				g.drawRect(x-20, y-25, 6, 50);
-				g.drawString("Buffer"+id+": " + bufferIndex+"/"+bufferSize, x-30, y+45);
+				// TODO : battery level
+//				battery.draw(g, x, y);
+//				g.setColor(UColor.WHITE_LTRANSPARENT);
+//				g.fillRect(x-20, y-25, 6, 50);
+//				g.setColor(Color.DARK_GRAY);
+//				g.fillRect(x-20, y-(int)(bufferIndex*1.0/bufferSize*100./2.)+25, 6, (int)(bufferIndex*1.0/bufferSize*100./2.));
+//				if(MapLayer.dark) g.setColor(Color.WHITE);
+//				g.drawRect(x-20, y-25, 6, 50);
+//				g.drawString("Buffer"+id+": " + bufferIndex+"/"+bufferSize, x-30, y+45);
 			}
 			
 			drawId(x, y, g);
@@ -456,25 +461,30 @@ public abstract class SensorNode extends DeviceWithRadio {
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
-	public void addMessageToBuffer(String message) {		
+	public void addMessageToBuffer(String message, int index) {		
 		try {
+			checkbAndCreateBuffer(index);
+			Buffer bufferCls = bufferList.get(index-1);
+			byte[] buffer = bufferCls.getBuffer();
 			for(int i=0; i < message.length(); i++) {
-				buffer[bufferIndex] = (byte) message.charAt(i);
-				bufferIndex++;
-				if(bufferIndex >= bufferSize) {
+				buffer[bufferCls.getIndex()] = (byte) message.charAt(i);
+				bufferCls.incIndex();
+				if(bufferCls.getIndex() >= bufferCls.getSize()) {
 					System.err.println("S"+getId()+": ERROR FULL BUFFER!");
 					break;
 				}
 			}		
-			buffer[bufferIndex] = '\r';
-			bufferIndex++;
+			buffer[bufferCls.getIndex()] = '\r';
+			bufferCls.incIndex();
 		}
 		catch(Exception e) {
 			System.err.println("S"+getId()+" [EMPTY MESSAGE]");
 		}		
 	}
 	
-	public int readMessage(String var) {
+	public int readMessage(String var, int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		byte[] buffer = bufferCls.getBuffer();
 		int i=0;
 		String s ="";
 		while(buffer[i]!='\r') {
@@ -487,26 +497,28 @@ public abstract class SensorNode extends DeviceWithRadio {
 		script.putVariable(var, s);
 
 		int k = 0;
-		for(int j=i+1;j<bufferSize; j++) {
+		for(int j=i+1;j<bufferCls.getSize(); j++) {
 			buffer[k] = buffer[j];
 			k++;
 		}
-		bufferIndex = bufferIndex - (i+1);
-		if(bufferIndex < 0){
-			bufferIndex = 0;
-			bufferReady = false ;
+		bufferCls.setIndex(bufferCls.getIndex() - (i+1));
+		if(bufferCls.getIndex() < 0){
+			bufferCls.setIndex(0);
+			bufferCls.setReady(false);
 		}
 		return i;
 	}
 	
-	public int pickMessage(String var) {
+	public int pickMessage(String var, int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		byte[] buffer = bufferCls.getBuffer();
 		int i=0;
 		String s ="";
 		while(buffer[i]!='\r') {
 			s += (char) buffer[i];
 			i++;
 		}
-		WisenSimulation.simLog.add("S"+getId()+" pick from its buffer \""+s+"\" and put it in "+var);
+		WisenSimulation.simLog.add("S"+getId()+" pick from its buffer \"" +index+ " "+s+"\" and put it in "+var);
 		
 		script.putVariable(var, s);
 
@@ -514,28 +526,49 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	public void initBuffer() {
-		bufferIndex = 0 ;
-		bufferReady = false;	
-		for(int i=0; i<bufferSize; i++) {
-			buffer[i] = '\r';
+		Buffer buffer = new Buffer();
+		buffer.init();
+		bufferList.add(buffer);
+	}
+	
+	// check if buffer exists
+	public void checkbAndCreateBuffer(int index) {
+		int currSize = bufferListSize();
+		if(index > currSize) {
+			addBuffer(index);
 		}
 	}
-	
-	public boolean dataAvailable() {
-		verifyData();
-		return bufferReady;
+	// add a new buffer
+	public void addBuffer(int index) {
+		Buffer newBuffer = new Buffer();
+		newBuffer.init();
+		bufferList.add(newBuffer);
 	}
 	
-	public void verifyData() {
-		if((buffer[0]!='\r') && bufferIndex>0) {
-			bufferReady = true;
+	// BufferList size
+	public int bufferListSize() {
+		return bufferList.size();
+	}
+	
+	public boolean dataAvailable(int index) {
+		verifyData(index);
+		return bufferList.get(index-1).isReady();
+	}
+	
+	public void verifyData(int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		byte[] buffer = bufferCls.getBuffer();
+		if((buffer[0]!='\r') && bufferCls.getIndex()>0) {
+			bufferCls.setReady(true);
 		} 
 		else {
-			bufferReady = false ;
+			bufferCls.setReady(false);
 		}
 	}	
 
-	public int getDataSize() {
+	public int getDataSize(int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		byte[] buffer = bufferCls.getBuffer();
 		int i=0;
 		while(buffer[i]!='\r') {
 			i++;
@@ -566,8 +599,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return false;
 	}
 
-	public byte [] getBuffer() {
-		return buffer;
+	public byte [] getBuffer(int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		return bufferCls.getBuffer();
 	}
 	
 	
@@ -629,8 +663,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 		getCurrentRadioModule().setPl(100);
 	}
 
-	public int getBufferIndex() {
-		return this.bufferIndex ;
+	public int getBufferIndex(int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		return bufferCls.getIndex();
 	}
 
 	@Override
@@ -672,8 +707,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return s ;
 	}	
 		
-	public int getBufferSize() {
-		return bufferSize;
+	public int getBufferSize(int index) {
+		Buffer bufferCls = bufferList.get(index-1);
+		return bufferCls.getSize();
 	}
 
 	public double [] getIntPosition() {

@@ -16,7 +16,8 @@ public class Command_READ extends Command {
 	@Override
 	public double execute() {
 		WisenSimulation.simLog.add("S" + sensor.getId() + " READ");
-		sensor.readMessage(arg);
+		//default read message on buffer 1.
+		sensor.readMessage(arg, 1);
 		return 0 ;
 	}
 

@@ -21,10 +21,12 @@ public class Command_RECEIVE extends Command {
 	public double execute() {		
 		double event = 0 ;
 
-		if (sensor.dataAvailable()) {			
+		// default on receive message on buffer 1.
+		if (sensor.dataAvailable(1)) {			
 			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
-			sensor.readMessage(arg);
+			// default on receive message on buffer 1.
+			sensor.readMessage(arg,1);
 			return 0 ;
 		} 
 		else {

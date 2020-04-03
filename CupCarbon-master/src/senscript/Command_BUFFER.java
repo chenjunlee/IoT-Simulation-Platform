@@ -17,7 +17,8 @@ public class Command_BUFFER extends Command {
 		String v = "" ;
 		WisenSimulation.simLog.add("S" + sensor.getId() + " BUFFER .");
 		//v = sensor.getDataSize()+"";
-		v = sensor.getBufferIndex()+"";
+		// default execute on buffer 1
+		v = sensor.getBufferIndex(1)+"";
 		sensor.getScript().addVariable(arg, v);
 		return 0 ;
 	}
