@@ -7,12 +7,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
@@ -67,7 +67,7 @@ public class MarkerList {
 	public MarkerList() {
 		markers = new LinkedList<Marker>();
 	}
-	
+
 	public static void reset() {
 		if(markers != null) {
 			markers = new LinkedList<Marker>();
@@ -100,7 +100,7 @@ public class MarkerList {
 
 	public static void open(String fileName) {
 		//Routes.reset();
-		reset();		
+		reset();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
@@ -116,10 +116,10 @@ public class MarkerList {
 			}
 			br.close();
 			MapLayer.repaint();
-		} 
+		}
 		catch (FileNotFoundException e) {
 			System.out.println("[MarkerList] No Markers!");
-		} 
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -139,7 +139,7 @@ public class MarkerList {
 
 	/**
 	 * Draw the markers (in red)
-	 * 
+	 *
 	 * @param g
 	 *            Graphical object
 	 */
@@ -168,17 +168,17 @@ public class MarkerList {
 						MapLayer.numberOfInsideAndSelected++;
 					if(marker.isSelected() || marker.isInside())
 						MapLayer.mapViewer.setPanEnabled(false);
-					
+
 					// Draw the marker
 					marker.draw(g);
-					
+
 					if (first) {
 						first = false;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
-						ly1 = coord[1];			
+						ly1 = coord[1];
 						g.setColor(UColor.BLUE3);
 						g.fillOval((int) lx1 - 5, (int) ly1 - 5, (int) 10, (int) 10);
 						g.setColor(UColor.BLUE1);
@@ -191,7 +191,7 @@ public class MarkerList {
 						ly2 = coord[1];
 
 						g.setStroke(new BasicStroke(3f));
-						
+
 						g.setColor(UColor.BLUE2);
 						if(NetworkParameters.drawMarkerArrows)
 							g.setColor(UColor.BLUE4);
@@ -200,7 +200,7 @@ public class MarkerList {
 						}
 						// Draw the link between markers
 						g.drawLine((int) lx1, (int) ly1, (int) lx2, (int) ly2);
-												
+
 						// Draw arrows
 						if(NetworkParameters.drawMarkerArrows) {
 							g.setStroke(new BasicStroke(0.8f));
@@ -213,20 +213,20 @@ public class MarkerList {
 							if ((dx >= 0 && dy >= 0) || (dx >= 0 && dy <= 0))
 								g.fillArc((int) lx2 - 12, (int) ly2 - 12, 12*2, 12*2,180 - (int) alpha - 12, 12*2);
 							else
-								g.fillArc((int) lx2 - 12, (int) ly2 - 12, 12*2, 12*2, -(int) alpha - 12, 12*2);		
+								g.fillArc((int) lx2 - 12, (int) ly2 - 12, 12*2, 12*2, -(int) alpha - 12, 12*2);
 						}
 						if (NetworkParameters.displayMarkerDistance) {
 							MapLayer.drawDistance(x1, y1, 0, x2, y2, 0, g);
 						}
 						totalDistance+=(int)  (int) MapLayer.distance(x1, y1, x2, y2);
-						totalDuration++;						
+						totalDuration++;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
-						ly1 = coord[1];	
-						
-						
+						ly1 = coord[1];
+
+
 					}
 				}
 			}
@@ -245,7 +245,7 @@ public class MarkerList {
 		}
 		return -1;
 	}
-	
+
 	public static int size() {
 		return markers.size();
 	}
@@ -279,7 +279,7 @@ public class MarkerList {
 					el = marker.getElevation() ;
 					ra = marker.getRadius();
 				}
-				ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
+				ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());
 			}
 			if(loop) {
 				ps.println(delay + " " + lo + " " + la + " " + el + " " + ra);
@@ -352,12 +352,12 @@ public class MarkerList {
 		String host = "https://graphhopper.com/api/1/route?";
 		int n1 = 0;
 		int n2 = markers.size();
-		
-		if(n2>2) 
+
+		if(n2>2)
 			n1 = n2-2;
 		for (int i=n1; i<n2; i++) {
 			host += "point=" + markers.get(i).getLatitude() + "," + markers.get(i).getLongitude() + "&";
-		}		
+		}
 		host += "&vehicle=car&locale=de&key=83a9ff19-9dc6-44ff-9f04-70a0500ad0ef&type=gpx";
 
 		try {
@@ -374,10 +374,10 @@ public class MarkerList {
 			}
 			else {
 				SocketAddress sa = new InetSocketAddress(SolverProxyParams.host, Integer.parseInt(SolverProxyParams.port));
-				Proxy proxy = new Proxy(Proxy.Type.HTTP, sa);			
+				Proxy proxy = new Proxy(Proxy.Type.HTTP, sa);
 				uc = url.openConnection(proxy);
 			}
-			
+
 			uc.setRequestProperty("User-Agent", "CupCarbon");
 
 			InputStream in = uc.getInputStream();
@@ -398,14 +398,14 @@ public class MarkerList {
 
 	public static void gpxToMarkers() {
 		CupActionBlock block = new CupActionBlock();
-		
+
 		LinkedList<Marker> nMarkers = new LinkedList<Marker>(markers);
 		nMarkers.removeLast();
-		
+
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("gpx/tmp.gpx"));
 			while(!br.readLine().startsWith("<trkpt")) {}
-				
+
 			String[] st ;
 			String s ;
 			while((s=br.readLine()).startsWith("<trkpt")) {
@@ -417,7 +417,7 @@ public class MarkerList {
 			f.delete();
 			f = new File("gpx");
 			f.delete();
-			
+
 			CupAction action = new CupActionRouteFromMarkers(markers, nMarkers);
 			block.addAction(action);
 			CupActionStack.add(block);
@@ -426,7 +426,7 @@ public class MarkerList {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void insertMarkers() {
 		ArrayList<Integer> iList = new ArrayList<Integer>();
 		for (int i = 0; i < markers.size()-1; i++) {
@@ -435,14 +435,14 @@ public class MarkerList {
 			}
 		}
 		if(iList.size()>0) {
-			CupAction action = new CupActionInsertMarker(iList);		
+			CupAction action = new CupActionInsertMarker(iList);
 			CupActionBlock block = new CupActionBlock();
 			block.addAction(action);
 			CupActionStack.add(block);
 			CupActionStack.execute();
 		}
 	}
-	
+
 	public static void selectNextMarkers() {
 		for(int i=0; i<markers.size(); i++) {
 			if(markers.get(i).isSelected() && !markers.get(i+1).isSelected()) {
@@ -451,7 +451,7 @@ public class MarkerList {
 			}
 		}
 	}
-	
+
 	public static void insertMarkers2() {
 		int n = markers.size()-1;
 		for (int i = 0; i < n; i++) {
@@ -459,10 +459,10 @@ public class MarkerList {
 				MapLayer.addMarker(i*2+1,Marker.getCentre(markers.get(i*2),MarkerList.get(i*2+1),true));
 		}
 	}
-		
+
 	public static void transformMarkersToSensors() {
 		if(markers.size()>0) {
-			CupActionBlock block = new CupActionBlock();		
+			CupActionBlock block = new CupActionBlock();
 			for (int i = 0; i < markers.size(); i++) {
 				Marker marker = markers.get(i);
 				if(marker.isSelected()) {
@@ -476,29 +476,29 @@ public class MarkerList {
 			}
 		}
 	}
-	
+
 	public static void deselectAll() {
 		for(Marker marker : markers) {
 			marker.setSelected(false);
 		}
 	}
-	
+
 	public static void selectAll() {
 		for(Marker marker : markers) {
 			marker.setSelected(true);
 		}
 	}
-	
+
 	public static void delete(Marker marker) {
 		Marker tMarker;
 		for (Iterator<Marker> iterator = MarkerList.markers.iterator(); iterator.hasNext();) {
 			tMarker = iterator.next();
 			if (tMarker == marker) {
-				iterator.remove();				
+				iterator.remove();
 			}
 		}
-		if(DeviceList.propagationsCalculated)			
+		if(DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 	}
-	
+
 }
