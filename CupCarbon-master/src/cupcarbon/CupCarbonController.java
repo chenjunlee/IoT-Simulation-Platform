@@ -1,6 +1,7 @@
 package cupcarbon;
 
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import action.CupAction;
 import action.CupActionAddRadioModule;
 import action.CupActionBlock;
+import action.CupActionDeleteDevice;
 import action.CupActionDeleteRadioModule;
 import action.CupActionModifDeviceElevation;
 import action.CupActionModifDeviceGpsFile;
@@ -126,93 +128,132 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import utilities.MapCalc;
 import visibility.VisibilityLauncher;
+import user.User;
+import user.UserList;
 
 public class CupCarbonController implements Initializable {
-	
+
 	private WorldMap map = null;
 
 	protected FaultInjector faultInjector = null;
 
 	ConsoleWindow console ;
-	
+
+
+	//=========================== Bang Tran
+	@FXML
+	private ComboBox<String> comboBoxEncryptedOption;
+	@FXML
+	private ComboBox<String> comboUsers;
+	@FXML
+	private TextField txtLatency;
+	@FXML
+	private TextField txtThroughput;
+	@FXML
+	private CheckBox checkboxTemperatureSens;
+	@FXML
+	private CheckBox checkboxHumiditySens;
+	@FXML
+	private CheckBox checkboxGasSens;
+	@FXML
+	private CheckBox checkboxLightSens;
+	@FXML
+	private CheckBox checkboxWindLevelSens;
+	@FXML
+	private CheckBox checkboxWaterLevelSens;
+	@FXML
+	private Button buttonClearConcernedArea;
+	@FXML
+	private Button buttonSetConcernedArea;
+	@FXML
+	private ListView<String> listViewConcernedSensors;
+
+	@FXML
+	public Button buttonSaveUserPreferences;
+	@FXML
+	public Button buttonRunSimulationCS682;
+	@FXML
+	public Button buttonGenerateSenScripts;
+	//=========================== Bang Tran
+
 	@FXML
 	private TextField suCoverage ;
-	
+
 	@FXML
 	private TextField suDirection ;
-	
+
 	@FXML
 	private Label labelInfo1 ;
-	
+
 	@FXML
 	private Label labelInfo2 ;
-	
+
 	@FXML
 	private Label labelInfo3 ;
-	
+
 	@FXML
 	private Label labelInfo4 ;
-	
+
 	@FXML
 	private Label labelInfo5 ;
-	
+
 	@FXML
 	private Label labelInfo6 ;
-	
+
 	@FXML
 	private Label labelInfo7 ;
-	
+
 	@FXML
 	private Label labelInfo8 ;
-	
+
 	@FXML
 	private Label labelInfo9 ;
-	
+
 	@FXML
 	private Label labelInfo10 ;
-	
+
 	@FXML
 	private Label labelInfo11 ;
-	
+
 	@FXML
 	private Label labelInfo12 ;
-	
+
 	@FXML
 	private Label labelInfo13 ;
-	
+
 	@FXML
 	private Label labelInfo14 ;
-	
+
 	@FXML
 	private Label labelInfo15 ;
 
 	@FXML
 	private Label labelInfo16 ;
-	
+
 	@FXML
 	private Label labelInfo17 ;
 
 	@FXML
 	private Label labelInfo18 ;
-	
+
 	@FXML
 	private Text textReady;
-	
+
 	@FXML
 	private SwingNode sn ;
-	
+
 	@FXML
 	private VBox vbox ;
-				
+
 	//@FXML
 	//public TextArea textOut;
-	
+
 	//@FXML
 	//public TextArea textErr;
-		
+
 	@FXML
 	public Slider bg_slider;
-	
+
 	@FXML
 	public Button saveButton;
 
@@ -251,25 +292,25 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public ComboBox<String> radio_spreading_factor;
-	
+
 	@FXML
 	public ComboBox<String> radio_code_rate;
-	
+
 	@FXML
 	public ComboBox<String> radio_conso_tx_model;
-	
+
 	@FXML
 	public ComboBox<String> radio_conso_rx_model;
 
 	@FXML
 	public Button spreading_factor_apply_button;
-	
+
 	@FXML
 	public Button code_rate_apply_button;
 
 	@FXML
 	public Label simulationTimeLabel;
-	
+
 	@FXML
 	public Label zoomLabel;
 
@@ -326,10 +367,10 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public CheckBox macCheckBox;
-	
+
 	@FXML
 	public TextField macProbaTextField;
-	
+
 	@FXML
 	public CheckBox ackCheckBox;
 
@@ -426,7 +467,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public TextField radio_ch;
-	
+
 	@FXML
 	public TextField radio_pl;
 
@@ -510,15 +551,15 @@ public class CupCarbonController implements Initializable {
 		radio_spreading_factor.getItems().removeAll(radio_spreading_factor.getItems());
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
 		radio_spreading_factor.getSelectionModel().select(0);
-		
+
 		radio_code_rate.getItems().removeAll(radio_code_rate.getItems());
 		radio_code_rate.getItems().addAll("0", "1", "2", "3", "4");
 		radio_code_rate.getSelectionModel().select(0);
-		
+
 		radio_conso_tx_model.getItems().removeAll(radio_conso_tx_model.getItems());
 		radio_conso_tx_model.getItems().addAll(RadioModule.CLASSICAL_TX, RadioModule.HEINZELMAN_TX, "(n/8.0)*etx*p", "0.00000005*n+0.0000000001*n*(r*p)");
 		radio_conso_tx_model.setValue("");
-		
+
 		radio_conso_rx_model.getItems().removeAll(radio_conso_rx_model.getItems());
 		radio_conso_rx_model.getItems().addAll(RadioModule.CLASSICAL_RX, RadioModule.HEINZELMAN_RX, "(n/8.0)*erx", "0.00000005*n");
 		radio_conso_rx_model.setValue("");
@@ -540,6 +581,75 @@ public class CupCarbonController implements Initializable {
 		radioNameComboBox.getItems().addAll("radio1", "radio2", "radio3", "radio4", "radio5", "radio6", "radio7",
 				"radio8", "radio9", "radio10");
 		radioNameComboBox.getSelectionModel().select(0);
+
+
+		//================== Bang Tran
+		comboBoxEncryptedOption.getItems().addAll("Yes", "No");
+
+		//add 10 users to the List
+		for(int i=1; i<=10; i++){
+			User u = new User("user " + i);
+			UserList.users.add(u);
+
+			comboUsers.getItems().add(u.getName());
+
+		}
+		comboUsers.getSelectionModel().select(0);
+		loadUserPreferrences();
+
+		comboUsers.getSelectionModel()
+			.selectedItemProperty()
+			.addListener( (options, oldValue, newValue) -> {
+				if(oldValue != newValue)
+					loadUserPreferrences();
+					MapLayer.repaint();
+			}
+	    );
+		//================== Bang Tran
+	}
+
+	/**
+	 *@author Bang Tran
+	 * This method load preferences of current user
+	 */
+	private void loadUserPreferrences(){
+		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+		UserList.lastUser = UserList.currentUser;
+		UserList.currentUser = idx;
+
+		User user = UserList.users.get(idx);
+
+		txtLatency.setText(String.format("%.2f", user.preferredLatency));
+		txtThroughput.setText(String.format("%.2f", user.preferredThroughput));
+		//txtFrequency.setText(String.format("%.2f", user.preferredFrequency));
+		comboBoxEncryptedOption.getSelectionModel().select(user.dataEncrypted ? 0:1);
+
+		checkboxGasSens.setSelected(user.gasSensing);
+		checkboxTemperatureSens.setSelected(user.temperatureSensing);
+		checkboxHumiditySens.setSelected(user.humiditySensing);
+		checkboxWaterLevelSens.setSelected(user.waterLevelSensing);
+		checkboxWindLevelSens.setSelected(user.windLevelSensing);
+		checkboxLightSens.setSelected(user.lightSensing);
+	}
+
+	/**
+	 *@author Bang Tran
+	 * This method save user's preferences
+	 */
+	public void saveUserPreferrences(){
+		int userIdx = comboUsers.getSelectionModel().getSelectedIndex();
+
+		UserList.users.get(userIdx).preferredLatency = Float.parseFloat(txtLatency.getText());
+		UserList.users.get(userIdx).preferredThroughput = Float.parseFloat(txtThroughput.getText());
+		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
+		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
+
+		UserList.users.get(userIdx).temperatureSensing = checkboxTemperatureSens.isSelected();
+		UserList.users.get(userIdx).humiditySensing = checkboxHumiditySens.isSelected();
+		UserList.users.get(userIdx).gasSensing = checkboxGasSens.isSelected();
+		UserList.users.get(userIdx).lightSensing = checkboxLightSens.isSelected();
+		UserList.users.get(userIdx).windLevelSensing = checkboxWindLevelSens.isSelected();
+		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
 	}
 
 	@Override
@@ -554,13 +664,13 @@ public class CupCarbonController implements Initializable {
 			openLastProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			saveProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN));
 			resetItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
-			
+
 			menuBar.setUseSystemMenuBar(true);
 			//menuBar.useSystemMenuBarProperty().set(true);
 		}
-		
+
 		initComboBoxes();
-		
+
 		gpsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		deviceListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -572,11 +682,11 @@ public class CupCarbonController implements Initializable {
 //		CupCarbonConsoleStream consoleOut = new CupCarbonConsoleStream(textOut);
 //		PrintStream ps1 = new PrintStream(consoleOut, true);
 //		System.setOut(ps1);
-//		
+//
 //		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
 //		PrintStream ps2 = new PrintStream(consoleErr, true);
 //		System.setErr(ps2);
-				
+
 		try {
 			System.out.println("> CupCarbon U-One");
 			FileInputStream licenceFile = new FileInputStream("utils"+File.separator+"cupcarbon_licence.txt");
@@ -589,21 +699,21 @@ public class CupCarbonController implements Initializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if(CupCarbon.internetIsAvailable()) {
 			System.out.println("Connection: OK");
 			WorldMap.changeMap(0);
 		}
 		else
 			System.out.println("Connection: NO");
-		
+
 		try {
 			console = new ConsoleWindow();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@FXML
 	public void zoomP() {
 		map.setZoom(map.getZoomSlider().getValue() - 1);
@@ -670,7 +780,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void openConsole() {
 		console.toFront();
@@ -744,7 +854,7 @@ public class CupCarbonController implements Initializable {
 		WorldMap.addNodeInMap('2');
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void addWeather() {
 		if(DeviceList.weather==null) {
@@ -792,7 +902,7 @@ public class CupCarbonController implements Initializable {
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void propagation_vt() {
 		saveButton.setDisable(false);
@@ -1010,7 +1120,7 @@ public class CupCarbonController implements Initializable {
 		}
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void macChecked() {
 		if (macCheckBox.isSelected()) {
@@ -1104,9 +1214,9 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Open CupCarbon file");
-		
+
 				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon Sources", "*.cup"));
-		
+
 				File file = fileChooser.showOpenDialog(CupCarbon.stage);
 				if (file != null) {
 					Project.openProject(file.getParentFile().toString(), file.getName().toString());
@@ -1117,7 +1227,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void createContextMenu() {
 		CupCarbonContextMenu.create(sn, CupCarbonController.this);
 	}
@@ -1154,9 +1264,9 @@ public class CupCarbonController implements Initializable {
 		map.getZoomSlider().setPaintTicks(false);
 
 		sn.setContent(map);
-		
+
 		sn.requestFocus();
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -1183,7 +1293,7 @@ public class CupCarbonController implements Initializable {
 				textReady.setVisible(false);
 			}
 		}).start();
-		
+
 	}
 
 	public void loadSimulationParams() {
@@ -1207,7 +1317,7 @@ public class CupCarbonController implements Initializable {
 					symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					clockDriftCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					visibilityCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
-					resultsWPeriod.setText(br.readLine().split(":")[1]);					
+					resultsWPeriod.setText(br.readLine().split(":")[1]);
 					macCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					macProbaTextField.setText(br.readLine().split(":")[1]);
 					ackChecked();
@@ -1316,7 +1426,7 @@ public class CupCarbonController implements Initializable {
 		CupActionBlock block = new CupActionBlock();
 		double newLongitude = Double.parseDouble(device_longitude.getText());
 		for (SensorNode sensor : DeviceList.sensors) {
-			if (sensor.isSelected()) {				
+			if (sensor.isSelected()) {
 				double lo = sensor.getLongitude();
 				double la = sensor.getLatitude();
 				int [] coord = MapCalc.geoToPixelMapA(la, lo);
@@ -1431,7 +1541,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void suCoverageApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1451,7 +1561,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void suDirectionApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1577,7 +1687,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void code_rate_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1596,7 +1706,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_conso_tx_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1615,7 +1725,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_conso_rx_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1672,7 +1782,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_pl_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1895,7 +2005,7 @@ public class CupCarbonController implements Initializable {
 			mapItem12.setSelected(true);
 			break;
 		}
-		
+
 	}
 
 	@FXML
@@ -1957,7 +2067,7 @@ public class CupCarbonController implements Initializable {
 	public void setMap11() {
 		WorldMap.changeMap(11);
 	}
-	
+
 	@FXML
 	public void setMap12() {
 		WorldMap.changeMap(12);
@@ -2127,7 +2237,7 @@ public class CupCarbonController implements Initializable {
 				device_latitude.setText("" + currentDevice.getLatitude());
 				device_elevation.setText("" + currentDevice.getElevation());
 				device_radius.setText("" + currentDevice.getRadius());
-				
+
 				uartComboBox.setValue("" + currentDevice.getUartDataRate());
 				device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
 				updateLabeLInfos();
@@ -2171,10 +2281,10 @@ public class CupCarbonController implements Initializable {
 					device_elevation.setText("" + currentDevice.getElevation());
 					device_radius.setText("" + currentDevice.getRadius());
 					sensor_radius.setText("" + currentDevice.getSensorUnitRadius());
-					
+
 					suCoverage.setText("" + currentDevice.getSUCoverage());
 					suDirection.setText("" + currentDevice.getSUDirection());
-					
+
 					device_emax.setText("" + currentDevice.getBatteryLevel());
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
@@ -2223,6 +2333,8 @@ public class CupCarbonController implements Initializable {
 		}
 	}
 
+
+
 	public void getRadioList() {
 		SensorNode sensor = (SensorNode) currentDevice;
 		radioListView.getItems().removeAll(radioListView.getItems());
@@ -2269,7 +2381,7 @@ public class CupCarbonController implements Initializable {
 						spreading_factor_apply_button.setDisable(false);
 						radio_spreading_factor.getSelectionModel().select("" + rm.getSpreadingFactor());
 					}
-					
+
 					if (rm.getCodeRate() == -1) {
 						radio_code_rate.setDisable(true);
 						code_rate_apply_button.setDisable(true);
@@ -2279,7 +2391,7 @@ public class CupCarbonController implements Initializable {
 						code_rate_apply_button.setDisable(false);
 						radio_code_rate.getSelectionModel().select("" + rm.getCodeRate());
 					}
-					
+
 					radio_conso_tx_model.getSelectionModel().select("" + rm.getRadioConsoTxModel());
 					radio_conso_rx_model.getSelectionModel().select("" + rm.getRadioConsoRxModel());
 				}
@@ -2329,7 +2441,7 @@ public class CupCarbonController implements Initializable {
 		stage.setScene(scene);
 		stage.initOwner(CupCarbon.stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.showAndWait();		
+		stage.showAndWait();
 	}
 
 	@FXML
@@ -2354,7 +2466,7 @@ public class CupCarbonController implements Initializable {
 	public void sensorCoverage() {
 		SensorSetCover.sensorSetCover();
 	}
-	
+
 	@FXML
 	public void sensorCycle() {
 		CycleFromNode cfm = new CycleFromNode();
@@ -2395,7 +2507,7 @@ public class CupCarbonController implements Initializable {
 		EnvelopeLPCN_wc lpcn = new EnvelopeLPCN_wc();
 		lpcn.start();
 	}
-	
+
 	@FXML
 	public void runLPCNAlgorithm() {
 		EnvelopeLPCN lpcn = new EnvelopeLPCN();
@@ -2454,7 +2566,7 @@ public class CupCarbonController implements Initializable {
 		DeviceList.selectByMy(bytxtfield.getText());
 		updateSelectionInListView();
 	}
-	
+
 	@FXML
 	public void selectByLed() {
 		DeviceList.selectByLed(bytxtfield.getText());
@@ -2478,7 +2590,7 @@ public class CupCarbonController implements Initializable {
 		DeviceList.selectMarkedSensors();
 		updateSelectionInListView();
 	}
-	
+
 	@FXML
 	public void selectDeadSensors() {
 		DeviceList.selectDeadSensors();
@@ -2487,7 +2599,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void selectAllSensors() {
-		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());		
+		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());
 		updateSelectionInListView();
 	}
 
@@ -2627,8 +2739,9 @@ public class CupCarbonController implements Initializable {
 		radio_code_rate.getSelectionModel().select(0);
 		radio_conso_tx_model.setValue("");
 		radio_conso_rx_model.setValue("");
-		
+
 		numberOfDevices.setText("N = " + DeviceList.getSize());
+
 	}
 
 	public void initListViewSelections() {
@@ -2738,13 +2851,13 @@ public class CupCarbonController implements Initializable {
 	public void loadRoute() {
 		Platform.runLater(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				if (!gpsListView.getSelectionModel().isEmpty()) {
 					saveButton.setDisable(false);
 					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
-		
+
 					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
-		
+
 					try {
 						BufferedReader br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
 						String line;
@@ -2766,7 +2879,7 @@ public class CupCarbonController implements Initializable {
 						}
 						line = br.readLine();
 						loopNumber.setText(line);
-		
+
 						br.close();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -2824,7 +2937,7 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
-		
+
 	}
 
 	@FXML
@@ -2848,7 +2961,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork500() {
 		Platform.runLater(new Runnable() {
@@ -2861,7 +2974,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork1000() {
 		Platform.runLater(new Runnable() {
@@ -2877,7 +2990,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork10() {
 		Platform.runLater(new Runnable() {
@@ -3252,9 +3365,9 @@ public class CupCarbonController implements Initializable {
 					s = br.readLine();
 				String path = s.split("#")[0];
 				String name = s.split("#")[1];
-				
+
 				displayShortMessage(name);
-				
+
 				br.close();
 				Project.openProject(path, name);
 				CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
@@ -3269,42 +3382,42 @@ public class CupCarbonController implements Initializable {
 			openProjectLoadParameters();
 		});
 	}
-	
+
 	@FXML
 	public void insertMarkers() {
 		MarkerList.insertMarkers();
 	}
-	
+
 	@FXML
 	public void drawAllRoutes() {
 		MarkerList.reset();
 		Routes.loadRoutes();
 	}
-	
+
 	@FXML
 	public void drawSelectedRoutes() {
 		NetworkParameters.displayAllRoutes = true;
 		MarkerList.reset();
 		Routes.loadListOfRoutes(gpsListView.getSelectionModel().getSelectedItems());
 	}
-	
+
 	@FXML
 	public void hideAllRoutes() {
 		NetworkParameters.displayAllRoutes = false;
 		Routes.hideAll();
 	}
-	
+
 	@FXML
 	public void startServer() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				new CupCarbonServer().start();		
+				new CupCarbonServer().start();
 				mapFocus();
 			}
 		});
 	}
-	
+
 	@FXML
 	public void initIDs() {
 		DeviceList.initIDs();
@@ -3314,14 +3427,103 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void sliderValueChanged() {
-		MapLayer.bg_transparency=(int)(bg_slider.getValue()*2.5);		
+		MapLayer.bg_transparency=(int)(bg_slider.getValue()*2.5);
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 */
+	public void generateSenScripts(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Generating SenScript");
+		alert.setHeaderText(null);
+		alert.setContentText("This functions will generate SenScript for all users");
+		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 */
+	public void runSimulationCs682(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Run simulation");
+		alert.setHeaderText(null);
+		alert.setContentText("Run the simulation after generating SenScript for all users");
+		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 * This method set concerned area for an user. Needs place 2 markers to determine the area
+	 *
+	 */
+	public void setConcernedArea(){
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+
+		if(MarkerList.markers.size()>=2) {
+			MapLayer.concernedMarker1 = MarkerList.markers.get(0);
+			MapLayer.concernedMarker2 = MarkerList.markers.get(1);
+			User u = UserList.users.get(selectedUserIndex);
+			u.selectedArea = true;
+			u.setConcernedArea(MarkerList.markers.get(0).getLatitude(), MarkerList.markers.get(0).getLongitude(),
+							   MarkerList.markers.get(1).getLatitude(), MarkerList.markers.get(1).getLongitude());
+
+			if(u.getSensorsInsideArea()!=null && u.getSensorsInsideArea().size() > 0 ){
+				listViewConcernedSensors.getItems().clear();
+				for(SensorNode s: u.getSensorsInsideArea() )
+					listViewConcernedSensors.getItems().add(s.getName());
+			}
+			MapLayer.repaint();
+
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Set concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText("Add 2 Markes To Determine Your Area");
+			alert.showAndWait();
+		}
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 * This method remove concerned area for an user.
+	 * clear the rectangle on the map and unmark all devices inside the rectangle
+	 *
+	 */
+	public void clearConcernedArea(){
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		if(selectedUserIndex < 0 ) return; //in the case of no user
+
+		User u = UserList.users.get(selectedUserIndex);
+		if( !u.selectedArea ) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Clear concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText(u.getName() + "hasn't set his concerned region yet");
+			alert.showAndWait();
+			return;
+		}
+
+		listViewConcernedSensors.getItems().clear();
+		u.removeConcernedArea();
+		MapLayer.repaint();
+	}
+
+
+
 	@FXML
 	public Label stlabel;
-	
+
 	public void updateLabeLInfos() {
 		Platform.runLater(() -> {
 			int n_s = 0;
@@ -3333,7 +3535,7 @@ public class CupCarbonController implements Initializable {
 			int n_b = 0;
 			int n_mark = 0;
 			int n_unmark = 0;
-			
+
 			int n_s_o = 0;
 			int n_s_s = 0;
 			int n_s_ms = 0;
@@ -3343,9 +3545,9 @@ public class CupCarbonController implements Initializable {
 			int n_i_s = 0;
 			int n_wi_s = 0;
 			int n_wo_s = 0;
-			
+
 			n_b = BuildingList.size();
-			
+
 			for(Device device : DeviceList.devices) {
 				if(device.getType() == Device.MOBILE) {
 					n_m++;
@@ -3360,10 +3562,10 @@ public class CupCarbonController implements Initializable {
 
 			//for(SensorNode sensor : DeviceList.sensors) {
 			for(int i=0; i<DeviceList.sensors.size(); i++) {
-				SensorNode sensor = DeviceList.sensors.get(i);			
+				SensorNode sensor = DeviceList.sensors.get(i);
 				if(sensor.getNeighbors().size()==0) n_i_s++;
 				if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
-				
+
 				if(sensor.getType() == Device.SENSOR) {
 					n_s++;
 					if(sensor.isSelected()) n_s_s++;
@@ -3380,11 +3582,11 @@ public class CupCarbonController implements Initializable {
 				if(sensor.isSelected()) n_s_o++;
 			}
 
-			File f = new File(Project.getProjectGpsPath()); 
+			File f = new File(Project.getProjectGpsPath());
 			if(f.list() != null)
 				n_r = new File(Project.getProjectGpsPath()).list().length;
-			
-			labelInfo1.setText("Number of Sensors: " + n_s);		
+
+			labelInfo1.setText("Number of Sensors: " + n_s);
 			labelInfo2.setText("Number of Directional Sensors: " + n_ms);
 			labelInfo3.setText("Number of Base Stations: " + n_bs);
 			labelInfo4.setText("Number of Mobiles: " + n_m);
@@ -3404,7 +3606,7 @@ public class CupCarbonController implements Initializable {
 			labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
 		});
 	}
-	
+
 	public void displayLongMessage(String s) {
 		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 		textReady.setText(s);
@@ -3414,11 +3616,11 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayPermanentMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3426,7 +3628,7 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void displayShortMessage(String s) {
 		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 		textReady.setText(s);
@@ -3436,7 +3638,7 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayShortGoodMessage(String s) {
 		textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 		textReady.setText(s);
@@ -3446,11 +3648,11 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayPermanentErrMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(1,0.5,0.0,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3459,21 +3661,21 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void hidePermanentErrMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setVisible(false);
 			}
 		});
 		th.start();
 	}
-	
+
 	public void displayShortGoodMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3485,7 +3687,7 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void displayShortErrMessage(String s) {
 		textReady.setFill(new Color(1,0,0,0.5));
 		textReady.setText(s);
@@ -3496,7 +3698,7 @@ public class CupCarbonController implements Initializable {
 		textReady.setVisible(false);
 		//consolePane.setExpanded(true);
 	}
-	
+
 	public void displayShortErrMessageTh(String s) {
 		new Thread(() -> {
 			textReady.setFill(new Color(1,0,0,0.5));
@@ -3508,7 +3710,7 @@ public class CupCarbonController implements Initializable {
 			textReady.setVisible(false);
 		}).start();
 	}
-	
+
 	public void displayLongErrMessageTh(String s) {
 		new Thread(() -> {
 			textReady.setFill(new Color(1,0,0,0.5));
@@ -3520,5 +3722,7 @@ public class CupCarbonController implements Initializable {
 			textReady.setVisible(false);
 		}).start();
 	}
-	
+
+
+
 }
