@@ -602,7 +602,15 @@ public class CupCarbonController implements Initializable {
 			.addListener( (options, oldValue, newValue) -> {
 				if(oldValue != newValue)
 					loadUserPreferrences();
+
+					User user = UserList.users.get(comboUsers.getSelectionModel().getSelectedIndex());
+
 					MapLayer.repaint();
+					listViewConcernedSensors.getItems().clear();
+					if(user.getSensorsInsideArea()!=null && user.getSensorsInsideArea().size() > 0 ){
+						for(SensorNode s: user.getSensorsInsideArea() )
+							listViewConcernedSensors.getItems().add(s.getName());
+					}
 			}
 	    );
 		//================== Bang Tran
@@ -630,6 +638,8 @@ public class CupCarbonController implements Initializable {
 		checkboxWaterLevelSens.setSelected(user.waterLevelSensing);
 		checkboxWindLevelSens.setSelected(user.windLevelSensing);
 		checkboxLightSens.setSelected(user.lightSensing);
+
+
 	}
 
 	/**
