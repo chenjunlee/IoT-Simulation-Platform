@@ -23,11 +23,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
+
+import database.DBMethods;
 import device.SensorNode;
 import project.Project;
 
@@ -129,6 +138,18 @@ public class SenScript {
 		}
 		ps.println(text);
 	}
+	
+	public void printToDB(String text) {
+		String name = Project.projectName;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		String currentDate = dtf.format(now);
+		UpdateOptions up = new UpdateOptions();
+		up.upsert(true);
+		MongoCollection<Document> project = DBMethods.getDB("iot_result").getCollection(name);
+		project.updateOne(Filters.and(Filters.eq("project", name), Filters.eq("sensor", sensor.getName())), new Document("$set", new Document(currentDate, text)), up);
+	}
+	
 	
 	public int size(){
 		return commands.size();

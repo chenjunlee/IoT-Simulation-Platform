@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.Document;
 
 import battery.Battery;
 import buildings.BuildingList;
@@ -244,6 +248,29 @@ public class StdSensorNode extends SensorNode {
 			e.printStackTrace();
 		}
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "sensor_"+ref);
+	}
+	
+	@Override
+	public List<Document> saveToDB() {
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("prefix", "device")
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide())
+				.append("device_draw_battery", getDrawBatteryLevel())
+				.append("device_sensor_unit_radius", getSensorUnitRadius());
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+		if (!getScriptFileName().equals(""))
+			document.append("device_script_file_name", getScriptFileName());
+		documents.add(document);
+		documents.add(saveRadioModuleToDB(""+getId()));
+		return documents;
 	}
 
 	public double getNextValueTime() {return Double.MAX_VALUE;}

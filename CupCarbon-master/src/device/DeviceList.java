@@ -35,6 +35,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.util.JSON;
+
 import action.CupAction;
 import action.CupActionAddSensor;
 import action.CupActionBlock;
@@ -244,6 +250,154 @@ public class DeviceList {
 		}
 	}
 	
+	public static void openFromDB(FindIterable<Document> deviceData, FindIterable<Document> radioData) {
+		SensorNode sensor;
+		int deviceType = -1;
+		int deviceId = 0;
+		int idMax = 0 ;
+		MongoCursor<Document> deviceDataIterator = deviceData.iterator();
+		while(deviceDataIterator.hasNext()) {
+			Document selectedDevice = deviceDataIterator.next();
+			deviceType = (int) selectedDevice.get("device_type");
+			deviceId = selectedDevice.getInteger("device_id");
+			Document selectedRadio = new Document();
+			for(Document radio: radioData) {
+				if(radio.get("device_id").equals("" + deviceId)) {
+					selectedRadio = radio;
+				}
+			}
+//				System.out.println(deviceType);
+//				System.out.println(selectedDevice);
+			switch (deviceType) {
+			case MapObject.SENSOR:
+				if(selectedRadio.isEmpty()){
+					sensor = loadSensorFromDB(selectedDevice);
+					add(sensor);
+				} else {
+					sensor = loadSensorFromDB(selectedDevice, selectedRadio);
+					add(sensor);
+				}
+				break;
+			case MapObject.GAS:						
+				add(loadGasFromDB(selectedDevice));
+				break;
+			case MapObject.BASE_STATION:
+				if(selectedRadio.isEmpty()){
+					sensor = loadBaseStationFromDB(selectedDevice);
+					add(sensor);
+				} else {
+					sensor = loadBaseStationFromDB(selectedDevice, selectedRadio);
+					add(sensor);
+				}
+				break;
+			case MapObject.DIRECTIONAL_SENSOR:
+				if(selectedRadio.isEmpty()){
+					sensor = loadDirectionalSensorFromDB(selectedDevice);
+					add(sensor);
+				} else {
+					sensor = loadDirectionalSensorFromDB(selectedDevice, selectedRadio);
+					add(sensor);
+				}
+				break;
+			case MapObject.MOBILE:						
+				add(loadMobileFromDB(selectedDevice));
+				break;
+			case MapObject.WEATHER:						
+				add(loadWeatherFromDB(selectedDevice));
+				break;
+			}
+			DeviceList.number = idMax+1;
+			MapLayer.repaint();
+		}
+	}
+	
+	public static SensorNode loadSensorFromDB(Document selectedDevice) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		String [] mparameters = {"","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("device_draw_battery")) {
+			parameters[10] = "" + selectedDevice.get("device_draw_battery");
+		}
+		sensor = new StdSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+		sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+//		openRadioModule(Project.getProjectRadioPath()+File.separator+"sensor_"+sensor.getId(), sensor);
+		return sensor;
+	}
+	
+	public static SensorNode loadSensorFromDB(Document selectedDevice, Document selectedRadio) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("device_draw_battery")) {
+			parameters[10] = "" + selectedDevice.get("device_draw_battery");
+		}
+		sensor = new StdSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+		sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+		openRadioModuleFromDB(selectedRadio, sensor);
+		return sensor;
+	}
+	
 	public static SensorNode loadSensor(String fileName) {
 		SensorNode sensor = null;
 		try {
@@ -302,6 +456,104 @@ public class DeviceList {
 			e.printStackTrace();
 		}
 		openRadioModule(Project.getProjectRadioPath()+File.separator+"sensor_"+sensor.getId(), sensor);
+		return sensor;
+	}
+	
+	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		String [] mparameters = {"","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("device_draw_battery")) {
+			parameters[10] = "" + selectedDevice.get("device_draw_battery");
+		}
+		if(selectedDevice.containsKey("directional_parameters")) {
+			String [] directional = selectedDevice.getString("directional_parameters").split(" ");
+			for (int j = 0; j< directional.length; j++)
+				mparameters[j] = directional[j];
+		}
+		sensor = new DirectionalSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6], mparameters[0], mparameters[1], mparameters[2]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+		sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+//		openRadioModule(Project.getProjectRadioPath()+File.separator+"directionalsensor_"+sensor.getId(), sensor);
+		return sensor;
+	}
+	
+	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice, Document selectedRadio) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		String [] mparameters = {"","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("device_draw_battery")) {
+			parameters[10] = "" + selectedDevice.get("device_draw_battery");
+		}
+		if(selectedDevice.containsKey("directional_parameters")) {
+			String [] directional = selectedDevice.getString("directional_parameters").split(" ");
+			for (int j = 0; j< directional.length; j++)
+				mparameters[j] = directional[j];
+		}
+		sensor = new DirectionalSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6], mparameters[0], mparameters[1], mparameters[2]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+		sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+		openRadioModuleFromDB(selectedRadio, sensor);
 		return sensor;
 	}
 	
@@ -372,6 +624,84 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	public static SensorNode loadBaseStationFromDB(Document selectedDevice) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		sensor = new BaseStation(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+//		openRadioModule(Project.getProjectRadioPath()+File.separator+"basestation_"+sensor.getId(), sensor);		
+		return sensor;
+	}
+	
+	public static SensorNode loadBaseStationFromDB(Document selectedDevice, Document selectedRadio) {
+		SensorNode sensor = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_sensor_unit_radius")) {
+			parameters[4] = "" + selectedDevice.get("device_sensor_unit_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_script_file_name")) {
+			parameters[6] = "" + selectedDevice.get("device_script_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[7] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[8] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[9] = "" + selectedDevice.get("device_hide");
+		}
+		sensor = new BaseStation(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+		sensor.setHide(Integer.parseInt(parameters[9]));
+		openRadioModuleFromDB(selectedRadio, sensor);
+		return sensor;
+	}
+	
 	public static SensorNode loadBaseStation(String fileName) {
 		SensorNode sensor = null;
 		try {
@@ -429,6 +759,38 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	public static Device loadMobileFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[4] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_type")) {
+			parameters[5] = "" + selectedDevice.get("device_type");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[6] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[7] = "" + selectedDevice.get("device_hide");
+		}
+		device = new Mobile(parameters[0], parameters[1], parameters[2], parameters[3],parameters[4], Integer.parseInt(parameters[6]));
+		device.setHide(Integer.parseInt(parameters[7]));
+		return device;
+	}
+	
 	public static Device loadMobile(String fileName) {
 		Device device = null;
 		try {
@@ -476,6 +838,39 @@ public class DeviceList {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return device;
+	}
+	
+	public static Device loadGasFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new Gas(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
 		return device;
 	}
 	
@@ -527,6 +922,40 @@ public class DeviceList {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return device;
+	}
+	
+	public static Device loadWeatherFromDB(Document selectedDevice) {
+		Weather device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[0] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[0] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[0] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[0] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[0] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[0] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[0] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new Weather(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));			
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		DeviceList.weather = device;			
 		return device;
 	}
 	
@@ -1656,6 +2085,87 @@ public class DeviceList {
 				device.setSigmaOfDriftTime(drift);				
 			}
 		}		
+	}
+	
+	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {				
+		if(selectedRadio.containsKey("radio_name"+1)) {
+			openRadioModuleFromDBHelper(selectedRadio, 1, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+2)) {
+			openRadioModuleFromDBHelper(selectedRadio, 2, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+3)) {
+			openRadioModuleFromDBHelper(selectedRadio, 3, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+4)) {
+			openRadioModuleFromDBHelper(selectedRadio, 4, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+5)) {
+			openRadioModuleFromDBHelper(selectedRadio, 5, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+6)) {
+			openRadioModuleFromDBHelper(selectedRadio, 6, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+7)) {
+			openRadioModuleFromDBHelper(selectedRadio, 7, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+8)) {
+			openRadioModuleFromDBHelper(selectedRadio, 8, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+9)) {
+			openRadioModuleFromDBHelper(selectedRadio, 9, sensor);
+		}
+		if(selectedRadio.containsKey("radio_name"+10)) {
+			openRadioModuleFromDBHelper(selectedRadio, 10, sensor);
+		}
+		String currentRadioName = selectedRadio.getString("current_radio_name");
+		sensor.selectCurrentRadioModule(currentRadioName);
+	}
+	
+	public static void openRadioModuleFromDBHelper(Document selectedRadio, int index, SensorNode sensor) {
+		String name = selectedRadio.getString("radio_name"+index);
+		String std = selectedRadio.getString("radio_standard"+index);
+		sensor.addRadioModule(name, std);
+		if(selectedRadio.containsKey("radio_my"+index)) {
+			sensor.getRadioModuleByName(name).setMy(selectedRadio.getInteger("radio_my"+index));
+		}
+		if(selectedRadio.containsKey("radio_channel"+index)) {
+			sensor.getRadioModuleByName(name).setCh(selectedRadio.getInteger("radio_channel"+index));
+		}
+		if(selectedRadio.containsKey("radio_network_id"+index)) {
+			sensor.getRadioModuleByName(name).setNId(selectedRadio.getInteger("radio_network_id"+index));
+		}
+		if(selectedRadio.containsKey("radio_radius"+index)) {
+			sensor.getRadioModuleByName(name).setRadioRangeRadius(selectedRadio.getDouble("radio_radius"+index));
+		}
+		if(selectedRadio.containsKey("radio_etx"+index)) {
+			sensor.getRadioModuleByName(name).setETx(selectedRadio.getDouble("radio_etx"+index));
+		}
+		if(selectedRadio.containsKey("radio_erx"+index)) {
+			sensor.getRadioModuleByName(name).setERx(selectedRadio.getDouble("radio_erx"+index));
+		}
+		if(selectedRadio.containsKey("radio_esleep"+index)) {
+			sensor.getRadioModuleByName(name).setESleep(selectedRadio.getDouble("radio_esleep"+index));
+		}
+		if(selectedRadio.containsKey("radio_elisten"+index)) {
+			sensor.getRadioModuleByName(name).setEListen(selectedRadio.getDouble("radio_elisten"+index));
+		}
+		if(selectedRadio.containsKey("radio_data_rate"+index)) {
+			sensor.getRadioModuleByName(name).setRadioDataRate(selectedRadio.getInteger("radio_data_rate"+index));
+		}
+		if(selectedRadio.containsKey("spreading_factor"+index)) {
+			sensor.getRadioModuleByName(name).setSpreadingFactor(selectedRadio.getInteger("spreading_factor"+index));
+		}
+		if(selectedRadio.containsKey("code_rate"+index)) {
+			sensor.getRadioModuleByName(name).setCodeRate(selectedRadio.getInteger("code_rate"+index));
+		}
+		if(selectedRadio.containsKey("conso_tx_model"+index)) {
+			sensor.getRadioModuleByName(name).setRadioConsoTxModel(selectedRadio.getString("conso_tx_model"+index));
+		}
+		if(selectedRadio.containsKey("conso_rx_model"+index)) {
+			sensor.getRadioModuleByName(name).setRadioConsoRxModel(selectedRadio.getString("conso_rx_model"+index));
+		}
+		MapLayer.repaint();	
 	}
 	
 	public static void openRadioModule(String fileName, SensorNode sensor) {

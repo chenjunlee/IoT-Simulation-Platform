@@ -33,9 +33,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
+
+import org.bson.Document;
 
 import device.Device;
 import device.DeviceList;
@@ -277,6 +281,47 @@ public class Gas extends MobileG {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public List<Document> saveToDB() {
+//		try {
+//			PrintStream fos = null;
+//			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "gas_" + getId()));
+//			fos.println("List of parameters");
+//			fos.println("------------------------------------------");
+//			fos.println("device_type:" + getType());
+//			fos.println("device_id:" + getId());
+//			fos.println("device_longitude:" + getLongitude());
+//			fos.println("device_latitude:" + getLatitude());
+//			fos.println("device_elevation:" + getElevation());
+//			fos.println("device_radius:" + getRadius());
+//			fos.println("device_hide:" + getHide());
+//			if (!getGPSFileName().equals(""))
+//				fos.println("device_gps_file_name:" + getGPSFileName());
+//			if (!getNatEventFileName().equals(""))
+//				fos.println("natural_event_file_name:" + getNatEventFileName());
+//			fos.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("prefix", "device")
+				.append("device_type", getType())
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide());
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+		if (!getNatEventFileName().equals(""))
+			document.append("natural_event_file_name", getNatEventFileName());
+		documents.add(document);
+		return documents;
 	}
 
 	public void loadValuesFromFile() {
