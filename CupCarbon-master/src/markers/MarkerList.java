@@ -39,6 +39,12 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 
 import action.CupAction;
 import action.CupActionAddSensor;
@@ -98,6 +104,37 @@ public class MarkerList {
 		}
 	}
 
+	public static List<Document> saveToDB() {
+		List<Document> markList = new ArrayList<Document>();
+		Marker marker;
+		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
+			marker = iterator.next();
+			Document document = new Document();
+			document.append("prefix", "mark")
+				.append("longitude", marker.getLongitude())
+				.append("latitude", marker.getLatitude())
+				.append("elevation", marker.getElevation())
+				.append("radius", marker.getRadius());
+			markList.add(document);
+		}
+		return markList;
+	}
+	
+	public static void openFromDB(FindIterable<Document> markData) {
+		//Routes.reset();
+		reset();
+		MongoCursor<Document> markDataIterator = markData.iterator();
+		while(markDataIterator.hasNext()) {
+			Document SelectedMark = markDataIterator.next();
+			addNodeByType(""+SelectedMark.get("longitude"), 
+					""+SelectedMark.get("latitude"), 
+					""+SelectedMark.get("elevation"), 
+					""+SelectedMark.get("radius"));
+		}
+		MapLayer.repaint();
+	}
+	
+	
 	public static void open(String fileName) {
 		//Routes.reset();
 		reset();

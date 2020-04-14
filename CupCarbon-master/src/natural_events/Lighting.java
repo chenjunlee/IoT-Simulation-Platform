@@ -15,8 +15,11 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
+
+import org.bson.Document;
 
 import device.Device;
 import device.DeviceList;
@@ -329,6 +332,13 @@ public class Lighting extends MobileG {
 				valueIndex = 1;
 			}
 		}
+	}
+
+	@Override
+	public List<Document> saveToDB() {
+		// TODO Auto-generated method stub
+		// TODO need to do so that database can save it
+		return null;
 	}
 
 

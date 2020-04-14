@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.PrintStream;
 
+import org.bson.Document;
+
 import device.DeviceList;
 import device.SensorNode;
 import enegy_conso_model.EnergyConsumptionModel;
@@ -386,6 +388,7 @@ public abstract class RadioModule {
 	}	
 	
 	public abstract void save(PrintStream fos, RadioModule currentRadioModule);
+	public abstract Document saveToDB(int index, RadioModule currentRadioModule, String deviceId, Document document);
 	
 	public int getSpreadingFactor() {
 		return -1;

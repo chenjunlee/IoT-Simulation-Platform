@@ -156,6 +156,10 @@ public final class SenScriptAddCommand {
 			command =  new Command_PRINTFILE(sensorNode, inst);
 		}
 		
+		if (inst[0].toLowerCase().equals("printdb")) {
+			command =  new Command_PRINTDB(sensorNode, inst);
+		}
+		
 		if (inst[0].toLowerCase().equals("data")) {
 			command = new Command_DATA(sensorNode, inst);
 		}

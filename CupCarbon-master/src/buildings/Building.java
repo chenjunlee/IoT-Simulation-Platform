@@ -14,6 +14,7 @@ import java.awt.geom.Point2D;
 
 import javax.vecmath.Vector3d;
 
+import org.bson.Document;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
@@ -43,6 +44,14 @@ public class Building implements MouseListener, KeyListener {
 	
 	private double height = 10 ;
 	
+	public Building(Document document) {
+//		mapZoom = MapLayer.mapViewer.getZoom();
+//		this.nPoints = nPoints;
+//		coordX = new double [nPoints] ;
+//		coordY = new double [nPoints] ;
+//		iCoordX = new int [nPoints] ;
+//		iCoordY = new int [nPoints] ;
+	}
 	
 	public Building(int nPoints) {
 		mapZoom = MapLayer.mapViewer.getZoom();

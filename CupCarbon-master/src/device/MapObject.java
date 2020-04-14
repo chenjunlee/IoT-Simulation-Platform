@@ -33,15 +33,13 @@ public abstract class MapObject implements Runnable, Cloneable {
 	public static final int BUILDING = 10;
 	public static final int GEOZONE = 11;
 	public static final int RSENSOR = 12;
-<<<<<<< Updated upstream
-=======
+
 	//Chenjun edited
 	public static final int TEMPERATURE = 13;
 	public static final int HUMIDITY = 14;
 	public static final int WIND = 15;
 	public static final int WATER = 16;
 	public static final int LIGHT = 17;
->>>>>>> Stashed changes
 	
 	protected int id = 0;
 	protected String userId = "";

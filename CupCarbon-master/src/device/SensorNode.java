@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import org.bson.Document;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import battery.Battery;
@@ -814,6 +815,17 @@ public abstract class SensorNode extends DeviceWithRadio {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	public Document saveRadioModuleToDB(String deviceId) {
+		Document document = new Document();
+		int index = 1;
+		for (RadioModule radioModule : getRadioModuleList()) {
+			document = radioModule.saveToDB(index, currentRadioModule, deviceId, document);
+			index++;
+		}
+		return document;
+
 	}
 
 	public double getDrssi() {

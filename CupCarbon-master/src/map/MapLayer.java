@@ -426,8 +426,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 			repaint();
 		}
-<<<<<<< Updated upstream
-=======
 
 		if (lastKey == 'a') {
 			CupAction action = new CupActionAddDevice(new Humidity(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
@@ -467,7 +465,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 			repaint();
 		}
->>>>>>> Stashed changes
 		
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();

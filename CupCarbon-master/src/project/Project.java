@@ -28,9 +28,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
+import org.bson.Document;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 
 import action.CupActionStack;
 import buildings.BuildingList;
@@ -357,6 +363,66 @@ public final class Project {
 		}
 	}
 
+	public static void loadParametersFromDB(FindIterable<Document> projectData) {
+		MongoCursor<Document> projectDataIterator = projectData.iterator();
+		while(projectDataIterator.hasNext()) {
+			Document selectedData = projectDataIterator.next();
+			int zoom = selectedData.getInteger("zoom");
+			MapLayer.mapViewer.setZoom(zoom);
+			double la = selectedData.getDouble("centerposition_la");
+			double lo = selectedData.getDouble("centerposition_lo");
+			int mapIndex = selectedData.getInteger("map");
+			MapLayer.mapViewer.setCenterPosition(new GeoPosition(la, lo));
+			String [] keyVal ;
+			if(selectedData.containsKey("display_details")) {
+				NetworkParameters.displayDetails = selectedData.getBoolean("display_details");
+			}
+			if(selectedData.containsKey("draw_radio_links")) {
+				NetworkParameters.drawRadioLinks = selectedData.getBoolean("draw_radio_links");
+			}
+			if(selectedData.containsKey("draw_sensor_arrows")) {
+				NetworkParameters.drawSensorArrows = selectedData.getBoolean("draw_sensor_arrows");
+			}
+			if(selectedData.containsKey("radio_links_color")) {
+				NetworkParameters.radioLinksColor = selectedData.getInteger("radio_links_color");
+			}
+			if(selectedData.containsKey("draw_marker_arrows")) {
+				NetworkParameters.drawMarkerArrows = selectedData.getBoolean("draw_marker_arrows");
+			}
+			if(selectedData.containsKey("display_rl_distance")) {
+				NetworkParameters.displayRLDistance = selectedData.getBoolean("display_rl_distance");
+			}
+			if(selectedData.containsKey("propagation")) {
+				DeviceList.propagationsCalculated = selectedData.getBoolean("propagation");
+			}
+			if(selectedData.containsKey("display_marker_distance")) {
+				NetworkParameters.displayMarkerDistance = selectedData.getBoolean("display_marker_distance");
+			}
+			if(selectedData.containsKey("display_radio_messages")) {
+				NetworkParameters.displayRadioMessages = selectedData.getBoolean("display_radio_messages");
+			}
+			if(selectedData.containsKey("draw_script_file_name")) {
+				NetworkParameters.drawScriptFileName = selectedData.getBoolean("draw_script_file_name");
+			}
+			if(selectedData.containsKey("display_print_messages")) {
+				NetworkParameters.displayPrintMessage = selectedData.getBoolean("display_print_messages");
+			}
+			if(selectedData.containsKey("display_all_routes")) {
+				NetworkParameters.displayAllRoutes = selectedData.getBoolean("display_all_routes");
+			}
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					if(CupCarbon.internetIsAvailable())
+						WorldMap.changeMap(mapIndex);
+					else
+						WorldMap.changeMap(2);
+				}
+			});	
+		}	
+		CupCarbon.cupCarbonController.applyParameters();
+	}
+	
 	public static void loadParameters() {		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(getProjectPathName()));
@@ -413,7 +479,33 @@ public final class Project {
 			System.err.println("[CupCarbon ERROR] -> loadParameters() Project -> Param manquant");
 		}
 	}
-
+	
+	public static Document saveParametersToDB() {
+		Document document = new Document();
+		document.append("prefix", "project")
+		.append("CupCarbon", CupCarbonVersion.VERSION)
+		.append("name", projectName.substring(0, projectName.length() - 4))
+		.append("zoom", MapLayer.mapViewer.getZoom())
+		.append("centerposition_la", MapLayer.mapViewer.getCenterPosition().getLatitude())
+		.append("centerposition_lo", MapLayer.mapViewer.getCenterPosition().getLongitude())
+		.append("map", WorldMap.mapIdx)
+		.append("display_details", NetworkParameters.displayDetails)
+		.append("draw_radio_links", NetworkParameters.drawRadioLinks)
+		.append("draw_sensor_arrows", NetworkParameters.drawSensorArrows)
+		.append("radio_links_color", NetworkParameters.radioLinksColor)
+		.append("draw_marker_arrows", NetworkParameters.drawMarkerArrows)
+		.append("display_rl_distance", NetworkParameters.displayRLDistance)
+		.append("propagation", DeviceList.propagationsCalculated)
+		.append("display_marker_distance", NetworkParameters.displayMarkerDistance)
+		.append("display_radio_messages", NetworkParameters.displayRadioMessages)
+		.append("draw_script_file_name", NetworkParameters.drawScriptFileName)
+		.append("display_print_messages", NetworkParameters.displayPrintMessage)
+		.append("display_all_routes", NetworkParameters.displayAllRoutes);
+		System.out.println(document);
+		System.out.println(document.size());
+		return document;
+	}	
+	
 	public static void saveParameters() {
 		try {
 			PrintStream fos = new PrintStream(new FileOutputStream(getProjectPathName()));

@@ -14,7 +14,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import org.bson.Document;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
 
 import action.CupAction;
 import action.CupActionAddRadioModule;
@@ -62,6 +66,7 @@ import action.CupActionStack;
 import arduino.Arduino;
 import buildings.BuildingList;
 import cupcarbon_script.CupCarbonServer;
+import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
@@ -138,10 +143,6 @@ public class CupCarbonController implements Initializable {
 	protected FaultInjector faultInjector = null;
 
 	ConsoleWindow console ;
-<<<<<<< Updated upstream
-	
-=======
-
 
 	//=========================== Bang Tran
 	@FXML
@@ -179,7 +180,6 @@ public class CupCarbonController implements Initializable {
 	public Button buttonGenerateSenScripts;
 	//=========================== Bang Tran
 
->>>>>>> Stashed changes
 	@FXML
 	private TextField suCoverage ;
 
@@ -1309,6 +1309,64 @@ public class CupCarbonController implements Initializable {
 		}).start();
 
 	}
+	
+	public void loadSimulationParamsFromDB(FindIterable<Document> simulationData) {
+		MongoCursor<Document> simulationDataIterator = simulationData.iterator();
+		while(simulationDataIterator.hasNext()) {
+			Document Selectedsimulation = simulationDataIterator.next();
+			if(Selectedsimulation.containsKey("simulationtime")) {
+				simulationTimeTextField.setText((String) Selectedsimulation.get("simulationtime"));
+			}
+			if(Selectedsimulation.containsKey("mobility")) {
+				mobilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mobility")));
+			}
+			if(Selectedsimulation.containsKey("simulationspeed")) {
+				simulationSpeedTextField.setText((String) Selectedsimulation.get("simulationspeed"));
+			}
+			if(Selectedsimulation.containsKey("arrowspeed")) {
+				arrowSpeedTextField.setText((String) Selectedsimulation.get("arrowspeed"));
+			}
+			if(Selectedsimulation.containsKey("log")) {
+				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("log")));
+			}
+			if(Selectedsimulation.containsKey("results")) {
+				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("results")));
+			}
+			if(Selectedsimulation.containsKey("acktype")) {
+				probaComboBox.getSelectionModel().select((int) Double.parseDouble((String) Selectedsimulation.get("results")));
+			}
+			if(Selectedsimulation.containsKey("ackproba")) {
+				probaTextField.setText((String) Selectedsimulation.get("ackproba"));
+			}
+			if(Selectedsimulation.containsKey("acklinks")) {
+				ackShowCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("acklinks")));
+			}
+			if(Selectedsimulation.containsKey("ack")) {
+				ackCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("ack")));
+			}
+			if(Selectedsimulation.containsKey("symmetricalinks")) {
+				symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("symmetricalinks")));
+			}
+			if(Selectedsimulation.containsKey("clockdrift")) {
+				clockDriftCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("clockdrift")));
+			}
+			if(Selectedsimulation.containsKey("visibility")) {
+				visibilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("visibility")));
+			}
+			if(Selectedsimulation.containsKey("results_writing_period")) {
+				resultsWPeriod.setText((String) Selectedsimulation.get("results_writing_period"));
+			}
+			if(Selectedsimulation.containsKey("mac_layer")) {
+				macCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mac_layer")));
+			}
+			if(Selectedsimulation.containsKey("macproba")) {
+				macProbaTextField.setText((String) Selectedsimulation.get("macproba"));
+			}
+			ackChecked();
+			macChecked();
+		}
+	}
+	
 
 	public void loadSimulationParams() {
 		Platform.runLater(new Runnable() {
@@ -1555,11 +1613,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-<<<<<<< Updated upstream
-	
-=======
 
->>>>>>> Stashed changes
 	@FXML
 	public void suCoverageApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -2302,11 +2356,7 @@ public class CupCarbonController implements Initializable {
 
 					suCoverage.setText("" + currentDevice.getSUCoverage());
 					suDirection.setText("" + currentDevice.getSUDirection());
-<<<<<<< Updated upstream
 					
-=======
-
->>>>>>> Stashed changes
 					device_emax.setText("" + currentDevice.getBatteryLevel());
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
@@ -3362,7 +3412,20 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
+				if(Project.projectPath.equals("DataBase Mode")) {
+					Stage stage = new Stage();
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.setTitle("Save Project to File System");
+					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon", "*.*"));
+					File file = fileChooser.showSaveDialog(stage);
+					if (file != null) {
+						Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
+								file.getName().toString(), false);
+						CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
+						Project.saveProject();
+					}
+				}
+				else if (Project.projectPath.equals("") || Project.projectName.equals("")) {
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.setTitle("Warning!");
 					alert.setHeaderText(null);
@@ -3372,6 +3435,56 @@ public class CupCarbonController implements Initializable {
 					Project.saveProject();
 					saveButton.setDisable(true);
 				}
+			}
+		});
+	}
+	
+	// new 
+	// if project not create name a project name first.
+	@FXML
+	public void saveProjectToDB() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
+//					Alert alert = new Alert(AlertType.WARNING);
+//					alert.setTitle("Warning!");
+//					alert.setHeaderText(null);
+//					alert.setContentText("Project must be created or must be open.");
+//					alert.showAndWait();
+					try {
+						new DBProjectCreateWindow();
+					} catch(IOException e) {}
+				} else {
+					ImportToDB.saveProjectToDB();
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("INFORMATION!");
+					alert.setHeaderText(null);
+					alert.setContentText("Project Saved to DataBase");
+					alert.showAndWait();
+				}
+			}
+		});
+	}
+	
+	@FXML
+	public void openProjectFromDB() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+//				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
+//					Alert alert = new Alert(AlertType.WARNING);
+//					alert.setTitle("Warning!");
+//					alert.setHeaderText(null);
+//					alert.setContentText("Project must be created or must be open.");
+//					alert.showAndWait();
+					try {
+						new DBProjectSelectWindow();
+					} catch(IOException e) {}
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + "DataBase Mode" + "]");
+//				} else {
+//					ImportToDB.saveProjectToDB();
+//				}
 			}
 		});
 	}
