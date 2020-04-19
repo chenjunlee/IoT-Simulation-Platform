@@ -2,6 +2,10 @@ package database;
 
 import com.mongodb.MongoClient;
 
+/**
+ * @author Yiwei Yao
+ *
+ */
 public class ConnectToDB {
 	
 	private ConnectToDB() {};

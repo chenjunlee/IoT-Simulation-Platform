@@ -13,6 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import project.Project;
 
+/**
+ * @author Yiwei Yao
+ * 
+ * DBProjectCreateController control the windows of dbprojectcreate.fxml
+ */
 public class DBProjectCreateController implements Initializable {
 	
 	@FXML
@@ -29,6 +34,12 @@ public class DBProjectCreateController implements Initializable {
 	
 
 	
+	/**
+	 * if the project is not set. 
+	 * for example, the project is not created or imported
+	 * then create the project and set project path to database mode and save to db
+	 * otherwise save to db directly.
+	 */
 	@FXML
 	public void save() {
 		boolean success = false;

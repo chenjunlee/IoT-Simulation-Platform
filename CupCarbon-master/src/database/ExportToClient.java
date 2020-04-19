@@ -15,13 +15,29 @@ import map.NetworkParameters;
 import markers.MarkerList;
 import markers.Routes;
 import project.Project;
+import user.UserList;
 import visibility.VisibilityLauncher;
 
+/**
+ * @author Yiwei Yao
+ * 
+ */
 public class ExportToClient {
 	
+	/**
+	 * open project from database
+	 * buildingData : prefix: building
+	 * deviceData : prefix: device
+	 * radioData : prefix: radio_module
+	 * markData : prefix: mark
+	 * projectData : prefix: project
+	 * simulationData : prefix: simulation
+	 * @param projectName
+	 */
 	public static void openProject(String projectName) {
 		CupCarbon.cupCarbonController.displayPermanentMessage_th("Loading ...");
 		MongoCollection<Document> project = DBMethods.getDB("iot").getCollection(projectName);
+		MongoCollection<Document> projectUser = DBMethods.getDB("iot_user").getCollection(projectName);
 		DeviceList.propagationsCalculated = false;
 		System.out.println(projectName);
 		System.out.println("Load From DataBase");
@@ -34,6 +50,7 @@ public class ExportToClient {
 		FindIterable<Document> markData = DBMethods.findWithPrefix(project, "mark");
 		FindIterable<Document> projectData = DBMethods.findWithPrefix(project, "project");
 		FindIterable<Document> simulationData = DBMethods.findWithPrefix(project, "simulation");
+		FindIterable<Document> userData = DBMethods.findWithPrefix(projectUser, "user");
 		try {
 			BuildingList.openFromDB(buildingData);
 		} catch (IOException e) {
@@ -56,21 +73,7 @@ public class ExportToClient {
 		}
 		else 
 			Routes.hideAll();
-		
+		UserList.openFromDB(userData);
 		CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
-//				}
-//				else {
-//					CupCarbon.cupCarbonController.displayLongErrMessageTh("Project does not exist!");
-//				}
-//			}
-//		});
-//		th.start();
 	}
-	
-	//test client
-//	public static void main(String[] args) {
-//
-//		openProject("deviceTest");
-//
-//	}
 }

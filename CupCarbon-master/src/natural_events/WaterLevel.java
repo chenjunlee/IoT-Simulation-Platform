@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -334,11 +335,29 @@ public class WaterLevel extends MobileG {
 		}
 	}
 
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a list of Document that contains the informs of WaterLevel with prefix device.
+	 */
 	@Override
 	public List<Document> saveToDB() {
-		// TODO Auto-generated method stub
-		// TODO need to do so that database can save it
-		return null;
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("prefix", "device")
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide());
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+		if (!getNatEventFileName().equals(""))
+			document.append("natural_event_file_name", getNatEventFileName());
+		documents.add(document);
+		return documents;
 	}
 
 

@@ -598,6 +598,7 @@ public class CupCarbonController implements Initializable {
 			comboUsers.getItems().add(u.getName());
 
 		}
+		
 		comboUsers.getSelectionModel().select(0);
 		loadUserPreferrences();
 
@@ -617,6 +618,8 @@ public class CupCarbonController implements Initializable {
 					}
 			}
 	    );
+		
+//		DeviceList.devices = loadDevicesFromDB()
 		//================== Bang Tran
 	}
 
@@ -664,6 +667,8 @@ public class CupCarbonController implements Initializable {
 		UserList.users.get(userIdx).lightSensing = checkboxLightSens.isSelected();
 		UserList.users.get(userIdx).windLevelSensing = checkboxWindLevelSens.isSelected();
 		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
+		
+		//save user's preferences to database
 	}
 
 	@Override
@@ -1310,6 +1315,11 @@ public class CupCarbonController implements Initializable {
 
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param simulationData
+	 * set simulation params when open from database
+	 */
 	public void loadSimulationParamsFromDB(FindIterable<Document> simulationData) {
 		MongoCursor<Document> simulationDataIterator = simulationData.iterator();
 		while(simulationDataIterator.hasNext()) {
@@ -3407,11 +3417,15 @@ public class CupCarbonController implements Initializable {
 		initRecentProjectMenu();
 	}
 
+	// changed by Yiwei Yao
 	@FXML
 	public void saveProject() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				// add DataBase mode support, if projectPath equals DataBase mode
+				// then find a new place to store in the file system.
+				// after that open the project by the old way.
 				if(Project.projectPath.equals("DataBase Mode")) {
 					Stage stage = new Stage();
 					FileChooser fileChooser = new FileChooser();
@@ -3439,8 +3453,12 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 	
-	// new 
-	// if project not create name a project name first.
+
+	/**
+	 * @author Yiwei Yao
+	 * save project to DB. if projectPath or project name is not set, create a new
+	 * project make project into database mode. otherwise save the project.
+	 */
 	@FXML
 	public void saveProjectToDB() {
 		Platform.runLater(new Runnable() {
@@ -3467,6 +3485,9 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 	
+	/**
+	 * openProjectFromDB Call DBProjectSelectWindow(). 
+	 */
 	@FXML
 	public void openProjectFromDB() {
 		Platform.runLater(new Runnable() {

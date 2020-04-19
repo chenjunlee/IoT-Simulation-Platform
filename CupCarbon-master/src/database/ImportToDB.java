@@ -19,11 +19,18 @@ import project.Project;
 import simulation.SimulationInputs;
 import markers.MarkerList;	
 import buildings.BuildingList;
+import user.User;
+import user.UserList;
 
+/**
+ * @author Yiwei Yao
+ *
+ */
 public class ImportToDB {
 
 	public static void saveProjectToDB() {
 		MongoCollection<Document> project = DBMethods.getDB("iot").getCollection(Project.projectName);
+		MongoCollection<Document> projectUser = DBMethods.getDB("iot_user").getCollection(Project.projectName);
 		List<Document> otherDocuments = new ArrayList<Document>();
 		DBMethods.dropCollection(project);
 		try {
@@ -38,6 +45,19 @@ public class ImportToDB {
 		if(BuildingList.size()>0) otherDocuments.add(BuildingList.saveToDB());
 		otherDocuments.add(saveSimulationParams());
 		project.insertMany(otherDocuments);
+		saveUsersToDB(projectUser);
+	}
+	// ***************************************************************
+	// below is helper method
+	public static void saveUsersToDB(MongoCollection<Document> projectUser) {
+		List<Document> userDocument = new ArrayList<Document>();
+		User user;
+		Vector<User> users = UserList.users;
+		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+			user = iterator.next();				
+			userDocument.add(user.saveToDB());
+		}
+		projectUser.insertMany(userDocument);
 	}
 	
 	public static void saveDevicesAndSensorsToDB() {

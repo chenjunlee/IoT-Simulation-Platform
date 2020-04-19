@@ -9,6 +9,8 @@ package user;
 import java.util.Random;
 import java.util.Vector;
 
+import org.bson.Document;
+
 import device.DeviceList;
 import device.SensorNode;
 import utilities.MapCalc;
@@ -37,8 +39,8 @@ public class User {
 	public boolean waterLevelSensing = false;
 	public boolean dataEncrypted = false;
 
-	public float preferredLatency = 10; //>= 10 ms
-	public float preferredThroughput = 0; //>= 0kbit
+	public double preferredLatency = 10; //>= 10 ms
+	public double preferredThroughput = 0; //>= 0kbit
 	public long preferredFrequency = 3600000; //1 minutes = 3600*1000 ms
 
 
@@ -173,6 +175,129 @@ public class User {
 		return insidedNodes;
 	}
 
-
+	/**
+	 * @author Yiwei Yao
+	 * @return
+	 * return Document includes user properties.
+	 */
+	public Document saveToDB() {
+		Document document = new Document();
+		document.append("prefix", "user")
+			.append("selectedArea", selectedArea)
+			.append("name", name)
+			.append("latitude1", latitude1)
+			.append("latitude2", latitude2)
+			.append("longitude1", longitude1)
+			.append("longitude2", longitude2)
+			.append("temperatureSensing", temperatureSensing)
+			.append("humiditySensing", humiditySensing)
+			.append("gasSensing", gasSensing)
+			.append("lightSensing", lightSensing)
+			.append("windLevelSensing", windLevelSensing)
+			.append("waterLevelSensing", waterLevelSensing)
+			.append("dataEncrypted", dataEncrypted)
+			.append("preferredLatency", preferredLatency)
+			.append("preferredThroughput", preferredThroughput)
+			.append("preferredFrequency", preferredFrequency);
+		return document;
+	}
+	
+	/**
+	 * setter and getter helpers
+	 * 
+	 */
+	public boolean isSelectedArea() {
+		return selectedArea;
+	}
+	public void setSelectedArea(boolean selectedArea) {
+		this.selectedArea = selectedArea;
+	}
+	public double getLatitude1() {
+		return latitude1;
+	}
+	public void setLatitude1(double latitude1) {
+		this.latitude1 = latitude1;
+	}
+	public double getLatitude2() {
+		return latitude2;
+	}
+	public void setLatitude2(double latitude2) {
+		this.latitude2 = latitude2;
+	}
+	public double getLongitude1() {
+		return longitude1;
+	}
+	public void setLongitude1(double longitude1) {
+		this.longitude1 = longitude1;
+	}
+	public double getLongitude2() {
+		return longitude2;
+	}
+	public void setLongitude2(double longitude2) {
+		this.longitude2 = longitude2;
+	}
+	public boolean isTemperatureSensing() {
+		return temperatureSensing;
+	}
+	public void setTemperatureSensing(boolean temperatureSensing) {
+		this.temperatureSensing = temperatureSensing;
+	}
+	public boolean isHumiditySensing() {
+		return humiditySensing;
+	}
+	public void setHumiditySensing(boolean humiditySensing) {
+		this.humiditySensing = humiditySensing;
+	}
+	public boolean isGasSensing() {
+		return gasSensing;
+	}
+	public void setGasSensing(boolean gasSensing) {
+		this.gasSensing = gasSensing;
+	}
+	public boolean isLightSensing() {
+		return lightSensing;
+	}
+	public void setLightSensing(boolean lightSensing) {
+		this.lightSensing = lightSensing;
+	}
+	public boolean isWindLevelSensing() {
+		return windLevelSensing;
+	}
+	public void setWindLevelSensing(boolean windLevelSensing) {
+		this.windLevelSensing = windLevelSensing;
+	}
+	public boolean isWaterLevelSensing() {
+		return waterLevelSensing;
+	}
+	public void setWaterLevelSensing(boolean waterLevelSensing) {
+		this.waterLevelSensing = waterLevelSensing;
+	}
+	public boolean isDataEncrypted() {
+		return dataEncrypted;
+	}
+	public void setDataEncrypted(boolean dataEncrypted) {
+		this.dataEncrypted = dataEncrypted;
+	}
+	public double getPreferredLatency() {
+		return preferredLatency;
+	}
+	public void setPreferredLatency(double preferredLatency) {
+		this.preferredLatency = preferredLatency;
+	}
+	public double getPreferredThroughput() {
+		return preferredThroughput;
+	}
+	public void setPreferredThroughput(double preferredThroughput) {
+		this.preferredThroughput = preferredThroughput;
+	}
+	public long getPreferredFrequency() {
+		return preferredFrequency;
+	}
+	public void setPreferredFrequency(long preferredFrequency) {
+		this.preferredFrequency = preferredFrequency;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

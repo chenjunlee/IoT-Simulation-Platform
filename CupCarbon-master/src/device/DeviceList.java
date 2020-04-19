@@ -39,7 +39,6 @@ import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.util.JSON;
 
 import action.CupAction;
 import action.CupActionAddSensor;
@@ -250,6 +249,15 @@ public class DeviceList {
 		}
 	}
 	
+
+	/**
+	 * @author Yiwei Yao
+	 * @param deviceData
+	 * @param radioData
+	 * This method receives device data and radio data from Mongodb parse
+	 * first check if device id is device data has its corresponding radio data.
+	 * it parses device data with its deviceType, in different device type call its particular document parse method.
+	 */
 	public static void openFromDB(FindIterable<Document> deviceData, FindIterable<Document> radioData) {
 		SensorNode sensor;
 		int deviceType = -1;
@@ -260,6 +268,7 @@ public class DeviceList {
 			Document selectedDevice = deviceDataIterator.next();
 			deviceType = (int) selectedDevice.get("device_type");
 			deviceId = selectedDevice.getInteger("device_id");
+			// find corresponding radio data.
 			Document selectedRadio = new Document();
 			for(Document radio: radioData) {
 				if(radio.get("device_id").equals("" + deviceId)) {
@@ -268,6 +277,7 @@ public class DeviceList {
 			}
 //				System.out.println(deviceType);
 //				System.out.println(selectedDevice);
+//			parse deviceType in different type
 			switch (deviceType) {
 			case MapObject.SENSOR:
 				if(selectedRadio.isEmpty()){
@@ -306,11 +316,18 @@ public class DeviceList {
 				add(loadWeatherFromDB(selectedDevice));
 				break;
 			}
+			//device number
 			DeviceList.number = idMax+1;
 			MapLayer.repaint();
 		}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return SensorNode
+	 * when device type is sensor and has no radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadSensorFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -355,6 +372,14 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @param selectedRadio
+	 * @return SensorNode
+	 * 
+	 * when device type is sensor and has radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadSensorFromDB(Document selectedDevice, Document selectedRadio) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -394,6 +419,7 @@ public class DeviceList {
 		sensor = new StdSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
 		sensor.setHide(Integer.parseInt(parameters[9]));
 		sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+		// parse radio data
 		openRadioModuleFromDB(selectedRadio, sensor);
 		return sensor;
 	}
@@ -459,6 +485,12 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return SensorNode
+	 * when device type is DirectionalSensor and has no radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -508,6 +540,12 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return SensorNode
+	 * when device type is DirectionalSensor and has radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice, Document selectedRadio) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -624,6 +662,12 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return SensorNode
+	 * when device type is baseStation and has no radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadBaseStationFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -663,6 +707,12 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return SensorNode
+	 * when device type is baseStation and has radio data, parse the Document return a sensorNode Object
+	 */
 	public static SensorNode loadBaseStationFromDB(Document selectedDevice, Document selectedRadio) {
 		SensorNode sensor = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -698,6 +748,7 @@ public class DeviceList {
 		}
 		sensor = new BaseStation(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
 		sensor.setHide(Integer.parseInt(parameters[9]));
+		// load radio data
 		openRadioModuleFromDB(selectedRadio, sensor);
 		return sensor;
 	}
@@ -759,6 +810,12 @@ public class DeviceList {
 		return sensor;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return Device
+	 * when device type is Device, parse the Document return a sensorNode Object
+	 */
 	public static Device loadMobileFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -841,6 +898,12 @@ public class DeviceList {
 		return device;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return Device
+	 * when device type is gas, parse the Document return a Device Object
+	 */
 	public static Device loadGasFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -925,6 +988,12 @@ public class DeviceList {
 		return device;
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedDevice
+	 * @return Device
+	 * when device type is Weather, parse the Document return a Device Object
+	 */
 	public static Device loadWeatherFromDB(Document selectedDevice) {
 		Weather device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -2087,6 +2156,14 @@ public class DeviceList {
 		}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedRadio
+	 * @param sensor
+	 * 
+	 * Parse Radio Document, check up to 10 radio name, if it exists use openRadioModuleFromDBHelper
+	 * to parse, after that set currentRadio.
+	 */
 	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {				
 		if(selectedRadio.containsKey("radio_name"+1)) {
 			openRadioModuleFromDBHelper(selectedRadio, 1, sensor);
@@ -2122,6 +2199,14 @@ public class DeviceList {
 		sensor.selectCurrentRadioModule(currentRadioName);
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param selectedRadio
+	 * @param index
+	 * @param sensor
+	 * 
+	 * openRadioModuleFromDBHelper parse radio document and add to sensor.
+	 */
 	public static void openRadioModuleFromDBHelper(Document selectedRadio, int index, SensorNode sensor) {
 		String name = selectedRadio.getString("radio_name"+index);
 		String std = selectedRadio.getString("radio_standard"+index);

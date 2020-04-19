@@ -388,6 +388,7 @@ public abstract class RadioModule {
 	}	
 	
 	public abstract void save(PrintStream fos, RadioModule currentRadioModule);
+	// save to db
 	public abstract Document saveToDB(int index, RadioModule currentRadioModule, String deviceId, Document document);
 	
 	public int getSpreadingFactor() {

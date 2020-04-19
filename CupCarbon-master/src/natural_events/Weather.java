@@ -276,28 +276,13 @@ public class Weather extends MobileG {
 		}
 	}
 
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a list of Document that contains the informs of Weather with prefix device.
+	 */
 	@Override
 	public List<Document> saveToDB() {
-//		try {
-//			PrintStream fos = null;
-//			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "weather_" + getId()));
-//			fos.println("List of parameters");
-//			fos.println("------------------------------------------");
-//			fos.println("device_type:" + getType());
-//			fos.println("device_id:" + getId());
-//			fos.println("device_longitude:" + getLongitude());
-//			fos.println("device_latitude:" + getLatitude());
-//			fos.println("device_elevation:" + getElevation());
-//			fos.println("device_radius:" + getRadius());
-//			fos.println("device_hide:" + getHide());
-//			if (!getGPSFileName().equals(""))
-//				fos.println("device_gps_file_name:" + getGPSFileName());
-//			if (!getNatEventFileName().equals(""))
-//				fos.println("natural_event_file_name:" + getNatEventFileName());
-//			fos.close();
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
 		List<Document> documents = new ArrayList<Document>();
 		Document document = new Document()
 				.append("prefix", "device")

@@ -363,6 +363,11 @@ public final class Project {
 		}
 	}
 
+	/**
+	 * @author Yiwei Yao
+	 * @param projectData
+	 * loadParametersFromDB parse project data and set it to project properties.
+	 */
 	public static void loadParametersFromDB(FindIterable<Document> projectData) {
 		MongoCursor<Document> projectDataIterator = projectData.iterator();
 		while(projectDataIterator.hasNext()) {
@@ -480,6 +485,12 @@ public final class Project {
 		}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @return Document
+	 * saveParametersToDB save properties of project into document with a prefix project.
+	 * 
+	 */
 	public static Document saveParametersToDB() {
 		Document document = new Document();
 		document.append("prefix", "project")

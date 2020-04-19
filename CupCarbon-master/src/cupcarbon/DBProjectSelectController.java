@@ -21,6 +21,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
+/**
+ * @author Yiwei Yao
+ *
+ *DBProjectSelectController control the windows of dbprojectselect.fxml
+ */
 public class DBProjectSelectController implements Initializable {
 
 	@FXML
@@ -35,6 +40,9 @@ public class DBProjectSelectController implements Initializable {
 	}
 
 	
+	/**
+	 * get a list of collection name in iot db
+	 */
 	private void initProjectName() {
 		MongoDatabase db = DBMethods.getDB("iot");
 		MongoIterable<String> collections = DBMethods.getCollections(db);
@@ -45,6 +53,9 @@ public class DBProjectSelectController implements Initializable {
 	}
 
 
+	/**
+	 * load project 
+	 */
 	@FXML
 	public void select() {
 		boolean success = false;

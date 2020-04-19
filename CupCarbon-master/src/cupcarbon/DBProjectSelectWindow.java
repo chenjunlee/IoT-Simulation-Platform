@@ -8,6 +8,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * @author Yiwei Yao
+ * 
+ * DBProjectSelectWindow Link dbprojectselect.fxml and construct the window.
+ *
+ */
 public class DBProjectSelectWindow {
 	
 	public DBProjectSelectWindow() throws IOException {

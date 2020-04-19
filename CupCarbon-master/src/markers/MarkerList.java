@@ -104,6 +104,11 @@ public class MarkerList {
 		}
 	}
 
+	/**
+	 * @author Yiwei Yao
+	 * @return List<Document>
+	 * return a list of Document that contains the informs of marker.
+	 */
 	public static List<Document> saveToDB() {
 		List<Document> markList = new ArrayList<Document>();
 		Marker marker;
@@ -120,6 +125,12 @@ public class MarkerList {
 		return markList;
 	}
 	
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param markData
+	 * parse mark fom markData and add.
+	 */
 	public static void openFromDB(FindIterable<Document> markData) {
 		//Routes.reset();
 		reset();

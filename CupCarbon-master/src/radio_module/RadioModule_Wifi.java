@@ -80,6 +80,15 @@ public class RadioModule_Wifi extends RadioModule {
 		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
 	
+	/**
+	 *@author Yiwei Yao
+	 *@param int index, RadioModule currentRadioModule, String deviceId, Document document
+	 *@return Document
+	 *return a Document that contains the properties of Wifi
+	 *if passed in document already has prefix. then append document with current radio properties.
+	 *other wise first append prefix and device id
+	 *if this radio is current selected radio. set current_radio_name to this one.
+	 */
 	@Override
 	public Document saveToDB(int index, RadioModule currentRadioModule, String deviceId, Document document) {
 		if(!document.containsKey("prefix")) 

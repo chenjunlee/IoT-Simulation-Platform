@@ -12,6 +12,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 
+/**
+ * @author Yiwei Yao
+ *
+ */
 public class DBMethods {	
 	static MongoClient  mongo = ConnectToDB.mongoClient;
 	
@@ -40,6 +44,7 @@ public class DBMethods {
 		return collection.find();
 	}
 	
+	// find document with prefix
 	public static FindIterable<Document> findWithPrefix(MongoCollection<Document> collection, String prefix) {
 		BasicDBObject query = new BasicDBObject();
 		query.put("prefix", prefix);
@@ -47,6 +52,7 @@ public class DBMethods {
 		return data;
 	}
 	
+	// drop collection
 	public static void dropCollection(MongoCollection<Document> collection) {
 		collection.drop();
 	}

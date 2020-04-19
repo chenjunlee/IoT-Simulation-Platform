@@ -321,6 +321,11 @@ public class DirectionalSensorNode extends SensorNode {
 	}
 	
 	
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a List of Document contains the informs of DirectionalSensor.
+	 */
 	@Override
 	public List<Document> saveToDB() {
 		List<Document> documents = new ArrayList<Document>();
