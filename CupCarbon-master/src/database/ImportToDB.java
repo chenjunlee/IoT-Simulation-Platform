@@ -47,8 +47,11 @@ public class ImportToDB {
 		project.insertMany(otherDocuments);
 		saveUsersToDB(projectUser);
 	}
+	
+	
 	// ***************************************************************
 	// below is helper method
+	// ***************************************************************
 	public static void saveUsersToDB(MongoCollection<Document> projectUser) {
 		List<Document> userDocument = new ArrayList<Document>();
 		User user;

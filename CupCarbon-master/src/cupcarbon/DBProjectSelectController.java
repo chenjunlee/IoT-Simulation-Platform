@@ -59,9 +59,19 @@ public class DBProjectSelectController implements Initializable {
 	@FXML
 	public void select() {
 		boolean success = false;
+		boolean error = false;
 		if (!txtLoadProjectName.getSelectionModel().getSelectedItem().isEmpty()) {
 			String selectedProjectName = txtLoadProjectName.getSelectionModel().getSelectedItem().toString();
-			ExportToClient.openProject(selectedProjectName);
+			try {
+				ExportToClient.openProject(selectedProjectName);
+			} catch(Exception e) {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("Warning!");
+				alert.setHeaderText(null);
+				alert.setContentText(e.toString());
+				alert.showAndWait();
+				error = true;
+			}
 			success = true;
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -70,7 +80,7 @@ public class DBProjectSelectController implements Initializable {
 			alert.setContentText("No Project Selected");
 			alert.showAndWait();
 		}
-		if(success) {
+		if(success && !error) {
 		    Stage stage = (Stage) done.getScene().getWindow();
 		    stage.close();
 		    Alert alert = new Alert(AlertType.WARNING);

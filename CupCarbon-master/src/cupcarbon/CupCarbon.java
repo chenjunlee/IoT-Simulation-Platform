@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.swing.ImageIcon;
 
@@ -49,6 +51,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
 import solver.SolverProxyParams;
 
@@ -61,6 +64,9 @@ public class CupCarbon extends Application {
 	public static Stage stage;
 	public static CupCarbonController cupCarbonController;
 	public static boolean macos = false;
+	
+	// Add by Yiwei Yao
+	public static String DBFilePath = "";
 
 	@Override
 	public void start(Stage mainStage) throws Exception {
@@ -92,6 +98,10 @@ public class CupCarbon extends Application {
 	}
 
 	public static void main(String[] args) {
+		// Add by Yiwei Yao initial db file folder and print out the path
+		initDBProjectFiles();
+		System.out.println("Files Path for Database Project: " + DBFilePath);
+		
 		System.out.println("03111441122123263122253111131132311317312221232617123");	//Signature
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];
@@ -160,5 +170,31 @@ public class CupCarbon extends Application {
 	@Override
 	public void stop() {
 		System.exit(0);
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * initial DB Script, nature event, GPS file path;
+	 */
+	public static void initDBProjectFiles() {
+		String file = "files_for_database";
+		java.nio.file.Path currentPath = Paths.get(System.getProperty("user.dir"));
+		java.nio.file.Path filePath = Paths.get(currentPath.toString(), file);
+		if(!(Files.exists(filePath) && Files.isDirectory(filePath))) {
+			filePath.toFile().mkdir();
+	    }
+		java.nio.file.Path scriptFilePath = Paths.get(currentPath.toString(), file, "scripts");
+		java.nio.file.Path gpsFilePath = Paths.get(currentPath.toString(), file, "gps");
+		java.nio.file.Path natureEventFilePath = Paths.get(currentPath.toString(), file, "natevents");
+		if(!(Files.exists(scriptFilePath) && Files.isDirectory(filePath))) {
+			scriptFilePath.toFile().mkdir();
+	    }
+		if(!(Files.exists(gpsFilePath) && Files.isDirectory(filePath))) {
+			gpsFilePath.toFile().mkdir();
+	    }
+		if(!(Files.exists(natureEventFilePath) && Files.isDirectory(filePath))) {
+			natureEventFilePath.toFile().mkdir();
+	    }
+		DBFilePath = filePath.toString();
 	}
 }

@@ -59,12 +59,29 @@ public final class Project {
 	
 	public static String projectPath = "";
 	public static String projectName = "";
+	//add by Yiwei Yao for db file path
+	public static String DBFilePath = cupcarbon.CupCarbon.DBFilePath;
 
 	public static void setProjectName(String path, String name) {
 		projectPath = path;
 		projectName = name;
 	}
 
+	// add by Yiwei Yao file path for database mode
+	// ***************************************************************************
+	public static String getProjectGpsPathForDB() {
+		return DBFilePath + File.separator + "gps";
+	}
+
+	public static String getProjectScriptPathForDB() {
+		return DBFilePath + File.separator + "scripts";
+	}
+	
+	public static String getProjectNatEventPathForDB() {
+		return DBFilePath + File.separator + "natevents";
+	}
+	// ***************************************************************************
+	
 	public static String getProjectPathName() {
 		return projectPath + File.separator + projectName;
 	}
@@ -551,6 +568,16 @@ public final class Project {
 		else
 			return getProjectNatEventPath() + File.separator + name + ".evt";
 	}
+	
+	// add by Yiwei Yao
+	// ******************************************************************************
+	public static String getNatEventFileFromNameForDB(String name) {
+		if (name.endsWith(".evt"))
+			return getProjectNatEventPathForDB() + File.separator + name;
+		else
+			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
+	}
+	// ******************************************************************************
 
 	public static String getNatEventFileExtension(String name) {
 		if (name.endsWith(".evt"))
@@ -566,6 +593,16 @@ public final class Project {
 			return getProjectGpsPath() + File.separator + name + ".gps";
 	}
 
+	// add by Yiwei Yao
+	// ******************************************************************************
+	public static String getGpsFileFromNameForDB(String name) {
+		if (name.endsWith(".gps"))
+			return getProjectGpsPathForDB() + File.separator + name;
+		else
+			return getProjectGpsPathForDB() + File.separator + name + ".gps";
+	}
+	// ******************************************************************************
+	
 	public static String getGpsFileExtension(String name) {
 		if (name.endsWith(".gps"))
 			return name;
@@ -580,6 +617,16 @@ public final class Project {
 			return getProjectScriptPath() + File.separator + name + ".csc";
 	}
 
+	// add by Yiwei Yao
+	// ******************************************************************************
+	public static String getScriptFileFromNameForDB(String name) {
+		if (name.endsWith(".csc"))
+			return getProjectScriptPathForDB() + File.separator + name;
+		else
+			return getProjectScriptPathForDB() + File.separator + name + ".csc";
+	}
+	// ******************************************************************************
+	
 	public static String getScriptFileExtension(String name) {
 		if (name.endsWith(".csc"))
 			return name;

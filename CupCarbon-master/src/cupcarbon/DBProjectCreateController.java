@@ -49,7 +49,7 @@ public class DBProjectCreateController implements Initializable {
 			name = name.replaceAll(" ", "");
 			Project.projectName = name;
 			Project.projectPath = "DataBase Mode";
-			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + "DataBase Mode" + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.projectPath + "]" + " (" + Project.DBFilePath + ")");
 			ImportToDB.saveProjectToDB();
 			success = true;
 		}

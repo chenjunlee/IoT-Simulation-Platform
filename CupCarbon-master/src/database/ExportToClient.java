@@ -60,7 +60,7 @@ public class ExportToClient {
 		DeviceList.openFromDB(deviceData, radioData);
 		MarkerList.openFromDB(markData);
 		Project.loadParametersFromDB(projectData);
-		CupCarbon.cupCarbonController.loadSimulationParams();
+		CupCarbon.cupCarbonController.loadSimulationParamsFromDB(simulationData);
 		CupCarbon.cupCarbonController.applyParameters();
 		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		if(DeviceList.propagationsCalculated) {

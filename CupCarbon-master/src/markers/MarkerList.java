@@ -337,6 +337,55 @@ public class MarkerList {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param fileName
+	 * @param title
+	 * @param from
+	 * @param to
+	 * @param loop
+	 * @param delay
+	 * @param nLoop
+	 * saveGpsCoordsForDB save gps to the file required by database project
+	 */
+	public static void saveGpsCoordsForDB(String fileName, String title, String from, String to, boolean loop, int delay, int nLoop) {
+		try {
+			PrintStream ps;
+			ps = new PrintStream(new FileOutputStream(Project.getGpsFileFromNameForDB(fileName)));
+			ps.println(title);
+			ps.println(from);
+			ps.println(to);
+			ps.println(loop);
+			ps.println(nLoop);
+			Marker marker;
+
+			boolean first = true;
+			double lo = 0;
+			double la = 0;
+			double el = 0;
+			double ra = 0;
+			for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
+				marker = iterator.next();
+				if(first) {
+					first = false;
+					lo = marker.getLongitude() ;
+					la = marker.getLatitude() ;
+					el = marker.getElevation() ;
+					ra = marker.getRadius();
+				}
+				ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());
+			}
+			if(loop) {
+				ps.println(delay + " " + lo + " " + la + " " + el + " " + ra);
+			}
+			ps.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
 		boolean selection = false;

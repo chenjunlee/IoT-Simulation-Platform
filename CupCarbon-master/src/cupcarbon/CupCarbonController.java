@@ -1051,7 +1051,12 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void deleteRoute() {
 		String fileName = gpsListView.getSelectionModel().getSelectedItem();
-		File file = new File(Project.getProjectGpsPath() + File.separator + fileName);
+		File file = null;
+		if(Project.projectPath == "DataBase Mode") {
+			file = new File(Project.getProjectGpsPathForDB() + File.separator + fileName);
+		} else {
+			file = new File(Project.getProjectGpsPath() + File.separator + fileName);
+		}
 
 		boolean delete = false;
 
@@ -1067,7 +1072,11 @@ public class CupCarbonController implements Initializable {
 		if (delete) {
 			saveButton.setDisable(false);
 			file.delete();
-			getListOfRoutes();
+			if(Project.projectPath == "DataBase Mode") {
+				getListOfRoutesForDB();
+			} else {
+				getListOfRoutes();
+			}
 			initScriptGpsEventComboBoxes();
 			mapFocus();
 		}
@@ -1077,7 +1086,12 @@ public class CupCarbonController implements Initializable {
 	public void saveRoute() {
 		if (!Project.projectName.equals("")) {
 			if (MarkerList.size() > 0) {
-				File gpsFolder = new File(Project.getProjectGpsPath());
+				File gpsFolder = null;
+				if(Project.projectPath == "DataBase Mode") {
+					gpsFolder = new File(Project.getProjectGpsPathForDB());
+				} else {
+					gpsFolder = new File(Project.getProjectGpsPath());
+				}
 				File[] gpsFiles = gpsFolder.listFiles();
 				int i = 0;
 				boolean found = false;
@@ -1103,10 +1117,17 @@ public class CupCarbonController implements Initializable {
 				if (saveOk) {
 					saveButton.setDisable(false);
 					txtFileName.setText(Project.getGpsFileExtension(txtFileName.getText()));
-					MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
-							txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
-							Integer.parseInt(loopNumber.getText()));
-					getListOfRoutes();
+					if(Project.projectPath == "DataBase Mode") {
+						MarkerList.saveGpsCoordsForDB(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
+								txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
+								Integer.parseInt(loopNumber.getText()));
+						getListOfRoutesForDB();
+					} else {
+						MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
+								txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
+								Integer.parseInt(loopNumber.getText()));
+						getListOfRoutes();
+					}
 					initScriptGpsEventComboBoxes();
 					mapFocus();
 				}
@@ -1253,8 +1274,12 @@ public class CupCarbonController implements Initializable {
 
 	public void openProjectLoadParameters() {
 		CupCarbon.cupCarbonController.simulationParametersApply();
-		loadSimulationParams();
-		getListOfRoutes();
+		if(Project.projectPath == "DataBase Mode") {
+			getListOfRoutesForDB();
+		} else {
+			loadSimulationParams();
+			getListOfRoutes();
+		}
 		updateObjectListView();
 		initScriptGpsEventComboBoxes();
 		createContextMenu();
@@ -1325,52 +1350,52 @@ public class CupCarbonController implements Initializable {
 		while(simulationDataIterator.hasNext()) {
 			Document Selectedsimulation = simulationDataIterator.next();
 			if(Selectedsimulation.containsKey("simulationtime")) {
-				simulationTimeTextField.setText((String) Selectedsimulation.get("simulationtime"));
+				simulationTimeTextField.setText(Double.toString(Selectedsimulation.getDouble("simulationtime")));
 			}
 			if(Selectedsimulation.containsKey("mobility")) {
-				mobilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mobility")));
+				mobilityCheckBox.setSelected(Selectedsimulation.getBoolean("mobility"));
 			}
 			if(Selectedsimulation.containsKey("simulationspeed")) {
-				simulationSpeedTextField.setText((String) Selectedsimulation.get("simulationspeed"));
+				simulationSpeedTextField.setText(Integer.toString(Selectedsimulation.getInteger("simulationspeed")));
 			}
 			if(Selectedsimulation.containsKey("arrowspeed")) {
-				arrowSpeedTextField.setText((String) Selectedsimulation.get("arrowspeed"));
+				arrowSpeedTextField.setText(Integer.toString(Selectedsimulation.getInteger("arrowspeed")));
 			}
 			if(Selectedsimulation.containsKey("log")) {
-				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("log")));
+				logCheckBox.setSelected(Selectedsimulation.getBoolean("log"));
 			}
 			if(Selectedsimulation.containsKey("results")) {
-				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("results")));
+				logCheckBox.setSelected(Selectedsimulation.getBoolean("results"));
 			}
 			if(Selectedsimulation.containsKey("acktype")) {
-				probaComboBox.getSelectionModel().select((int) Double.parseDouble((String) Selectedsimulation.get("results")));
+				probaComboBox.getSelectionModel().select(Double.toString(Selectedsimulation.getDouble("acktype")));
 			}
 			if(Selectedsimulation.containsKey("ackproba")) {
-				probaTextField.setText((String) Selectedsimulation.get("ackproba"));
+				probaTextField.setText(Double.toString(Selectedsimulation.getDouble("ackproba")));
 			}
 			if(Selectedsimulation.containsKey("acklinks")) {
-				ackShowCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("acklinks")));
+				ackShowCheckBox.setSelected(Selectedsimulation.getBoolean("acklinks"));
 			}
 			if(Selectedsimulation.containsKey("ack")) {
-				ackCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("ack")));
+				ackCheckBox.setSelected(Selectedsimulation.getBoolean("ack"));
 			}
 			if(Selectedsimulation.containsKey("symmetricalinks")) {
-				symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("symmetricalinks")));
+				symmetricalLinkCheckBox.setSelected(Selectedsimulation.getBoolean("symmetricalinks"));
 			}
 			if(Selectedsimulation.containsKey("clockdrift")) {
-				clockDriftCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("clockdrift")));
+				clockDriftCheckBox.setSelected(Selectedsimulation.getBoolean("clockdrift"));
 			}
 			if(Selectedsimulation.containsKey("visibility")) {
-				visibilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("visibility")));
+				visibilityCheckBox.setSelected(Selectedsimulation.getBoolean("visibility"));
 			}
 			if(Selectedsimulation.containsKey("results_writing_period")) {
-				resultsWPeriod.setText((String) Selectedsimulation.get("results_writing_period"));
+				resultsWPeriod.setText(Double.toString(Selectedsimulation.getDouble("results_writing_period")));
 			}
 			if(Selectedsimulation.containsKey("mac_layer")) {
-				macCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mac_layer")));
+				macCheckBox.setSelected(Selectedsimulation.getBoolean("mac_layer"));
 			}
 			if(Selectedsimulation.containsKey("macproba")) {
-				macProbaTextField.setText((String) Selectedsimulation.get("macproba"));
+				macProbaTextField.setText(Double.toString(Selectedsimulation.getDouble("macproba")));
 			}
 			ackChecked();
 			macChecked();
@@ -2378,40 +2403,91 @@ public class CupCarbonController implements Initializable {
 	}
 
 	public void initScriptGpsEventComboBoxes() {
-		File gpsFiles = new File(Project.getProjectGpsPath());
-		String[] s = gpsFiles.list();
-		if (s == null)
-			s = new String[1];
-		gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
-		gpsFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					gpsFileComboBox.getItems().add(s[i]);
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File gpsFiles = new File(Project.getProjectGpsPathForDB());
+			String[] s = gpsFiles.list();
+			if (s == null)
+				s = new String[1];
+			gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
+			gpsFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						gpsFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File gpsFiles = new File(Project.getProjectGpsPath());
+			String[] s = gpsFiles.list();
+			if (s == null)
+				s = new String[1];
+			gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
+			gpsFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						gpsFileComboBox.getItems().add(s[i]);
+			}
 		}
-
-		File scriptFiles = new File(Project.getProjectScriptPath());
-		s = scriptFiles.list();
-		if (s == null)
-			s = new String[1];
-		scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
-		scriptFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					scriptFileComboBox.getItems().add(s[i]);
+		
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File scriptFiles = new File(Project.getProjectScriptPathForDB());
+			String[] s = scriptFiles.list();
+			if (s == null)
+				s = new String[1];
+			scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
+			scriptFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						scriptFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File scriptFiles = new File(Project.getProjectScriptPath());
+			String[] s = scriptFiles.list();
+			if (s == null)
+				s = new String[1];
+			scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
+			scriptFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						scriptFileComboBox.getItems().add(s[i]);
+			}
 		}
-
-		File neteventFiles = new File(Project.getProjectNatEventPath());
-		s = neteventFiles.list();
-		if (s == null)
-			s = new String[1];
-		nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
-		nateventFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					nateventFileComboBox.getItems().add(s[i]);
+		
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File neteventFiles = new File(Project.getProjectNatEventPathForDB());
+			String[] s = neteventFiles.list();
+			if (s == null)
+				s = new String[1];
+			nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
+			nateventFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						nateventFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File neteventFiles = new File(Project.getProjectNatEventPath());
+			String[] s = neteventFiles.list();
+			if (s == null)
+				s = new String[1];
+			nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
+			nateventFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						nateventFileComboBox.getItems().add(s[i]);
+			}
 		}
 	}
 
@@ -2918,7 +2994,30 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void getListOfRoutes() {
 		gpsListView.getItems().removeAll(gpsListView.getItems());
-		File gpsFolder = new File(Project.getProjectGpsPath());
+		File gpsFolder = null;
+		// add by Yiwei Yao support Database gps file view lists
+		if(Project.projectPath == "DataBase Mode") {
+			gpsFolder = new File(Project.getProjectGpsPathForDB());
+		} else {
+			gpsFolder = new File(Project.getProjectGpsPath());
+		}
+		File[] gpsFiles = gpsFolder.listFiles();
+		if (gpsFolder.exists()) {
+			for (int i = 0; i < gpsFiles.length; i++) {
+				if (!(gpsFiles[i].getName().startsWith("."))) {
+					gpsListView.getItems().add(gpsFiles[i].getName());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * return a list of gps file from database gps folder.
+	 */
+	public void getListOfRoutesForDB() {
+		gpsListView.getItems().removeAll(gpsListView.getItems());
+		File gpsFolder = new File(Project.getProjectGpsPathForDB());
 		File[] gpsFiles = gpsFolder.listFiles();
 		if (gpsFolder.exists()) {
 			for (int i = 0; i < gpsFiles.length; i++) {
@@ -2937,11 +3036,20 @@ public class CupCarbonController implements Initializable {
 				if (!gpsListView.getSelectionModel().isEmpty()) {
 					saveButton.setDisable(false);
 					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
-
-					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
-
+					
+					if(Project.projectPath == "DataBase Mode") {
+						MarkerList.open(Project.getProjectGpsPathForDB() + File.separator + gpsFileName);
+					} else {
+						MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
+					}
+					
 					try {
-						BufferedReader br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
+						BufferedReader br = null;
+						if(Project.projectPath == "DataBase Mode") {
+							br = new BufferedReader(new FileReader(Project.getProjectGpsPathForDB() + File.separator + gpsFileName));
+						} else {
+							br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
+						}
 						String line;
 						txtFileName.setText(gpsFileName);
 						line = br.readLine();
@@ -3465,11 +3573,6 @@ public class CupCarbonController implements Initializable {
 			@Override
 			public void run() {
 				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
-//					Alert alert = new Alert(AlertType.WARNING);
-//					alert.setTitle("Warning!");
-//					alert.setHeaderText(null);
-//					alert.setContentText("Project must be created or must be open.");
-//					alert.showAndWait();
 					try {
 						new DBProjectCreateWindow();
 					} catch(IOException e) {}
@@ -3486,6 +3589,7 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	/**
+	 * @author Yiwei Yao
 	 * openProjectFromDB Call DBProjectSelectWindow(). 
 	 */
 	@FXML
@@ -3493,19 +3597,12 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-//				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
-//					Alert alert = new Alert(AlertType.WARNING);
-//					alert.setTitle("Warning!");
-//					alert.setHeaderText(null);
-//					alert.setContentText("Project must be created or must be open.");
-//					alert.showAndWait();
 					try {
 						new DBProjectSelectWindow();
 					} catch(IOException e) {}
-					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + "DataBase Mode" + "]");
-//				} else {
-//					ImportToDB.saveProjectToDB();
-//				}
+					openProjectLoadParameters();
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.projectPath + "]" + " (" + Project.DBFilePath + ")");
+					
 			}
 		});
 	}
@@ -3737,10 +3834,18 @@ public class CupCarbonController implements Initializable {
 				if(sensor.isMarked()) n_mark++; else n_unmark++;
 				if(sensor.isSelected()) n_s_o++;
 			}
-
-			File f = new File(Project.getProjectGpsPath());
+			File f = null;
+			if(Project.projectPath == "DataBase Mode") {
+				f = new File(Project.getProjectGpsPathForDB());
+			} else {
+				f = new File(Project.getProjectGpsPath());
+			}
 			if(f.list() != null)
-				n_r = new File(Project.getProjectGpsPath()).list().length;
+				if(Project.projectPath == "DataBase Mode") {
+					n_r = new File(Project.getProjectGpsPathForDB()).list().length;
+				} else {
+					n_r = new File(Project.getProjectGpsPath()).list().length;
+				}
 
 			labelInfo1.setText("Number of Sensors: " + n_s);
 			labelInfo2.setText("Number of Directional Sensors: " + n_ms);
