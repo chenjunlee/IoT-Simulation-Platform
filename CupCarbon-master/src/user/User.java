@@ -304,6 +304,7 @@ public class User {
 	//add by Chenjun
 	public void setUserServer(CloudServer userServer) {
 		this.userServer = userServer;
+		this.userServer.setUser(this);
 	}
 	public CloudServer userServer() {
 		return userServer;
