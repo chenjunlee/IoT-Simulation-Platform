@@ -54,6 +54,15 @@ import simulation.WisenSimulation;
 import utilities.MapCalc;
 import utilities.UColor;
 
+//add by Chenjun
+import natural_events.Gas;
+import natural_events.Humidity;
+import natural_events.Lighting;
+import natural_events.Temperature;
+import natural_events.WaterLevel;
+import natural_events.Weather;
+import natural_events.WindLevel;
+
 /**
  * @author Ahcene Bounceur
  * @version 1.0
@@ -652,24 +661,70 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}		
 	}
 	
+	//edit by Chenjun, change it for AREADSENSOR
+	//DATA FORMAT will change from S#S1#V1#S2#V2 ... TO S#Temperature#TemperatureValue#...#E
 	public String getSensorValues() {
 		String s = "";
+		boolean temperature = true;
+		boolean humidity = true;
+		boolean gas = true;
+		boolean lighting = true;
+		boolean water = true;
+		boolean wind = true;
 		boolean first = true; 
 		for(Device device : DeviceList.devices) {
 			if(!device.getClass().equals(Weather.class)) {
 				if(detect(device)) {
-					if (!first) {
-						s += "#";
+					if (device.getClass().equals(Temperature.class) && temperature) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Temperature" + "#" + device.getValue();
+						first = false;
+						temperature = false;
+					} else if (device.getClass().equals(Gas.class) && gas) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Gas" + "#" + device.getValue();
+						first = false;
+						humidity = false;
+					} else if (device.getClass().equals(Humidity.class) && humidity) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Humidity" + "#" + device.getValue();
+						first = false;
+						gas = false;
+					} else if (device.getClass().equals(Lighting.class) && lighting) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Lighting" + "#" + device.getValue();
+						first = false;
+						lighting = false;
+					} else if (device.getClass().equals(WaterLevel.class) && water) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Water" + "#" + device.getValue();
+						first = false;
+						water = false;
+					} else if (device.getClass().equals(WindLevel.class) && wind) {
+						if (!first) {
+							s += "#";
+						}
+						s += "Wind" + "#" + device.getValue();
+						first = false;
+						wind = false;
 					}
-					s += device.getId()+"#"+device.getValue();
-					first = false;
 				}
 			}
 		}
 		if(s.equals(""))
 			s = "X";
 		else
-			s = "S#"+s;
+			s = "S#"+s+"#E";
 		return s ;
 	}	
 		
