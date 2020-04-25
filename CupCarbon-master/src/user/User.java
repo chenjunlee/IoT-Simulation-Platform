@@ -60,6 +60,8 @@ public class User {
 		latitude1 = longitude1 = latitude2 = longitude2 = 0;
 		selectedArea = false;
 		areaBoderColor=new Color(255, 0, 0);
+		//add by Chenjun
+		userServer = null;
 	}
 
 	/**
@@ -306,7 +308,7 @@ public class User {
 		this.userServer = userServer;
 		this.userServer.setUser(this);
 	}
-	public CloudServer userServer() {
+	public CloudServer getUserServer() {
 		return userServer;
 	}
 
