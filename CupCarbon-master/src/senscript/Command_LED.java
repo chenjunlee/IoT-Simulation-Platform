@@ -1,14 +1,17 @@
 package senscript;
 
+import java.util.Vector;
+
 import arduino.BeginInstructions;
+import device.CloudServer;
 import device.SensorNode;
 import simulation.WisenSimulation;
-import utilities.UColor;
+
 
 public class Command_LED extends Command {
 
-	protected String arg1 = "" ;
-	protected String arg2 = "" ;
+	protected String arg1 = null ;
+	protected String arg2 = null ;
 	
 	// Note: arg1 is the number of the pin: not used in simulation
 	// but it is useful for the code generation to determine which pin
@@ -22,14 +25,26 @@ public class Command_LED extends Command {
 
 	@Override
 	public double execute() {
-		WisenSimulation.simLog.add("S" + sensor.getId() + " LED "+arg1+" -> Color = "+arg2);
-		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue();
-		if(ledColor>UColor.colorTab.length-1)
-			ledColor = (ledColor % (UColor.colorTab.length))+1;
-		else
-			ledColor = ledColor % (UColor.colorTab.length+1);
-		sensor.setLedColor(ledColor);
-		return 0 ;
+		String tableName = sensor.getScript().getVariableValue(arg1);
+		String data = sensor.getScript().getVariableValue(arg2);
+		if(sensor.getClass().equals(CloudServer.class)) {
+			Vector<SensorNode> sensors = sensor.getUser().getSensorsInsideArea();
+			int count = sensors.size();
+			sensor.getScript().putVector(tableName, count+1);
+			String [] vector = sensor.getScript().getVector(tableName);
+			vector[0] = "" + (count +1);
+			int index = 1;
+			for(SensorNode s : sensors) {
+				vector[index] ="" +s.getId();
+				index++;
+			}
+		} else {
+			sensor.getScript().putVector(tableName, 1);
+			String [] vector = sensor.getScript().getVector(tableName);
+			vector[0] = ""+ 1;
+		}
+		
+		return 0;
 	}
 
 	@Override
