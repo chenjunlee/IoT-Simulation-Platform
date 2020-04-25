@@ -55,6 +55,7 @@ import utilities.MapCalc;
 import utilities.UColor;
 
 //add by Chenjun
+import user.User;
 import natural_events.Gas;
 import natural_events.Humidity;
 import natural_events.Lighting;
@@ -84,6 +85,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected byte [] buffer = new byte [bufferSize];
 	protected boolean bufferReady = false;
 	protected double drssi = 0; // rssi in distance (meter)
+	
+	//Chenjun
+	private User user = null;
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -909,4 +913,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return getSensorUnit().getDirection();
 	}
 	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public User getUser() {
+		return user;
+	}
 }
