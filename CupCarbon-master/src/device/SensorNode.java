@@ -666,7 +666,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	//edit by Chenjun, change it for AREADSENSOR
-	//DATA FORMAT will change from S#S1#V1#S2#V2 ... TO S#Temperature#TemperatureValue#...#E
+	//DATA FORMAT will change from S#S1#V1#S2#V2 ... TO NumberOfEventDetected(1 for each kind mostly)#Temperature#TemperatureValue#...#E
 	public String getSensorValues() {
 		String s = "";
 		boolean temperature = true;
@@ -676,6 +676,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		boolean water = true;
 		boolean wind = true;
 		boolean first = true; 
+		int count = 0;
 		for(Device device : DeviceList.devices) {
 			if(!device.getClass().equals(Weather.class)) {
 				if(detect(device)) {
@@ -686,6 +687,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Temperature" + "#" + device.getValue();
 						first = false;
 						temperature = false;
+						count++;
 					} else if (device.getClass().equals(Gas.class) && gas) {
 						if (!first) {
 							s += "#";
@@ -693,6 +695,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Gas" + "#" + device.getValue();
 						first = false;
 						humidity = false;
+						count++;
 					} else if (device.getClass().equals(Humidity.class) && humidity) {
 						if (!first) {
 							s += "#";
@@ -700,6 +703,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Humidity" + "#" + device.getValue();
 						first = false;
 						gas = false;
+						count++;
 					} else if (device.getClass().equals(Lighting.class) && lighting) {
 						if (!first) {
 							s += "#";
@@ -707,6 +711,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Lighting" + "#" + device.getValue();
 						first = false;
 						lighting = false;
+						count++;
 					} else if (device.getClass().equals(WaterLevel.class) && water) {
 						if (!first) {
 							s += "#";
@@ -714,6 +719,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Water" + "#" + device.getValue();
 						first = false;
 						water = false;
+						count++;
 					} else if (device.getClass().equals(WindLevel.class) && wind) {
 						if (!first) {
 							s += "#";
@@ -721,6 +727,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						s += "Wind" + "#" + device.getValue();
 						first = false;
 						wind = false;
+						count++;
 					}
 				}
 			}
@@ -728,7 +735,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if(s.equals(""))
 			s = "X";
 		else
-			s = "S#"+s+"#E";
+			s = (""+count) + "#" + s + "#E";
 		return s ;
 	}	
 		
