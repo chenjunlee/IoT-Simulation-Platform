@@ -70,6 +70,9 @@ import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+//add by Chenjun
+import device.CloudServer;
+
 import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
