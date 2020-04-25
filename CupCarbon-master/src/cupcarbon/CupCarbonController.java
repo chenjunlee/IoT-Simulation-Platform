@@ -3736,7 +3736,8 @@ public class CupCarbonController implements Initializable {
 				listViewConcernedSensors.getItems().clear();
 				for(SensorNode s: u.getSensorsInsideArea() )
 					listViewConcernedSensors.getItems().add(s.getName());
-				//After set up the user area, add one CloudServer to user in the center of area
+				//Add one CloudServer to user at the corner of area
+				//you can move it to anywhere
 				//add by Chenjun
 				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, -1);
 				DeviceList.add(userServer);
