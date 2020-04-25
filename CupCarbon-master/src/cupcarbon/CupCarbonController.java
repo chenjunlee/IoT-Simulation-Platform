@@ -3735,12 +3735,9 @@ public class CupCarbonController implements Initializable {
 					listViewConcernedSensors.getItems().add(s.getName());
 				//After set up the user area, add one CloudServer to user in the center of area
 				//add by Chenjun
-				//need fix
-				//double pos1 = (MarkerList.markers.get(0).getLatitude() + MarkerList.markers.get(1).getLatitude())/2;
-				//double pos2 = (MarkerList.markers.get(0).getLongitude() + MarkerList.markers.get(1).getLongitude())/2;
-				//CloudServer userServer = new CloudServer(pos1, pos2, 0, 0, 100, 20, -1);
-				//DeviceList.add(userServer);
-				//u.setUserServer(userServer);
+				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, -1);
+				DeviceList.add(userServer);
+				u.setUserServer(userServer);
 			}
 			MapLayer.repaint();
 
