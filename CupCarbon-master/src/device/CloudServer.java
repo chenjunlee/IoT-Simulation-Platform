@@ -30,18 +30,8 @@ public class CloudServer extends StdSensorNode {
 	private double windValue = 0.0;
 	private double waterValue = 0.0;
 	
-	private User user = null;
-	
 	public CloudServer(double x, double y, double z, double radius, double radioRadius, double suRadius, int id) {
 		super(x, y, z, radius, radioRadius, suRadius, id);		
-	}
-	
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	public User getUser() {
-		return user;
 	}
 	
 	public void setTemperature(double temperature, double pos1, double pos2) {
