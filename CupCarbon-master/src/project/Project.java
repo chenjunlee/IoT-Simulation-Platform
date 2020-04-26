@@ -530,8 +530,8 @@ public final class Project {
 		.append("draw_script_file_name", NetworkParameters.drawScriptFileName)
 		.append("display_print_messages", NetworkParameters.displayPrintMessage)
 		.append("display_all_routes", NetworkParameters.displayAllRoutes);
-		System.out.println(document);
-		System.out.println(document.size());
+		//System.out.println(document);
+		//System.out.println(document.size());
 		return document;
 	}
 

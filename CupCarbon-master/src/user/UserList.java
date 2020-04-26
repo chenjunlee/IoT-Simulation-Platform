@@ -21,10 +21,14 @@ public class UserList {
 		reset();
 	}
 
+	/**
+	 * @author Yiwei --> fix by Bang Tran
+	 */
 	public static void reset() {
 		users = new Vector<User>();
 		currentUser = -1;
 		lastUser = -1;
+
 		for(int i=1; i<=10; i++){
 			User u = new User("user " + i);
 			UserList.users.add(u);
