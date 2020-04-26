@@ -569,16 +569,7 @@ public final class Project {
 		else
 			return getProjectNatEventPath() + File.separator + name + ".evt";
 	}
-	
-	// add by Yiwei Yao
-	// ******************************************************************************
-	public static String getNatEventFileFromNameForDB(String name) {
-		if (name.endsWith(".evt"))
-			return getProjectNatEventPathForDB() + File.separator + name;
-		else
-			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
-	}
-	// ******************************************************************************
+
 
 	// add by Yiwei Yao
 	// ******************************************************************************

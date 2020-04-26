@@ -81,7 +81,7 @@ public class CupCarbonContextMenu {
         /**
          * @author Bang tran
          */
-        MenuItem item8 = new MenuItem("Save workspace to database");
+        MenuItem item8 = new MenuItem("Save Network to DB");
         item8.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -93,7 +93,7 @@ public class CupCarbonContextMenu {
         /**
          * @author Bang tran
          */
-        MenuItem item9 = new MenuItem("Reset/Reload workspace");
+        MenuItem item9 = new MenuItem("Reset/Reload from DB");
         item9.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

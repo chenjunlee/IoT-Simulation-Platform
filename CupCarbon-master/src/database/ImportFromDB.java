@@ -83,6 +83,8 @@ public class ImportFromDB {
 		CupCarbon.cupCarbonController.displayShortGoodMessage_th("Default workspace loaded");
 
 		map.MapLayer.repaint();
+
 	}
+
 
 }
