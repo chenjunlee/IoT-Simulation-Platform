@@ -8,6 +8,12 @@ import device.SensorNode;
 import simulation.WisenSimulation;
 
 
+/**
+ * @author Chenjun
+ * 
+ * return sensors in selectArea.
+ *
+ */
 public class Command_LED extends Command {
 
 	protected String arg1 = null ;
