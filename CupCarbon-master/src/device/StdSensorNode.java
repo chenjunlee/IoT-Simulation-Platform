@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.Document;
 
 import battery.Battery;
 import buildings.BuildingList;
@@ -14,9 +18,9 @@ import utilities.MapCalc;
 import visibility.VisibilityLauncher;
 
 public class StdSensorNode extends SensorNode {
-	
+
 	/**
-	 * Constructor 1 Instanciate the sensor unit 
+	 * Constructor 1 Instanciate the sensor unit
 	 * Instanciate the battery
 	 */
 	public StdSensorNode() {
@@ -26,7 +30,7 @@ public class StdSensorNode extends SensorNode {
 
 	/**
 	 * Constructor 2
-	 * 
+	 *
 	 * @param x
 	 *            Latitude
 	 * @param y
@@ -38,12 +42,12 @@ public class StdSensorNode extends SensorNode {
 	 */
 	public StdSensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
 		super(x, y, z, radius, radioRadius, id);
-		sensorUnit = new StdSensorUnit(this.longitude, this.latitude, this.elevation, this);		
-	}	
+		sensorUnit = new StdSensorUnit(this.longitude, this.latitude, this.elevation, this);
+	}
 
 	/**
 	 * Constructor 3
-	 * 
+	 *
 	 * @param x
 	 *            Latitude
 	 * @param y
@@ -63,10 +67,10 @@ public class StdSensorNode extends SensorNode {
 			DeviceList.calculatePropagations();
 		}
 	}
-	
+
 	/**
 	 * Constructor 4
-	 * 
+	 *
 	 * @param x
 	 *            Latitude
 	 * @param y
@@ -89,10 +93,10 @@ public class StdSensorNode extends SensorNode {
 		initBuffer();
 	}
 
-	
+
 	/**
 	 * Constructor 6
-	 * 
+	 *
 	 * @param x
 	 *            Latitude
 	 * @param y
@@ -115,11 +119,11 @@ public class StdSensorNode extends SensorNode {
 		calculateRadioSpace();
 		initBuffer();
 	}
-	
+
 	/**
 	 * Constructor 5 the same as the Constructor 3 with "String" argument
 	 * instead of "double"
-	 * 
+	 *
 	 * @param x
 	 *            Latitude
 	 * @param y
@@ -136,7 +140,7 @@ public class StdSensorNode extends SensorNode {
 		sensorUnit = new StdSensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), this);
 
 	}
-	
+
 	@Override
 	public void drawSensorUnit(Graphics g) {
 		int [] coord = MapCalc.geoToPixelMapA(latitude, longitude);
@@ -155,8 +159,8 @@ public class StdSensorNode extends SensorNode {
 
 	public double getSensorUnitRadius() {
 		return sensorUnit.getRadius();
-	}	
-	
+	}
+
 	@Override
 	public Device clone() throws CloneNotSupportedException {
 		Battery newBattery = (Battery) battery.clone();
@@ -173,10 +177,10 @@ public class StdSensorNode extends SensorNode {
 //		}
 //		return 0.0 ;
 //	}
-//	
+//
 //	public String getSensorValues() {
 //		String s = "";
-//		boolean first = true; 
+//		boolean first = true;
 //		for(SensorNode d : DeviceList.sensors) {
 //			if(detect(d) && this!=d) {
 //				if (!first) {
@@ -193,7 +197,7 @@ public class StdSensorNode extends SensorNode {
 	public String getIdFL() {
 		return "S";
 	}
-	
+
 	@Override
 	public int getType() {
 		return Device.SENSOR;
@@ -209,20 +213,20 @@ public class StdSensorNode extends SensorNode {
 		return "";
 	}
 
-	public boolean detectBuildings() {		
+	public boolean detectBuildings() {
 		return BuildingList.intersect(sensorUnit.getPoly());
 	}
-	
+
 	@Override
 	public SensorNode createNewWithTheSameType() {
 		return new StdSensorNode(longitude, latitude, elevation, radius, 0.0, sensorUnit.getRadius(), DeviceList.number++);
 	}
-	
+
 	@Override
 	public void save(String ref) {
 		String fileName = Project.getProjectNodePath();
 		try {
-			PrintStream fos = null;	
+			PrintStream fos = null;
 			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "sensor_" + ref));
 			fos.println("List of parameters");
 			fos.println("------------------------------------------");
@@ -234,7 +238,7 @@ public class StdSensorNode extends SensorNode {
 			fos.println("device_radius:" + getRadius());
 			fos.println("device_hide:" + getHide());
 			fos.println("device_draw_battery:" + getDrawBatteryLevel());
-			fos.println("device_sensor_unit_radius:" + getSensorUnitRadius());			
+			fos.println("device_sensor_unit_radius:" + getSensorUnitRadius());
 			if (!getGPSFileName().equals(""))
 				fos.println("device_gps_file_name:" + getGPSFileName());
 			if (!getScriptFileName().equals(""))
@@ -244,6 +248,36 @@ public class StdSensorNode extends SensorNode {
 			e.printStackTrace();
 		}
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "sensor_"+ref);
+	}
+
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a list of Document that contains the informs of StdSensorNode.
+	 */
+	@Override
+	public List<Document> saveToDB() {
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("prefix", "device")
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide())
+				.append("device_draw_battery", getDrawBatteryLevel())
+				.append("device_sensor_unit_radius", getSensorUnitRadius());
+
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+
+		if (!getScriptFileName().equals(""))
+			document.append("device_script_file_name", getScriptFileName());
+		documents.add(document);
+		documents.add(saveRadioModuleToDB(""+getId()));
+		return documents;
 	}
 
 	public double getNextValueTime() {return Double.MAX_VALUE;}

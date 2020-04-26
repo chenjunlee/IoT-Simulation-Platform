@@ -13,6 +13,11 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+
 import action.CupActionBlock;
 import action.CupActionDeleteBuilding;
 import action.CupActionStack;
@@ -51,6 +56,14 @@ public class BuildingList {
 		for(int i=0; i<str.length; i++) {
 			buildings.add(new Building(str));
 		}
+	}
+	
+	/**
+	 * @param document
+	 * create a new building with input document. and then add to buildings list.
+	 */
+	public static void addFromDB(Document document) {		
+		buildings.add(new Building(document));
 	}
 	
 	public static void add(Building building) {
@@ -119,6 +132,24 @@ public class BuildingList {
 		}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @return Document
+	 * saveToDB save buildings to database with prefix "building"
+	 * X and Y Coords may save in a wrong way
+	 */ 
+	public static Document saveToDB() {
+		Document document = new Document();
+		document.append("prefix", "building");
+		for (Building building : buildings) {
+			for(int i=0; i<building.getNPoints(); i++) {
+				document.append(""+building.getXCoords(i), " ")
+					.append(""+building.getYCoords(i), " ");
+			}
+		}
+		return document;
+	}
+	
 	public static void open(String fileName) {
 				init();
 				try {
@@ -138,6 +169,21 @@ public class BuildingList {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param buildingData
+	 * @throws IOException
+	 * openFromDB parse buildingData from database.
+	 */
+	public static void openFromDB(FindIterable<Document> buildingData) throws IOException {
+		init();
+		MongoCursor<Document> buildingDataIterator = buildingData.iterator();
+		while(buildingDataIterator.hasNext()) {
+			BuildingList.addFromDB(buildingDataIterator.next());
+		}
+		MapLayer.repaint();
 	}
 	
 	public void deleteIfSelected() {

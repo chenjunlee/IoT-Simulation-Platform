@@ -43,17 +43,34 @@ public class NaturalEventGeneratorController implements Initializable{
 	@FXML
 	public void load() {
 		if (txtLoadFileName.getSelectionModel().getSelectedIndex() > 0) {
-			txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
-			zone.setText("");
-			try {
-				FileInputStream in = new FileInputStream(new File(
-						Project.getNatEventFileFromName(txtLoadFileName.getSelectionModel()
-								.getSelectedItem().toString())));
-				byte[] bytes = new byte[in.available()];
-				in.read(bytes);
-				zone.setText(new String(bytes));
-				in.close();
-			} catch (Exception e1) {}
+			// add by yiwei yao, add support for database mode
+			// *************************************************************************************************
+			if(Project.projectPath == "DataBase Mode") {
+				txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
+				zone.setText("");
+				try {
+					FileInputStream in = new FileInputStream(new File(
+							Project.getNatEventFileFromNameForDB(txtLoadFileName.getSelectionModel()
+									.getSelectedItem().toString())));
+					byte[] bytes = new byte[in.available()];
+					in.read(bytes);
+					zone.setText(new String(bytes));
+					in.close();
+				} catch (Exception e1) {}
+			// *************************************************************************************************
+			} else {
+				txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
+				zone.setText("");
+				try {
+					FileInputStream in = new FileInputStream(new File(
+							Project.getNatEventFileFromName(txtLoadFileName.getSelectionModel()
+									.getSelectedItem().toString())));
+					byte[] bytes = new byte[in.available()];
+					in.read(bytes);
+					zone.setText(new String(bytes));
+					in.close();
+				} catch (Exception e1) {}
+			}
 		} else {
 			zone.setText("");
 			txtFileName.setText("");
@@ -63,35 +80,71 @@ public class NaturalEventGeneratorController implements Initializable{
 	@FXML
 	public void save() {
 		if(!txtFileName.getText().equals("")) {
-			try {
-				String fileName = txtFileName.getText();
-				fileName = fileName.trim();
-				fileName = fileName.replaceAll(" ", "");
-				PrintStream ps;
-				ps = new PrintStream(new FileOutputStream(Project.getNatEventFileFromName(Project.getNatEventFileExtension(fileName))));
-				ps.print(zone.getText());
-				ps.close();
-				zone.setText("");
-				txtFileName.setText("");
+			// add by yiwei yao, add support for database mode
+			// *************************************************************************************************
+			if(Project.projectPath == "DataBase Mode") {
+				try {
+					String fileName = txtFileName.getText();
+					fileName = fileName.trim();
+					fileName = fileName.replaceAll(" ", "");
+					PrintStream ps;
+					ps = new PrintStream(new FileOutputStream(Project.getNatEventFileFromNameForDB(Project.getNatEventFileExtension(fileName))));
+					ps.print(zone.getText());
+					ps.close();
+					zone.setText("");
+					txtFileName.setText("");
 
-				File scriptFiles = new File(Project.getProjectNatEventPath());
-				String[] c = scriptFiles.list();
-				txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
-				txtLoadFileName.getItems().add("New scenario ...");
-				for (int i = 0; i < c.length; i++) {
-					txtLoadFileName.getItems().add(c[i]);
+					File scriptFiles = new File(Project.getProjectNatEventPathForDB());
+					String[] c = scriptFiles.list();
+					txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+					txtLoadFileName.getItems().add("New scenario ...");
+					for (int i = 0; i < c.length; i++) {
+						txtLoadFileName.getItems().add(c[i]);
+					}
+					
+					CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
+					
+//					Alert alert = new Alert(AlertType.INFORMATION);
+//					alert.setTitle("Save Natural Event File!");
+//					alert.setHeaderText(null);
+//					alert.setContentText("File saved !");
+//					alert.showAndWait();
+					System.out.println("Natural Event File saved.");
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
-				
-				CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
-				
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//				alert.setTitle("Save Natural Event File!");
-//				alert.setHeaderText(null);
-//				alert.setContentText("File saved !");
-//				alert.showAndWait();
-				System.out.println("Natural Event File saved.");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+			// *************************************************************************************************
+			} else {
+				try {
+					String fileName = txtFileName.getText();
+					fileName = fileName.trim();
+					fileName = fileName.replaceAll(" ", "");
+					PrintStream ps;
+					ps = new PrintStream(new FileOutputStream(Project.getNatEventFileFromName(Project.getNatEventFileExtension(fileName))));
+					ps.print(zone.getText());
+					ps.close();
+					zone.setText("");
+					txtFileName.setText("");
+
+					File scriptFiles = new File(Project.getProjectNatEventPath());
+					String[] c = scriptFiles.list();
+					txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+					txtLoadFileName.getItems().add("New scenario ...");
+					for (int i = 0; i < c.length; i++) {
+						txtLoadFileName.getItems().add(c[i]);
+					}
+					
+					CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
+					
+//					Alert alert = new Alert(AlertType.INFORMATION);
+//					alert.setTitle("Save Natural Event File!");
+//					alert.setHeaderText(null);
+//					alert.setContentText("File saved !");
+//					alert.showAndWait();
+					System.out.println("Natural Event File saved.");
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -102,13 +155,28 @@ public class NaturalEventGeneratorController implements Initializable{
 	}
 
 	public void initComboBox() {
-		File scriptFiles = new File(Project.getProjectNatEventPath());
-		String[] c = scriptFiles.list();
-		txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
-		txtLoadFileName.getItems().add("New script ...");
-		if (scriptFiles.isDirectory() && c != null) {
-			for (int i = 0; i < c.length; i++) {
-				txtLoadFileName.getItems().add(c[i]);
+		// add by yiwei yao, add support for database mode
+		// *************************************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File scriptFiles = new File(Project.getProjectNatEventPathForDB());
+			String[] c = scriptFiles.list();
+			txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+			txtLoadFileName.getItems().add("New script ...");
+			if (scriptFiles.isDirectory() && c != null) {
+				for (int i = 0; i < c.length; i++) {
+					txtLoadFileName.getItems().add(c[i]);
+				}
+			}
+		// *************************************************************************************************
+		} else {
+			File scriptFiles = new File(Project.getProjectNatEventPath());
+			String[] c = scriptFiles.list();
+			txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+			txtLoadFileName.getItems().add("New script ...");
+			if (scriptFiles.isDirectory() && c != null) {
+				for (int i = 0; i < c.length; i++) {
+					txtLoadFileName.getItems().add(c[i]);
+				}
 			}
 		}
 	}

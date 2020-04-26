@@ -26,7 +26,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoDatabase;
 
 import battery.Battery;
 //import cupcarbon.RadioModuleWindow;
@@ -900,15 +905,15 @@ public abstract class Device extends MapObject implements Cloneable {
 
 	public abstract Device duplicate() ;
 	public abstract Device duplicateWithShift(double sh1, double sh2, double sh3) ;
-	public abstract void save(String fileName) ;
 
+	public abstract void save(String fileName) ;	
+	// save to database
+	public abstract List<Document> saveToDB() ;
+	
 	public double getSUCoverage() {
 		return 0;
 	}
-
 	public double getSUDirection() {
 		return 0;
 	}
-
-
 }

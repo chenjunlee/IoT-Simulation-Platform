@@ -76,6 +76,11 @@ import markers.Marker;
 import markers.MarkerList;
 import markers.Routes;
 import natural_events.Gas;
+import natural_events.Humidity;
+import natural_events.Lighting;
+import natural_events.Temperature;
+import natural_events.WaterLevel;
+import natural_events.WindLevel;
 import natural_events.Weather;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
@@ -226,6 +231,29 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addThing = true;
 		}
 
+		//add by Chenjun
+		if (lastKey == 'a') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'b') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'c') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'd') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'e') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		
+
 		if(magnetic && addThing) {
 			g.drawLine(mX-6, mY, mX+6, mY);
 			g.drawLine(mX, mY-6, mX, mY+6);
@@ -308,10 +336,11 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	 *
 	 *
 	 */
-	private void drawUserAreas(Graphics2D g){
+
+	private static void drawUserAreas(Graphics2D g){
 		//if(displayUserAreas == false)
 		//	return;
-		if(usersList == null)
+		if(UserList.users == null)
 			return;
 
 		usersList.drawUserAreas(g);
@@ -344,6 +373,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 
 	private int expanded = 0;
+
+	
+	//edited by Chenjun add lastkey from a - e
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -398,6 +430,47 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 			repaint();
 		}
+
+
+		if (lastKey == 'a') {
+			CupAction action = new CupActionAddDevice(new Humidity(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+
+		
+		if (lastKey == 'b') {
+			CupAction action = new CupActionAddDevice(new Lighting(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}		
+
+		
+		if (lastKey == 'c') {
+			CupAction action = new CupActionAddDevice(new Temperature(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+
+		
+		if (lastKey == 'd') {
+			CupAction action = new CupActionAddDevice(new WaterLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}		
+
+		
+		if (lastKey == 'e') {
+			CupAction action = new CupActionAddDevice(new WindLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+		
 
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();

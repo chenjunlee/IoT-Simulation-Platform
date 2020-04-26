@@ -23,7 +23,7 @@ import project.Project;
 public class CupCarbonContextMenu {
 
 	public static boolean drag = false;
-	
+
 	public static void create(SwingNode sn, CupCarbonController controller) {
 		ContextMenu contextMenu = new ContextMenu();
         MenuItem item1 = new MenuItem("Add a Sensor Node");
@@ -61,7 +61,7 @@ public class CupCarbonContextMenu {
             	controller.routeFromMarkers();
             }
         });
-        
+
         MenuItem item6 = new MenuItem("SensScript Editor");
         item6.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -75,12 +75,41 @@ public class CupCarbonContextMenu {
             public void handle(ActionEvent event) {
             	controller.selectAllSensors();
             }
-        });        
-        
+        });
+
+
+        /**
+         * @author Bang tran
+         */
+        MenuItem item8 = new MenuItem("Save workspace to database");
+        item8.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	controller.saveNetworkToDatabase();
+            }
+        });
+        //============ Bang Tran - End
+
+        /**
+         * @author Bang tran
+         */
+        MenuItem item9 = new MenuItem("Reset/Reload workspace");
+        item9.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	controller.reloadFromDatabase();
+            }
+        });
+
+        SeparatorMenuItem menuSep4 = new SeparatorMenuItem();
+
+        //============ Bang Tran - End
+
+
         SeparatorMenuItem menuSep1 = new SeparatorMenuItem();
         SeparatorMenuItem menuSep2 = new SeparatorMenuItem();
         SeparatorMenuItem menuSep3 = new SeparatorMenuItem();
-        
+
         Menu assignScriptMenu = new Menu("Assign Scripts");
         String [] ls = getScriptFileNames();
         if(ls != null) {
@@ -105,7 +134,14 @@ public class CupCarbonContextMenu {
 	            assignScriptMenu.getItems().add(tmpItem);
 	        }
         }
-        contextMenu.getItems().addAll(item1, item7, menuSep1, assignScriptMenu, item6, menuSep3, item2, item5, menuSep2, item3, item4);
+
+        //modified by Bang Tran
+        contextMenu.getItems().addAll(item1, item7,
+        								menuSep1, assignScriptMenu, item6,
+        								menuSep3, item2, item5, menuSep2, item3, item4,
+        								menuSep4, item8, item9  //Bang Tran added
+        							);
+
 
         sn.setOnMouseDragged(new EventHandler<MouseEvent>() {
         	@Override
@@ -115,12 +151,12 @@ public class CupCarbonContextMenu {
 				}
 			}
         });
-        
+
         sn.setOnMouseReleased(new EventHandler<MouseEvent>() {
         	@Override
             public void handle(MouseEvent event) {
         		if(!drag)
-        			if(event.getButton()==MouseButton.SECONDARY) { 
+        			if(event.getButton()==MouseButton.SECONDARY) {
         				if(MapLayer.lastKey==0)
         					contextMenu.show(sn, event.getScreenX(), event.getScreenY());
         			}
@@ -131,7 +167,7 @@ public class CupCarbonContextMenu {
             }
         });
 	}
-	
+
 	public static void scriptFileApply(String newScriptFileName) {
 		CupActionBlock block = new CupActionBlock();
 		for (SensorNode sensor : DeviceList.sensors) {
@@ -145,7 +181,7 @@ public class CupCarbonContextMenu {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	public static String [] getScriptFileNames() {
 		File scriptFiles = new File(Project.getProjectScriptPath());
 		String [] list = scriptFiles.list();
@@ -159,5 +195,5 @@ public class CupCarbonContextMenu {
 		}
 		return null;
 	}
-	
+
 }

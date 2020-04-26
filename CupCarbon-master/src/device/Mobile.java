@@ -28,6 +28,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.Document;
 
 import map.MapLayer;
 import utilities.MapCalc;
@@ -239,6 +243,28 @@ public class Mobile extends MobileG {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * @return List<Document>
+	 * saveToDB return a list of Document contains the informs of Mobile
+	 */
+	@Override
+	public List<Document> saveToDB() {
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide());
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+		documents.add(document);
+		return documents;
 	}
 	
 	public double getNextValueTime() {return Double.MAX_VALUE;}
