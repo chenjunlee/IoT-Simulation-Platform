@@ -56,7 +56,6 @@ public class ImportToDB {
 		saveUsersToDB(projectUser);
 	}
 
-
 	// ***************************************************************
 	// below is helper method
 	// ***************************************************************
@@ -65,7 +64,9 @@ public class ImportToDB {
 		User user;
 		Vector<User> users = UserList.users;
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-			user = iterator.next();
+
+			user = iterator.next();				
+
 			userDocument.add(user.saveToDB());
 		}
 		projectUser.insertMany(userDocument);

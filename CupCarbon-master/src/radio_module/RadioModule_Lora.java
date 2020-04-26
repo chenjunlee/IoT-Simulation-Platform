@@ -90,7 +90,6 @@ public class RadioModule_Lora extends RadioModule {
 		fos.println("conso_tx_model:" + getRadioConsoTxModel());
 		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
-
 	/**
 	 *@author Yiwei Yao
 	 *@param int index, RadioModule currentRadioModule, String deviceId, Document document

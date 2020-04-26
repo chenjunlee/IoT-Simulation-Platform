@@ -508,7 +508,6 @@ public final class Project {
 	 * @author Yiwei Yao
 	 * @return Document
 	 * saveParametersToDB save properties of project into document with a prefix project.
-	 *
 	 */
 	public static Document saveParametersToDB() {
 		Document document = new Document();
@@ -570,6 +569,16 @@ public final class Project {
 		else
 			return getProjectNatEventPath() + File.separator + name + ".evt";
 	}
+	
+	// add by Yiwei Yao
+	// ******************************************************************************
+	public static String getNatEventFileFromNameForDB(String name) {
+		if (name.endsWith(".evt"))
+			return getProjectNatEventPathForDB() + File.separator + name;
+		else
+			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
+	}
+	// ******************************************************************************
 
 	// add by Yiwei Yao
 	// ******************************************************************************

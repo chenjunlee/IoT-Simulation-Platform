@@ -73,6 +73,9 @@ import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+//add by Chenjun
+import device.CloudServer;
+
 import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -152,7 +155,9 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	private ComboBox<String> comboBoxEncryptedOption;
 	@FXML
+
 	public ComboBox<String> comboUsers;
+
 	@FXML
 	private TextField txtLatency;
 	@FXML
@@ -636,7 +641,6 @@ public class CupCarbonController implements Initializable {
 
 		initComboBoxUsers();
 
-
 		//================== Bang Tran
 	}
 
@@ -693,6 +697,7 @@ public class CupCarbonController implements Initializable {
 		UserList.users.get(userIdx).lightSensing = checkboxLightSens.isSelected();
 		UserList.users.get(userIdx).windLevelSensing = checkboxWindLevelSens.isSelected();
 		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
+
 
 		//save user's preferences to database
 
@@ -1421,7 +1426,23 @@ public class CupCarbonController implements Initializable {
 		}).start();
 
 	}
-
+	
+	/**
+	 * @author Yiwei Yao
+	 * 
+	 * open result window
+	 */
+	public void result() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+					try {
+						new ResultWindow();
+					} catch(IOException e) {}
+			}
+		});
+	}
+	
 	/**
 	 * @author Yiwei Yao
 	 * @param simulationData
@@ -2544,7 +2565,6 @@ public class CupCarbonController implements Initializable {
 						scriptFileComboBox.getItems().add(s[i]);
 			}
 		}
-
 		// add by yiwei, add supoort for database mode.
 		// ******************************************************************************
 		if(Project.projectPath == "DataBase Mode") {
@@ -3122,14 +3142,11 @@ public class CupCarbonController implements Initializable {
 					saveButton.setDisable(false);
 					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
 
-
 					if(Project.projectPath == "DataBase Mode") {
 						MarkerList.open(Project.getProjectGpsPathForDB() + File.separator + gpsFileName);
 					} else {
 						MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
 					}
-
-
 					try {
 						BufferedReader br = null;
 						if(Project.projectPath == "DataBase Mode") {
@@ -3642,7 +3659,6 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
-
 	/**
 	 * @author Yiwei Yao
 	 * save project to DB. if projectPath or project name is not set, create a new
@@ -3669,6 +3685,7 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
+
 	/**
 	 * @author Yiwei Yao
 	 * openProjectFromDB Call DBProjectSelectWindow().
@@ -3683,7 +3700,6 @@ public class CupCarbonController implements Initializable {
 					} catch(IOException e) {}
 					openProjectLoadParameters();
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.projectPath + "]" + " (" + Project.DBFilePath + ")");
-
 			}
 		});
 	}
@@ -3825,13 +3841,17 @@ public class CupCarbonController implements Initializable {
 				listViewConcernedSensors.getItems().clear();
 				for(SensorNode s: u.getSensorsInsideArea() )
 					listViewConcernedSensors.getItems().add(s.getName());
+
+			  //empty markers after set area for user
+			  MarkerList.deleteAll();
+
+				//Add one CloudServer to user at the corner of area
+				//you can move it to anywhere
+				//add by Chenjun
+				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, -1);
+				DeviceList.add(userServer);
+				u.setUserServer(userServer);
 			}
-
-			//empty markers after set area for user
-			MarkerList.deleteAll();
-
-			//repaint the map
-
 			MapLayer.repaint();
 
 		} else {
@@ -3854,7 +3874,6 @@ public class CupCarbonController implements Initializable {
 	public void clearConcernedArea(){
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
 		if(selectedUserIndex < 0 ) return; //in the case of no user
-
 		// add by yiwei, return when no project which means userList is not reset yet.
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -3941,7 +3960,6 @@ public class CupCarbonController implements Initializable {
 				if(sensor.isMarked()) n_mark++; else n_unmark++;
 				if(sensor.isSelected()) n_s_o++;
 			}
-
 			File f = null;
 			if(Project.projectPath == "DataBase Mode") {
 				f = new File(Project.getProjectGpsPathForDB());

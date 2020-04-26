@@ -124,8 +124,6 @@ public class MarkerList {
 		}
 		return markList;
 	}
-
-
 	/**
 	 * @author Yiwei Yao
 	 * @param markData
@@ -337,8 +335,8 @@ public class MarkerList {
 			e.printStackTrace();
 		}
 	}
-
-
+	
+	
 	/**
 	 * @author Yiwei Yao
 	 * @param fileName
@@ -385,7 +383,6 @@ public class MarkerList {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
 		boolean selection = false;

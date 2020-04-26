@@ -15,7 +15,6 @@ import project.Project;
 
 /**
  * @author Yiwei Yao
- *
  * DBProjectCreateController control the windows of dbprojectcreate.fxml
  */
 public class DBProjectCreateController implements Initializable {
@@ -31,7 +30,6 @@ public class DBProjectCreateController implements Initializable {
 		// TODO Auto-generated method stub
 
 	}
-
 
 	/**
 	 * if the project is not set.

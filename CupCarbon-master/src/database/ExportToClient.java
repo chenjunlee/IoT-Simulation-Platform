@@ -40,9 +40,6 @@ public class ExportToClient {
 	//==== Bang Tran end
 
 
-
-
-
 	/**
 	 * open project from database
 	 * buildingData : prefix: building
@@ -95,8 +92,6 @@ public class ExportToClient {
 		UserList.openFromDB(userData);
 		CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
 	}
-
-
 
 	//Bang Tran codes
 	public static void openProject() {
@@ -152,7 +147,4 @@ public class ExportToClient {
 
 		map.MapLayer.repaint();
 	}
-
-
-
 }

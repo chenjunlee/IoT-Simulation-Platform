@@ -8,6 +8,10 @@ import org.bson.Document;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 
+
+import device.SensorNode;
+import map.MapLayer;
+
 public class UserList {
 	public static Vector<User> users = new Vector<User>();
 	public static int currentUser = -1;
@@ -48,6 +52,7 @@ public class UserList {
 		//Routes.reset();
 		reset();
 
+
 		MongoCursor<Document> userDataIterator = userData.iterator();
 		while(userDataIterator.hasNext()) {
 			Document SelectedUser = userDataIterator.next();
@@ -77,6 +82,7 @@ public class UserList {
 
 
 		//MapLayer.repaint();
+
 		for(User u: users) {
 			u.getSensorsInsideArea();
 		}
@@ -85,7 +91,6 @@ public class UserList {
 	public static void resetFromDB() {
 		users = new Vector<User>();
 	}
-
 
 	/**
 	 * @author Yiwei Yao

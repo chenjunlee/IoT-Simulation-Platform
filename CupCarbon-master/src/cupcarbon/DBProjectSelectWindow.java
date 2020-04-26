@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 /**
  * @author Yiwei Yao
- *
  * DBProjectSelectWindow Link dbprojectselect.fxml and construct the window.
  *
  */

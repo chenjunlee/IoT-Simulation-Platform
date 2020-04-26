@@ -1,4 +1,3 @@
-
 /**
  * @author Bang Tran UMB
  *
@@ -14,6 +13,9 @@ import org.bson.Document;
 
 import device.DeviceList;
 import device.SensorNode;
+
+import device.CloudServer;
+
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -32,6 +34,7 @@ public class User {
 	private double longitude1=0.0;
 	private double longitude2=0.0;
 
+
 	public boolean temperatureSensing= false;
 	public boolean humiditySensing = false;
 	public boolean gasSensing = false;
@@ -40,9 +43,12 @@ public class User {
 	public boolean waterLevelSensing = false;
 	public boolean dataEncrypted = false;
 
+
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
 	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
+	
+	public CloudServer userServer = null;
 
 
 	public User(String uname){
@@ -53,13 +59,14 @@ public class User {
 	public String getName(){ return name; }
 
 	public void reset(){
-		preferredFrequency = 3600000;
-		preferredLatency = 10;
-		preferredThroughput = 0;
-		latitude1 = longitude1 = latitude2 = longitude2 = 0;
+		preferredFrequency = 3600000L;
+		preferredLatency = 10.0;
+		preferredThroughput = 0.0;
+		latitude1 = longitude1 = latitude2 = longitude2 = 0.0;
 		selectedArea = false;
 		areaBoderColor=new Color(255, 0, 0);
-	}
+    userServer = null;
+	};
 
 	/**
 	 * @param lat1: Latitude of first coordinate
@@ -301,4 +308,12 @@ public class User {
 		this.name = name;
 	}
 
+	//add by Chenjun
+	public void setUserServer(CloudServer userServer) {
+		this.userServer = userServer;
+		this.userServer.setUser(this);
+	}
+	public CloudServer getUserServer() {
+		return userServer;
+	}
 }

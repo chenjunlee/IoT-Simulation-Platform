@@ -269,8 +269,6 @@ public class DeviceList {
 			deviceType = (int) selectedDevice.get("device_type");
 			deviceId = selectedDevice.getInteger("device_id");
 
-
-
 			// find corresponding radio data.
 			Document selectedRadio = new Document();
 			boolean found = false;
@@ -284,6 +282,11 @@ public class DeviceList {
 			}
 
 			//parse deviceType in different types
+
+//				System.out.println(deviceType);
+//				System.out.println(selectedDevice);
+//			parse deviceType in different type
+
 			switch (deviceType) {
 			case MapObject.SENSOR:
 				if(selectedRadio.isEmpty()){
@@ -325,7 +328,6 @@ public class DeviceList {
 				add(loadWeatherFromDB(selectedDevice));
 				break;
 			}
-
 			//device number
 			DeviceList.number = idMax+1;
 
@@ -400,7 +402,6 @@ public class DeviceList {
 	 * @param selectedDevice
 	 * @param selectedRadio
 	 * @return SensorNode
-	 *
 	 * when device type is sensor and has radio data, parse the Document return a sensorNode Object
 	 */
 	public static SensorNode loadSensorFromDB(Document selectedDevice, Document selectedRadio) {
@@ -707,7 +708,6 @@ public class DeviceList {
 		openRadioModule(Project.getProjectRadioPath()+File.separator+"directionalsensor_"+sensor.getId(), sensor);
 		return sensor;
 	}
-
 
 	/**
 	 * @author Yiwei Yao
@@ -2217,7 +2217,8 @@ public class DeviceList {
 	 * Parse Radio Document, check up to 10 radio name, if it exists use openRadioModuleFromDBHelper
 	 * to parse, after that set currentRadio.
 	 */
-	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {
+	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {				
+
 		if(selectedRadio.containsKey("radio_name"+1)) {
 			openRadioModuleFromDBHelper(selectedRadio, 1, sensor);
 		}
@@ -2267,7 +2268,6 @@ public class DeviceList {
 	 * @param selectedRadio
 	 * @param index
 	 * @param sensor
-	 *
 	 * openRadioModuleFromDBHelper parse radio document and add to sensor.
 	 */
 	public static void openRadioModuleFromDBHelper(Document selectedRadio, int index, SensorNode sensor) {

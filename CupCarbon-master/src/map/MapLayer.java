@@ -336,7 +336,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	 *
 	 *
 	 */
-
 	private static void drawUserAreas(Graphics2D g){
 		//if(displayUserAreas == false)
 		//	return;
@@ -376,7 +375,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 
 	
 	//edited by Chenjun add lastkey from a - e
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON3 && lastKey != 0) {
@@ -430,7 +428,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 			repaint();
 		}
-
 
 		if (lastKey == 'a') {
 			CupAction action = new CupActionAddDevice(new Humidity(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));

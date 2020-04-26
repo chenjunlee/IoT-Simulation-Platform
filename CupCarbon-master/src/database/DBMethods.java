@@ -16,7 +16,9 @@ import com.mongodb.client.MongoIterable;
  * @author Yiwei Yao
  *
  */
+
 public class DBMethods {
+
 	static MongoClient  mongo = ConnectToDB.mongoClient;
 
 	//get db
