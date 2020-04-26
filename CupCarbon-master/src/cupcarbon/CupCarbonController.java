@@ -655,7 +655,15 @@ public class CupCarbonController implements Initializable {
 	 */
 	public void saveUserPreferrences(){
 		int userIdx = comboUsers.getSelectionModel().getSelectedIndex();
-
+		// add by yiwei, return when no project which means userList is not reset yet.
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Save User Preferrences");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create project first!");
+			alert.showAndWait();
+			return;
+		}
 		UserList.users.get(userIdx).preferredLatency = Float.parseFloat(txtLatency.getText());
 		UserList.users.get(userIdx).preferredThroughput = Float.parseFloat(txtThroughput.getText());
 		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
@@ -1338,6 +1346,22 @@ public class CupCarbonController implements Initializable {
 			}
 		}).start();
 
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * 
+	 * open result window
+	 */
+	public void result() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+					try {
+						new ResultWindow();
+					} catch(IOException e) {}
+			}
+		});
 	}
 	
 	/**
@@ -3724,6 +3748,15 @@ public class CupCarbonController implements Initializable {
 		if(MarkerList.markers.size()>=2) {
 			MapLayer.concernedMarker1 = MarkerList.markers.get(0);
 			MapLayer.concernedMarker2 = MarkerList.markers.get(1);
+			// add error warning if project is created. Add by Yiwei
+			if(UserList.users.isEmpty()) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Set concerned area");
+				alert.setHeaderText(null);
+				alert.setContentText("Should create project first!");
+				alert.showAndWait();
+				return;
+			}
 			User u = UserList.users.get(selectedUserIndex);
 			u.selectedArea = true;
 			u.setConcernedArea(MarkerList.markers.get(0).getLatitude(), MarkerList.markers.get(0).getLongitude(),
@@ -3756,7 +3789,15 @@ public class CupCarbonController implements Initializable {
 	public void clearConcernedArea(){
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
 		if(selectedUserIndex < 0 ) return; //in the case of no user
-
+		// add by yiwei, return when no project which means userList is not reset yet.
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("clear concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create project first!");
+			alert.showAndWait();
+			return;
+		}
 		User u = UserList.users.get(selectedUserIndex);
 		if( !u.selectedArea ) {
 			Alert alert = new Alert(AlertType.ERROR);

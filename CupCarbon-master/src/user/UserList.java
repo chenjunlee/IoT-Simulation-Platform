@@ -21,7 +21,13 @@ public class UserList {
 	}
 
 	public static void reset() {
-//		users = new Vector<User>();
+		users = new Vector<User>();
+		currentUser = -1;
+		lastUser = -1;
+		for(int i=1; i<=10; i++){
+			User u = new User("user " + i);
+			UserList.users.add(u);
+		}
 	}
 
 	public static void add(User u){
@@ -43,11 +49,13 @@ public class UserList {
 	 */
 	public static void openFromDB(FindIterable<Document> userData) {
 		//Routes.reset();
-		resetFromDB();
+		reset();
 		MongoCursor<Document> userDataIterator = userData.iterator();
 		while(userDataIterator.hasNext()) {
 			Document SelectedUser = userDataIterator.next();
-			User user = new User(SelectedUser.getString("name"));
+			System.out.println("get user: ");
+			User user = getUser(SelectedUser.getString("name"));
+			System.out.println("usrname: " + SelectedUser.getString("name"));
 			user.setLatitude1(SelectedUser.getDouble("latitude1"));
 			user.setLatitude2(SelectedUser.getDouble("latitude2"));
 			user.setLongitude1(SelectedUser.getDouble("longitude1"));
@@ -63,7 +71,7 @@ public class UserList {
 			user.setPreferredThroughput(SelectedUser.getDouble("preferredThroughput"));
 			user.setPreferredFrequency(SelectedUser.getLong("preferredFrequency"));
 			user.setSelectedArea(SelectedUser.getBoolean("selectedArea"));
-			users.add(user);
+//			users.add(user);
 		}
 //		MapLayer.repaint();
 		for(User u: users) {
@@ -73,5 +81,21 @@ public class UserList {
 
 	public static void resetFromDB() {
 		users = new Vector<User>();
+	}
+	
+	
+	/**
+	 * @author Yiwei Yao
+	 * @return User
+	 * get user from name
+	 */
+	public static User getUser(String name) {
+		User selectUser = null;
+		for(int i = 0; i < users.size(); i++) {
+			if(users.get(i).name.equals(name)) {
+				selectUser = users.get(i);
+			}
+		}
+		return selectUser;
 	}
 }

@@ -334,10 +334,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	 *
 	 *
 	 */
-	private void drawUserAreas(Graphics2D g){
+	private static void drawUserAreas(Graphics2D g){
 		//if(displayUserAreas == false)
 		//	return;
-		if(usersList == null)
+		if(UserList.users == null)
 			return;
 
 		usersList.drawUserAreas(g);
