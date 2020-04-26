@@ -70,6 +70,9 @@ import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+//add by Chenjun
+import device.CloudServer;
+
 import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -3766,6 +3769,12 @@ public class CupCarbonController implements Initializable {
 				listViewConcernedSensors.getItems().clear();
 				for(SensorNode s: u.getSensorsInsideArea() )
 					listViewConcernedSensors.getItems().add(s.getName());
+				//Add one CloudServer to user at the corner of area
+				//you can move it to anywhere
+				//add by Chenjun
+				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, -1);
+				DeviceList.add(userServer);
+				u.setUserServer(userServer);
 			}
 			MapLayer.repaint();
 

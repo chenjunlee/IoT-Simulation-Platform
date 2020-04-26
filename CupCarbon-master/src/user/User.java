@@ -13,6 +13,7 @@ import org.bson.Document;
 
 import device.DeviceList;
 import device.SensorNode;
+import device.CloudServer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -42,7 +43,8 @@ public class User {
 	public double preferredLatency = 10; //>= 10 ms
 	public double preferredThroughput = 0; //>= 0kbit
 	public long preferredFrequency = 3600000; //1 minutes = 3600*1000 ms
-
+	
+	public CloudServer userServer = null;
 
 	public User(String uname){
 		Random r = new Random();
@@ -58,6 +60,8 @@ public class User {
 		latitude1 = longitude1 = latitude2 = longitude2 = 0;
 		selectedArea = false;
 		areaBoderColor=new Color(255, 0, 0);
+		//add by Chenjun
+		userServer = null;
 	}
 
 	/**
@@ -298,6 +302,14 @@ public class User {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	//add by Chenjun
+	public void setUserServer(CloudServer userServer) {
+		this.userServer = userServer;
+		this.userServer.setUser(this);
+	}
+	public CloudServer getUserServer() {
+		return userServer;
 	}
 
 }
