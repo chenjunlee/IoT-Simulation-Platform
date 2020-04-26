@@ -147,6 +147,7 @@ public class CupCarbonController implements Initializable {
 
 	ConsoleWindow console ;
 
+
 	//=========================== Bang Tran
 	@FXML
 	private ComboBox<String> comboBoxEncryptedOption;
@@ -632,7 +633,9 @@ public class CupCarbonController implements Initializable {
 
 		//================== Bang Tran
 		comboBoxEncryptedOption.getItems().addAll("Yes", "No");
+
 		initComboBoxUsers();
+
 
 		//================== Bang Tran
 	}
@@ -692,6 +695,7 @@ public class CupCarbonController implements Initializable {
 		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
 
 		//save user's preferences to database
+
 	}
 
 	@Override
@@ -1479,6 +1483,7 @@ public class CupCarbonController implements Initializable {
 			ackChecked();
 			macChecked();
 		}
+
 	}
 
 
@@ -3117,11 +3122,13 @@ public class CupCarbonController implements Initializable {
 					saveButton.setDisable(false);
 					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
 
+
 					if(Project.projectPath == "DataBase Mode") {
 						MarkerList.open(Project.getProjectGpsPathForDB() + File.separator + gpsFileName);
 					} else {
 						MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
 					}
+
 
 					try {
 						BufferedReader br = null;
@@ -3824,6 +3831,7 @@ public class CupCarbonController implements Initializable {
 			MarkerList.deleteAll();
 
 			//repaint the map
+
 			MapLayer.repaint();
 
 		} else {
@@ -3846,6 +3854,7 @@ public class CupCarbonController implements Initializable {
 	public void clearConcernedArea(){
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
 		if(selectedUserIndex < 0 ) return; //in the case of no user
+
 		// add by yiwei, return when no project which means userList is not reset yet.
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -3932,6 +3941,7 @@ public class CupCarbonController implements Initializable {
 				if(sensor.isMarked()) n_mark++; else n_unmark++;
 				if(sensor.isSelected()) n_s_o++;
 			}
+
 			File f = null;
 			if(Project.projectPath == "DataBase Mode") {
 				f = new File(Project.getProjectGpsPathForDB());

@@ -230,6 +230,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			addThing = true;
 		}
+
 		//add by Chenjun
 		if (lastKey == 'a') {
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -252,6 +253,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addThing = true;
 		}
 		
+
 		if(magnetic && addThing) {
 			g.drawLine(mX-6, mY, mX+6, mY);
 			g.drawLine(mX, mY-6, mX, mY+6);
@@ -334,6 +336,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	 *
 	 *
 	 */
+
 	private static void drawUserAreas(Graphics2D g){
 		//if(displayUserAreas == false)
 		//	return;
@@ -373,6 +376,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 
 	
 	//edited by Chenjun add lastkey from a - e
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON3 && lastKey != 0) {
@@ -427,6 +431,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 
+
 		if (lastKey == 'a') {
 			CupAction action = new CupActionAddDevice(new Humidity(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
@@ -466,6 +471,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 		
+
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();
 			for(SensorNode sensor : DeviceList.sensors) {

@@ -249,7 +249,6 @@ public class DeviceList {
 		}
 	}
 
-
 	/**
 	 * @author Yiwei Yao
 	 * @param deviceData
@@ -708,6 +707,7 @@ public class DeviceList {
 		openRadioModule(Project.getProjectRadioPath()+File.separator+"directionalsensor_"+sensor.getId(), sensor);
 		return sensor;
 	}
+
 
 	/**
 	 * @author Yiwei Yao

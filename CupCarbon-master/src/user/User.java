@@ -1,3 +1,4 @@
+
 /**
  * @author Bang Tran UMB
  *
@@ -39,9 +40,9 @@ public class User {
 	public boolean waterLevelSensing = false;
 	public boolean dataEncrypted = false;
 
-	public double preferredLatency = 10; //>= 10 ms
-	public double preferredThroughput = 0; //>= 0kbit
-	public long preferredFrequency = 3600000; //1 minutes = 3600*1000 ms
+	public double preferredLatency = 10.0; //>= 10 ms
+	public double preferredThroughput = 0.0; //>= 0kbit
+	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
 
 
 	public User(String uname){
