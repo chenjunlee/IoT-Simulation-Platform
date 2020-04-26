@@ -7,12 +7,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
@@ -34,6 +34,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -75,9 +76,16 @@ import markers.Marker;
 import markers.MarkerList;
 import markers.Routes;
 import natural_events.Gas;
+import natural_events.Humidity;
+import natural_events.Lighting;
+import natural_events.Temperature;
+import natural_events.WaterLevel;
+import natural_events.WindLevel;
 import natural_events.Weather;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
+import user.User;
+import user.UserList;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -107,25 +115,34 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public static String projectName = "";
 	public static boolean dark = false;
 	public static boolean blockBuildings = false;
-	
+
 	private boolean startSelection = false;
-	
+
 	public static boolean magnetic = false;
 	public static int magnetic_step = 16;
-	
+
 	public static boolean multipleSelection = false;
 	public static boolean button3Clicked = false;
-	
+
 	public static boolean showInfos = true;
 	public static boolean showBakhground = true;
 	public static int bg_transparency = 255;
-	
+
 	private int cx ;
 	private int cy ;
-	
+
+
+	//??? Bang Tran - Begin
+	public static Marker concernedMarker1, concernedMarker2;
+	public static boolean displayUserAreas = true;
+	public static UserList usersList = null;
+	//??? Bang Tran - End
+
+
+
 	public MapLayer() {}
-	
-	public MapLayer(JXMapViewer mapViewer) {		
+
+	public MapLayer(JXMapViewer mapViewer) {
 		MapLayer.mapViewer = mapViewer;
 		initLists();
 		mapViewer.setOverlayPainter(this);
@@ -133,12 +150,16 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		mapViewer.addMouseMotionListener(this);
 		mapViewer.addKeyListener(this);
 	}
-	
+
 	public static void initLists() {
 		buildingList = new BuildingList();
 		geoZoneList = new GeoZoneList();
 		markerList = new MarkerList();
 		nodeList = new DeviceList();
+
+		//Bang Tran - Begin
+		usersList = new UserList();
+		//Bang Tran - End
 	}
 
 	public boolean isstartSelection() {
@@ -148,9 +169,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public void setstartSelection(boolean startSelection) {
 		this.startSelection = startSelection;
 	}
-	
+
 	public static int numberOfInsideAndSelected = 0;
-	
+
 	@Override
 	public void paint(Graphics2D g, Object arg1, int arg2, int arg3) {
 		//g.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
@@ -160,20 +181,20 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		if(mapViewer.getZoom()==3) g.setFont(new Font("arial", Font.BOLD, 8));
 		if(mapViewer.getZoom()==4) g.setFont(new Font("arial", Font.BOLD, 7));
 		if(mapViewer.getZoom()>4) g.setFont(new Font("arial", Font.BOLD, 5));
-		
+
 		Rectangle rect = mapViewer.getViewportBounds();
-		g.translate(-rect.x, -rect.y);				
-		
+		g.translate(-rect.x, -rect.y);
+
 		if(showBakhground) {
 			g.setColor(new Color(255,255,255,bg_transparency));
 			g.fillRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)-20, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)-20, mapViewer.getWidth()+40,mapViewer.getHeight()+40);
 			//g.setColor(new Color(200,200,200,bg_transparency));
 			//g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+2, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+2, mapViewer.getWidth()-4,mapViewer.getHeight()-4);
 		}
-		
+
 		mapViewer.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		boolean addThing = false;
-		if (lastKey == '1') {					
+		if (lastKey == '1') {
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			addThing = true;
 		}
@@ -209,35 +230,55 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			addThing = true;
 		}
+		//add by Chenjun
+		if (lastKey == 'a') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'b') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'c') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'd') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		if (lastKey == 'e') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
 		
-		if(magnetic && addThing) {			
+		if(magnetic && addThing) {
 			g.drawLine(mX-6, mY, mX+6, mY);
 			g.drawLine(mX, mY-6, mX, mY+6);
 		}
 
 		if(!shiftDown && !button3Clicked)
 			mapViewer.setPanEnabled(true);
-		
+
 		//if (!OsmOverpass.isLoading) {
 			if(buildingList != null)
 				buildingList.draw(g);
 		//}
-		
+
 		numberOfInsideAndSelected = 0;
-		
+
 		if(Routes.routes != null)
 			if(Routes.routes.size()>0 && NetworkParameters.displayAllRoutes)
 				Routes.draw(g);
-		
-		
+
+
 		markerList.draw(g);
-		
+
 		nodeList.drawMarkedEdges(g);
-		
+
 		nodeList.draw(g);
-		
+
 		nodeList.drawHulls(g);
-		
 
 		if (drawSelectionRectangle) {
 			g.setStroke(new BasicStroke(0.5f));
@@ -254,7 +295,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					(int) (p2.getX() - p1.getX()),
 					(int) (p2.getY() - p1.getY()));
 		}
-		
+
 		g.setFont(new Font("courier", Font.BOLD, 10));
 		g.setColor(Color.DARK_GRAY);
 		if(dark) g.setColor(new Color(198,232,106));
@@ -274,13 +315,34 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.weather.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
 			g.drawString(BuildingList.locked?"[L]":"", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+76);
 		}
-		
+
 		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
 		//g.drawOval(coord[0], coord[1], 20, 20);
-		
+
+
+		//Bang Tran - Begin
+		if(displayUserAreas)
+			drawUserAreas(g);
+		//Bang Tran - End
+
+
 		g.dispose();
 	}
-	
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 *
+	 */
+	private static void drawUserAreas(Graphics2D g){
+		//if(displayUserAreas == false)
+		//	return;
+		if(UserList.users == null)
+			return;
+
+		usersList.drawUserAreas(g);
+	}
+
 	public static DeviceList getDeviceList() {
 		return nodeList;
 	}
@@ -306,11 +368,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		block.addAction(action);
 		CupActionStack.add(block);
 	}
-	
+
 	private int expanded = 0;
+
 	
+	//edited by Chenjun add lastkey from a - e
 	@Override
-	public void mouseClicked(MouseEvent e) {		
+	public void mouseClicked(MouseEvent e) {
 		if(e.getButton()==MouseEvent.BUTTON3 && lastKey != 0) {
 			DeviceList.deselectAll();
 			lastKey = 0;
@@ -334,7 +398,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
-		}			
+		}
 		if (lastKey == '5') {
 			CupAction action = new CupActionAddSensor(new BaseStation(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1));
 			addAction(action);
@@ -358,6 +422,45 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 		if (lastKey == '8') {
 			CupAction action = new CupActionAddMarker(new Marker(gp.getLongitude(), gp.getLatitude(), 0, 4));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+
+		if (lastKey == 'a') {
+			CupAction action = new CupActionAddDevice(new Humidity(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+
+		
+		if (lastKey == 'b') {
+			CupAction action = new CupActionAddDevice(new Lighting(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}		
+
+		
+		if (lastKey == 'c') {
+			CupAction action = new CupActionAddDevice(new Temperature(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+
+		
+		if (lastKey == 'd') {
+			CupAction action = new CupActionAddDevice(new WaterLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}		
+
+		
+		if (lastKey == 'e') {
+			CupAction action = new CupActionAddDevice(new WindLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
@@ -400,7 +503,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				}
 			}
 		}
-		
+
 		if(CupCarbon.cupCarbonController!=null) {
 			CupCarbon.cupCarbonController.updateObjectListView();
 			CupCarbon.cupCarbonController.getNodeInformations();
@@ -421,7 +524,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 		mousePressed = true;
@@ -437,7 +540,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			for(SensorNode sensor : DeviceList.sensors) {
 				if(!e.isControlDown() && numberOfInsideAndSelected==0) {
 					sensor.setSelected(false);
-				}				
+				}
 				if(e.getButton()==MouseEvent.BUTTON1 && sensor.isInside()) {
 					if(e.isControlDown())
 						sensor.setSelected(!sensor.isSelected());
@@ -448,30 +551,30 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 				}
 			}
-			
-			for(Device device : DeviceList.devices) {				
+
+			for(Device device : DeviceList.devices) {
 				if(!e.isControlDown() && numberOfInsideAndSelected==0) {
 					device.setSelected(false);
-				}	
+				}
 				if(e.getButton()==MouseEvent.BUTTON1 && device.isInside()) {
 					if(e.isControlDown())
 						device.setSelected(!device.isSelected());
-					else 
+					else
 						if(numberOfInsideAndSelected==0 && nbSelected==0) {
 							device.setSelected(true);
 							nbSelected++;
 						}
 				}
 			}
-			
+
 			for(Marker marker : MarkerList.markers) {
 				if(!e.isControlDown() && numberOfInsideAndSelected==0) {
 					marker.setSelected(false);
-				}	
+				}
 				if(e.getButton()==MouseEvent.BUTTON1 && marker.isInside()) {
 					if(e.isControlDown())
 						marker.setSelected(!marker.isSelected());
-					else 
+					else
 						if(numberOfInsideAndSelected==0 && nbSelected==0) {
 							marker.setSelected(true);
 							nbSelected++;
@@ -482,53 +585,53 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 
 	}
-	
+
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		cx = e.getX();
 		cy = e.getY();
-		
+
 		if (magnetic) {
 			cx = cx - (cx % magnetic_step) - (mapViewer.getViewportBounds().x % magnetic_step);
 			cy = cy - (cy % magnetic_step) - (mapViewer.getViewportBounds().y % magnetic_step);
 		}
-		
+
 		if(magnetic) {
 			Point2D pd = MapCalc.pixelPanelToPixelMap(cx, cy);
 			mX = (int) pd.getX();
 			mY = (int) pd.getY();
 			repaint();
 		}
-		
-		movingSensors(e.getX(), e.getY()) ;		
+
+		movingSensors(e.getX(), e.getY()) ;
 	}
-	
+
 	public void movingSensors(int x, int y) {
 		boolean selection = false;
-		for(SensorNode sensor : DeviceList.sensors) {			
-			sensor.calculateDxDy(cx, cy);	
-			boolean tmp_inside = sensor.isInside();	
-			sensor.inside(x, y);	
+		for(SensorNode sensor : DeviceList.sensors) {
+			sensor.calculateDxDy(cx, cy);
+			boolean tmp_inside = sensor.isInside();
+			sensor.inside(x, y);
 			if (sensor.isInside() != tmp_inside) {
 				selection = true;
 				repaint();
 			}
 		}
-		
-		for(Device device : DeviceList.devices) {			
-			device.calculateDxDy(cx, cy);	
-			boolean tmp_inside = device.isInside();	
-			device.inside(x, y);	
+
+		for(Device device : DeviceList.devices) {
+			device.calculateDxDy(cx, cy);
+			boolean tmp_inside = device.isInside();
+			device.inside(x, y);
 			if (device.isInside() != tmp_inside) {
 				selection = true;
 				repaint();
 			}
 		}
-		
-		for(Marker marker : MarkerList.markers) {			
-			marker.calculateDxDy(cx, cy);	
-			boolean tmp_inside = marker.isInside();	
-			marker.inside(x, y);	
+
+		for(Marker marker : MarkerList.markers) {
+			marker.calculateDxDy(cx, cy);
+			boolean tmp_inside = marker.isInside();
+			marker.inside(x, y);
 			if (marker.isInside() != tmp_inside) {
 				selection = true;
 				repaint();
@@ -542,29 +645,29 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				CupCarbon.cupCarbonController.updateSelectionInListView();
 			}
 	}
-	
+
 	private boolean dragging = false;
 	public int _cadreX1 = 0;
 	public int _cadreY1 = 0;
 	public int _cadreX2 = 0;
 	public int _cadreY2 = 0;
-	
+
 	@Override
-	public void mouseDragged(MouseEvent e) {		
+	public void mouseDragged(MouseEvent e) {
 		if (shiftDown || e.getButton()==MouseEvent.BUTTON3) {
 			_cadreX2 = e.getX();
 			_cadreY2 = e.getY();
-			
+
 			int mx1 = Math.min(_cadreX1, _cadreX2);
 			int my1 = Math.min(_cadreY1, _cadreY2);
 			int mx2 = Math.max(_cadreX1, _cadreX2);
 			int my2 = Math.max(_cadreY1, _cadreY2);
-			
+
 			cadreX1 = mx1;
 			cadreY1 = my1;
 			cadreX2 = mx2;
 			cadreY2 = my2;
-			
+
 			drawSelectionRectangle = true;
 			repaint();
 		}
@@ -581,12 +684,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						cx = e.getX();
 						cy = e.getY();
 						sensor.moveTo(cx, cy, 0);
-					}					
+					}
 				}
-				
+
 				for(Device device : DeviceList.devices) {
 					if (device.isSelected()) {
-						if(!dragging) {							
+						if(!dragging) {
 							device.calculateDxDy(e.getX(), e.getY());
 							device.setPrevLongitude(device.getLongitude());
 							device.setPrevLatitude(device.getLatitude());
@@ -594,9 +697,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						cx = e.getX();
 						cy = e.getY();
 						device.moveTo(cx, cy, 0);
-					}					
+					}
 				}
-				
+
 				for(Marker marker : MarkerList.markers) {
 					if (marker.isSelected()) {
 						if(!dragging) {
@@ -607,17 +710,17 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						cx = e.getX();
 						cy = e.getY();
 						marker.moveTo(cx, cy, 0);
-					}					
+					}
 				}
-				
+
 				dragging = true;
 				if(DeviceList.propagationsCalculated)
 					DeviceList.calculatePropagations();
 			}
 		}
 	}
-	
-	public void addActionAfterMoving() {	
+
+	public void addActionAfterMoving() {
 		if(dragging) {
 			if(CupCarbon.cupCarbonController!=null) {
 				CupCarbon.cupCarbonController.updateObjectListView();
@@ -625,39 +728,39 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				CupCarbon.cupCarbonController.getRadioInformations();
 				CupCarbon.cupCarbonController.updateSelectionInListView();
 			}
-			
+
 			dragging = false;
 			CupActionBlock block = new CupActionBlock();
 			for(SensorNode sensor : DeviceList.sensors) {
 				if (sensor.isSelected()) {
 					CupActionMapObjectMove action = new CupActionMapObjectMove(sensor);
-					block.addAction(action);				
+					block.addAction(action);
 				}
 			}
-			
+
 			for(Device device : DeviceList.devices) {
 				if (device.isSelected()) {
 					CupActionMapObjectMove action = new CupActionMapObjectMove(device);
-					block.addAction(action);				
+					block.addAction(action);
 				}
 			}
-			
-			for(Marker marker : MarkerList.markers) {				
+
+			for(Marker marker : MarkerList.markers) {
 				if (marker.isSelected()) {
 					CupActionMapObjectMove action = new CupActionMapObjectMove(marker);
-					block.addAction(action);				
+					block.addAction(action);
 				}
 			}
-			
+
 			if(block.size()>0) {
 				CupActionStack.add(block);
 				CupActionStack.execute();
 			}
 		}
 	}
-	
+
 	@Override
-	public void mouseReleased(MouseEvent e) {		
+	public void mouseReleased(MouseEvent e) {
 		addActionAfterMoving();
 		if (shiftDown || (mousePressed && e.getButton()==MouseEvent.BUTTON3)) {
 			mapViewer.setPanEnabled(true);
@@ -665,9 +768,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mousePressed = false;
 			lastKeyCode = 0;
 			startSelection = false;
-			
+
 			MapLayer.multipleSelection = true;
-			
+
 			if (drawSelectionRectangle) {
 				nodeList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
 				markerList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
@@ -687,7 +790,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		return y < gp1.getLatitude() && x > gp1.getLongitude()
 				&& y > gp2.getLatitude() && x < gp2.getLongitude();
 	}
-	
+
 	public void deleteIfSelected() {
 		CupActionBlock block = new CupActionBlock();
 		SensorNode sensor;
@@ -695,10 +798,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			sensor = iterator.next();
 			if (sensor.isSelected()) {
 				CupActionDeleteSensor action = new CupActionDeleteSensor(sensor);
-				block.addAction(action);				
-			}			
+				block.addAction(action);
+			}
 		}
-		
+
 		Device device;
 		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
 			device = iterator.next();
@@ -707,7 +810,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				block.addAction(action);
 			}
 		}
-		
+
 		Marker marker;
 		int index = 0;
 		for (Iterator<Marker> iterator = MarkerList.markers.iterator(); iterator.hasNext();) {
@@ -718,7 +821,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			}
 			index++;
 		}
-		
+
 		Building building;
 		for (Iterator<Building> iterator = BuildingList.buildings.iterator(); iterator.hasNext();) {
 			building = iterator.next();
@@ -729,12 +832,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 		if(block.size()>0) {
 			CupActionStack.add(block);
-			CupActionStack.execute(); 
+			CupActionStack.execute();
 		}
 
-		
+
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent key) {
 		ctrlDown = key.isControlDown();
@@ -742,21 +845,21 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		shiftDown = key.isShiftDown();
 		altDown = key.isAltDown();
 		lastKeyCode = key.getKeyCode();
-		
+
 		if(key.getKeyCode()==68 && altDown)
 			showInfos = !showInfos;
-		
+
 		if(key.getKeyCode()==70 && altDown)
 			showBakhground = !showBakhground;
-		
+
 		if(key.getKeyChar()=='a' && !ctrlDown && !cmdDown && !shiftDown && !altDown ) {
-			NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows; 
+			NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows;
 		}
-		
+
 		if(key.getKeyChar()=='A' && !ctrlDown && !cmdDown && !altDown ) {
-			NetworkParameters.drawMarkerArrows = !NetworkParameters.drawMarkerArrows; 
+			NetworkParameters.drawMarkerArrows = !NetworkParameters.drawMarkerArrows;
 		}
-		
+
 		if(key.getKeyChar() == KeyEvent.VK_SPACE) {
 			CupCarbon.cupCarbonController.splitPaneShowHide();
 		}
@@ -772,56 +875,56 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		if(key.getKeyChar() == 130) {
 			NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows;
 		}
-		
+
 		if (key.getKeyChar() == 'd') {
 			NetworkParameters.displayDetails = !NetworkParameters.displayDetails;
 		}
-		
+
 		if (key.getKeyChar() == 'D') {
 			NetworkParameters.displayPrintMessage = !NetworkParameters.displayPrintMessage;
 		}
-		
+
 		if (key.getKeyChar() == 'R') {
 			NetworkParameters.displayAllRoutes = !NetworkParameters.displayAllRoutes;
 		}
-		
+
 		if (key.getKeyChar() == 'm') {
 			NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages ;
 		}
-		
+
 		if (key.getKeyCode() == 27) { // escape
 			addActionAfterMoving();
 			for(SensorNode sensor : DeviceList.sensors) {
-				sensor.initSelection();				
+				sensor.initSelection();
 			}
 
 			for(Device device : DeviceList.devices) {
 				device.initSelection();
 			}
-			
+
 			for(Marker marker : MarkerList.markers) {
 				marker.initSelection();
 			}
-			
+
 			if(CupCarbon.cupCarbonController!=null) {
 				CupCarbon.cupCarbonController.updateObjectListView();
 				CupCarbon.cupCarbonController.updateSelectionInListView();
 			}
 			lastKey = 0;
-		}		
-		
+		}
+
 		repaint();
 	}
-	
-	
-	
-	
+
+
+
+
 	public static void escape() {
 		mapViewer.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		lastKey = 0;
-		repaint();		
+		repaint();
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent key) {
 		if(shiftDown && mousePressed) {
@@ -831,12 +934,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			buildingList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
 			repaint();
 		}
-		
+
 		altDown = false;
 		shiftDown = false;
 		ctrlDown = false;
 		cmdDown = false;
-		
+
 	}
 
 	public static void duplicate() {
@@ -852,7 +955,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			}
 		}
 		for(Device device : DeviceList.devices) {
-			if (device.isSelected()) {	
+			if (device.isSelected()) {
 				CupAction action;
 				if(MapLayer.magnetic)
 					action = new CupActionAddDevice(device.duplicate());
@@ -866,35 +969,35 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute();
 		}
 	}
-	
+
 	public void keyTypedForDevices(KeyEvent key) {
 		CupActionBlock block = new CupActionBlock();
 		for(Device device : DeviceList.devices) {
-			if (device.isSelected()) {	
+			if (device.isSelected()) {
 //				if (key.getKeyChar() == 'k') {
 //					device.switchVisible();
 //				}
-	
+
 				if (key.getKeyChar() == 'h') {
 					device.incHide();
 				}
-				
+
 				if (key.getKeyChar() == 'j') {
 					device.setHide(0);
 				}
-				
+
 				if (key.getKeyChar() == ';') {
 					CupAction action = new CupActionModifDeviceRadius(device, device.getRadius(), device.getRadius()+5);
 					block.addAction(action);
 				}
-		
+
 				if (key.getKeyChar() == ',') {
 					if(device.getRadius()>0) {
 						CupAction action = new CupActionModifDeviceRadius(device, device.getRadius(), device.getRadius()-5);
 						block.addAction(action);
 					}
 				}
-							
+
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
@@ -905,37 +1008,37 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						block.addAction(action);
 					}
 				}
-				
+
 				if (key.getKeyChar() == 'S') {
 					device.agentSimulation();
 				}
-				
+
 			}
-			
+
 			if (key.getKeyChar() == 'q') {
 				device.stopAgentSimulation();
 			}
-			
+
 			if (key.getKeyChar() == 'i') {
 				device.invSelection();
 			}
-	
+
 			if (key.getKeyChar() == '1' || key.getKeyChar() == '2' || key.getKeyChar() == '3' || key.getKeyChar() == '4' || key.getKeyChar() == '5'
 					|| key.getKeyChar() == '6' || key.getKeyChar() == '7' || key.getKeyChar() == '8') {
 				device.setSelected(false);
 			}
 		}
-		
+
 		if(block.size()>0) {
 			CupActionStack.add(block);
 			CupActionStack.execute();
 		}
 	}
-	
+
 	public void keyTypedForSensors(KeyEvent key) {
 		CupActionBlock block = new CupActionBlock();
 		for(SensorNode sensor : DeviceList.sensors) {
-			if (sensor.isSelected()) {	
+			if (sensor.isSelected()) {
 				if ((key.getKeyChar() == '(') || (key.getKeyChar() == '[')) {
 					int d = 5;
 					if(key.getKeyChar() == '[') d = 1;
@@ -954,7 +1057,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						CupCarbon.cupCarbonController.getSensorInformations();
 					}
 				}
-				
+
 				if ((key.getKeyChar() == 960) || (key.getKeyChar() == 'p')) {
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
@@ -968,7 +1071,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 					}
 				}
-				
+
 				if ((key.getKeyChar() == 339) || (key.getKeyChar() == 'o')) {
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
@@ -982,7 +1085,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 					}
 				}
-				
+
 				if ((key.getKeyChar() == 8719) || (key.getKeyChar() == 'P')) {
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
@@ -996,7 +1099,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 					}
 				}
-				
+
 				if ((key.getKeyChar() == 338) || (key.getKeyChar() == 'O')) {
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
@@ -1010,32 +1113,32 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 					}
 				}
-				
+
 //				if (key.getKeyChar() == 'k') {
 //					sensor.switchVisible();
 //				}
-	
+
 				if (key.getKeyChar() == 'h') {
 					sensor.incHide();
-					
+
 				}
-				
+
 				if (key.getKeyChar() == 'j') {
 					sensor.setHide(0);
 				}
-				
+
 				if (key.getKeyChar() == ';') {
 					CupAction action = new CupActionModifSensorRadius(sensor, sensor.getRadius(), sensor.getRadius()+5);
 					block.addAction(action);
 				}
-		
+
 				if (key.getKeyChar() == ',') {
 					if(sensor.getRadius()>0) {
 						CupAction action = new CupActionModifSensorRadius(sensor, sensor.getRadius(), sensor.getRadius()-5);
 						block.addAction(action);
 					}
 				}
-							
+
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
@@ -1050,19 +1153,19 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				if (key.getKeyChar() == 'b') {
 					sensor.invertDrawBatteryLevel();
 				}
-				
+
 				if (key.getKeyChar() == 'B') {
 					blockBuildings = !blockBuildings ;
 				}
-				
+
 				if (key.getKeyChar() == 'k') {
 					if (sensor.getBatteryLevel()>0) {
-						sensor.setBatteryLevel(0);					
+						sensor.setBatteryLevel(0);
 					}
 					else
-						sensor.initBattery();					
-				}				
-				
+						sensor.initBattery();
+				}
+
 				if(key.getKeyChar()=='+') {
 					CupAction action = new CupActionModifRadioRadius(sensor.getCurrentRadioModule(), sensor.getCurrentRadioModule().getRadioRangeRadius(), sensor.getCurrentRadioModule().getRadioRangeRadius()+1);
 					block.addAction(action);
@@ -1079,19 +1182,19 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						}
 					}
 				}
-				
+
 				if (key.getKeyChar() == 'S') {
 					sensor.agentSimulation();
-				}				
-	
+				}
+
 				if (key.getKeyChar() == 'e') {
 					sensor.setDisplaydRadius(!sensor.getDisplaydRadius());
 				}
-	
+
 				if (key.getKeyChar() == 'r') {
 					sensor.setDisplaydInfos(!sensor.getDisplaydInfos());
-				}				
-						
+				}
+
 				if (key.getKeyChar() == '1' || key.getKeyChar() == '2' || key.getKeyChar() == '3' || key.getKeyChar() == '4' || key.getKeyChar() == '5'
 						|| key.getKeyChar() == '6' || key.getKeyChar() == '7' || key.getKeyChar() == '8') {
 					sensor.setSelected(false);
@@ -1100,49 +1203,49 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			if (key.getKeyChar() == 'i') {
 				sensor.invSelection();
 			}
-			
+
 			if (key.getKeyChar() == 'q') {
 				sensor.stopAgentSimulation();
 			}
 		}
-		
+
 		if(block.size()>0) {
 			CupActionStack.add(block);
 			CupActionStack.execute();
 		}
 	}
-	
+
 	public void keyTypedForMarkers(KeyEvent key) {
 		for(Marker marker : MarkerList.markers) {
 			if (key.getKeyChar() == 'i') {
 				marker.invSelection();
 			}
-			
-			if (marker.isSelected()) {	
+
+			if (marker.isSelected()) {
 				if (key.getKeyChar() == '1' || key.getKeyChar() == '2' || key.getKeyChar() == '3' || key.getKeyChar() == '4' || key.getKeyChar() == '5'
 						|| key.getKeyChar() == '6' || key.getKeyChar() == '7' || key.getKeyChar() == '8') {
 					marker.setSelected(false);
 				}
 			}
-		}			
+		}
 	}
-	
+
 	@Override
 	public void keyTyped(KeyEvent key) {
 		lastKey = key.getKeyChar();
-		
+
 		if (lastKey == 'n') {
-			NetworkParameters.drawScriptFileName = !NetworkParameters.drawScriptFileName;					
+			NetworkParameters.drawScriptFileName = !NetworkParameters.drawScriptFileName;
 		}
-		
+
 		if(lastKey == 'l') {
 			NetworkParameters.drawRadioLinks = !NetworkParameters.drawRadioLinks;
 		}
-		
+
 		if(lastKey == 'L') {
 			BuildingList.locked = !BuildingList.locked ;
 		}
-		
+
 		if (lastKey == 'v' || lastKey=='V') {
 			nextLinkColor(lastKey);
 		}
@@ -1150,11 +1253,11 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		if (lastKey == 198) {
 			NetworkParameters.drawMarkerArrows = !NetworkParameters.drawMarkerArrows;
 		}
-		
-		if (lastKey == 'w') {			
+
+		if (lastKey == 'w') {
 			selectNodesMarkers();
 		}
-		
+
 		if (lastKey == '>') {
 			Device.moveSpeed += 5;
 		}
@@ -1164,60 +1267,60 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			if (Device.moveSpeed < 0)
 				Device.moveSpeed = 0;
 		}
-		
+
 		if(lastKey == 'f') {
 			DeviceList.selectOneFromSelected();
 		}
-		
-		if (key.getKeyChar() == 'x') {			
+
+		if (key.getKeyChar() == 'x') {
 			NetworkParameters.displayRLDistance = !NetworkParameters.displayRLDistance;
 		}
-		
-		if (key.getKeyChar() == 'X') {			
+
+		if (key.getKeyChar() == 'X') {
 			NetworkParameters.displayMarkerDistance = !NetworkParameters.displayMarkerDistance;
 		}
-		
+
 		if(key.getKeyChar()=='t') {
 			MarkerList.transformMarkersToSensors();
 		}
-				
+
 		if(key.getKeyChar()=='u') {
 			MarkerList.insertMarkers();
 		}
-		
+
 		if(key.getKeyChar()=='U') {
 			MarkerList.selectNextMarkers();
 		}
-		
+
 		if (key.getKeyChar() == ':') {
 			int n = MarkerList.size();
         	Building building = new Building(n);
-        	
+
         	for (int i=0; i<n; i++){
         		building.set(MarkerList.get(i).getLongitude(), MarkerList.get(i).getLatitude(), i);
         	}
-        	
+
         	mapViewer.addMouseListener(building);
     		mapViewer.addKeyListener(building);
-    		
+
     		CupAction action = new CupActionAddBuilding(building);
 			CupActionBlock block = new CupActionBlock();
 			block.addAction(action);
-			CupActionStack.add(block);			
-			CupActionStack.execute();			
+			CupActionStack.add(block);
+			CupActionStack.execute();
 			MarkerList.selectAll();
 		}
-		
+
 		keyTypedForSensors(key);
 		keyTypedForDevices(key);
 		keyTypedForMarkers(key);
-		
+
 		if(DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		repaint();
-		
+
 	}
-	
+
 	public static void selectNodesMarkers() {
 		if(selectType==MapObject.NONE) {
 			MapLayer.numberOfInsideAndSelected = 0;
@@ -1240,7 +1343,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			}
 		}
 	}
-	
+
 	public static void nextLinkColor(char c) {
 		if(c=='v') NetworkParameters.radioLinksColor++;
 		if(c=='V') NetworkParameters.radioLinksColor--;
@@ -1248,9 +1351,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			NetworkParameters.radioLinksColor = 0;
 		if(NetworkParameters.radioLinksColor<0)
 			NetworkParameters.radioLinksColor=5;
-	}	
+	}
 
-	
+
 
 	public void addNodeInMap(char c) {
 		lastKey = c;
@@ -1265,7 +1368,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public void setSelectionOfAllNodes(boolean selection, int type, boolean addSelection) {
 		nodeList.setSelectionOfAllNodes(selection, type, addSelection);
 	}
-	
+
 	public void setSelectionOfAllMobileNodes(boolean selection, int type, boolean addSelection) {
 		nodeList.setSelectionOfAllMobileNodes(selection, type, addSelection);
 	}
@@ -1275,17 +1378,17 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 
 	public void setSelectionOfAllMarkers(boolean selection, boolean addSelection) {
-		markerList.setSelectionOfAllMarkers(selection, addSelection);		
+		markerList.setSelectionOfAllMarkers(selection, addSelection);
 	}
-	
+
 	public void setSelectionOfAllBuildings(boolean selection, boolean addSelection) {
-		buildingList.setSelectionOfAllBuildings(selection, selection);		
+		buildingList.setSelectionOfAllBuildings(selection, selection);
 	}
-	
+
 	public static void repaint() {
 		mapViewer.repaint();
 	}
-	
+
 	public static void drawDistance(double longitude1, double latitude1, double elevation1, double longitude2, double latitude2, double elevation2, Graphics g) {
 		int[] coord = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int lx1 = coord[0];
@@ -1299,13 +1402,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		int d = (int) MapLayer.distance(longitude1, latitude1, longitude2, latitude2);
 		g.drawString("" + d, ((lx1 + lx2) / 2), ((ly1 + ly2) / 2 + 10));
 	}
-	
-	public static void drawMessage(int lx1, int lx2, int ly1, int ly2, String message, Graphics g) {		
+
+	public static void drawMessage(int lx1, int lx2, int ly1, int ly2, String message, Graphics g) {
 		g.setColor(Color.BLACK);
 		if(dark) g.setColor(new Color(243,210,29));
 		g.drawString(message, ((lx1 + lx2) / 2), ((ly1 + ly2) / 2 - 10));
 	}
-	
+
 	public static void drawMessageAttempts(int lx1, int lx2, int ly1, int ly2, String message, Graphics g) {
 		if(SimulationInputs.ack) {
 			g.setColor(Color.BLACK);
@@ -1313,7 +1416,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawString("["+message+"]", ((lx1 + lx2) / 2) -15, ((ly1 + ly2) / 2 - 10));
 		}
 	}
-	
+
 	/**
 	 * @param device
 	 * @return the distance in meters between the current device and the one

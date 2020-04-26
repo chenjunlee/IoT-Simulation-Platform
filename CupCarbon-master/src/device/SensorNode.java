@@ -817,6 +817,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}	
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param deviceId
+	 * @return Document
+	 * saveRadioModuleToDB iterate each Module and call saveToDB.
+	 */
 	public Document saveRadioModuleToDB(String deviceId) {
 		Document document = new Document();
 		int index = 1;

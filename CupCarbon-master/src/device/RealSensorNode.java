@@ -245,6 +245,11 @@ public class RealSensorNode extends SensorNode {
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "sensor_"+ref);
 	}
 	
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a list of Document contains the informs of RealSensorNode
+	 */
 	@Override
 	public List<Document> saveToDB() {
 		List<Document> documents = new ArrayList<Document>();

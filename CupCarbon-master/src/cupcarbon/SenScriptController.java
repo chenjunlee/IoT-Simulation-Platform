@@ -110,17 +110,34 @@ public class SenScriptController implements Initializable{
 	@FXML
 	public void load() {
 		if (txtLoadFileName.getSelectionModel().getSelectedIndex() > 0) {
-			txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
-			zone.setText("");
-			try {
-				FileInputStream in = new FileInputStream(new File(
-						Project.getScriptFileFromName(txtLoadFileName.getSelectionModel()
-								.getSelectedItem().toString())));
-				byte[] bytes = new byte[in.available()];
-				in.read(bytes);
-				zone.setText(new String(bytes));
-				in.close();
-			} catch (Exception e1) {}
+			// add by yiwei yao, add support for database mode
+			// *************************************************************************************************
+			if(Project.projectPath == "DataBase Mode") {
+				txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
+				zone.setText("");
+				try {
+					FileInputStream in = new FileInputStream(new File(
+							Project.getScriptFileFromNameForDB(txtLoadFileName.getSelectionModel()
+									.getSelectedItem().toString())));
+					byte[] bytes = new byte[in.available()];
+					in.read(bytes);
+					zone.setText(new String(bytes));
+					in.close();
+				} catch (Exception e1) {}
+			// *************************************************************************************************
+			} else {
+				txtFileName.setText(txtLoadFileName.getSelectionModel().getSelectedItem().toString());
+				zone.setText("");
+				try {
+					FileInputStream in = new FileInputStream(new File(
+							Project.getScriptFileFromName(txtLoadFileName.getSelectionModel()
+									.getSelectedItem().toString())));
+					byte[] bytes = new byte[in.available()];
+					in.read(bytes);
+					zone.setText(new String(bytes));
+					in.close();
+				} catch (Exception e1) {}
+			}
 		} else {			
 			txtFileName.setText("");
 			zone.setText("loop\n");
@@ -131,32 +148,66 @@ public class SenScriptController implements Initializable{
 	@FXML
 	public void save() {
 		if(!txtFileName.getText().equals("")) {
-			try {
-				String fileName = txtFileName.getText();
-				fileName = fileName.trim();
-				fileName = fileName.replaceAll(" ", "");
-				PrintStream ps;
-				ps = new PrintStream(new FileOutputStream(Project
-						.getScriptFileFromName(Project
-								.getScriptFileExtension(fileName))));
-				ps.print(zone.getText());
-				ps.close();
-				zone.setText("");
-				txtFileName.setText("");
-
-				File scriptFiles = new File(Project.getProjectScriptPath());
-				String[] c = scriptFiles.list();
-				txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
-				txtLoadFileName.getItems().add("New scenario ...");
-				for (int i = 0; i < c.length; i++) {
-					txtLoadFileName.getItems().add(c[i]);
+			// add by Yiwei Yao edit and create script file in database mode
+			// *************************************************************************************************
+			if(Project.projectPath == "DataBase Mode") {
+				try {
+					String fileName = txtFileName.getText();
+					fileName = fileName.trim();
+					fileName = fileName.replaceAll(" ", "");
+					PrintStream ps;
+					ps = new PrintStream(new FileOutputStream(Project
+							.getScriptFileFromNameForDB(Project
+									.getScriptFileExtension(fileName))));
+					ps.print(zone.getText());
+					ps.close();
+					zone.setText("");
+					txtFileName.setText("");
+	
+					File scriptFiles = new File(Project.getProjectScriptPathForDB());
+					String[] c = scriptFiles.list();
+					txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+					txtLoadFileName.getItems().add("New scenario ...");
+					for (int i = 0; i < c.length; i++) {
+						txtLoadFileName.getItems().add(c[i]);
+					}
+					
+					CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
+					CupCarbon.cupCarbonController.createContextMenu();
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
 				}
-				
-				CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
-				CupCarbon.cupCarbonController.createContextMenu();
-				
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+			// *************************************************************************************************
+			}
+			else {
+				try {
+					String fileName = txtFileName.getText();
+					fileName = fileName.trim();
+					fileName = fileName.replaceAll(" ", "");
+					PrintStream ps;
+					ps = new PrintStream(new FileOutputStream(Project
+							.getScriptFileFromName(Project
+									.getScriptFileExtension(fileName))));
+					ps.print(zone.getText());
+					ps.close();
+					zone.setText("");
+					txtFileName.setText("");
+	
+					File scriptFiles = new File(Project.getProjectScriptPath());
+					String[] c = scriptFiles.list();
+					txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+					txtLoadFileName.getItems().add("New scenario ...");
+					for (int i = 0; i < c.length; i++) {
+						txtLoadFileName.getItems().add(c[i]);
+					}
+					
+					CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
+					CupCarbon.cupCarbonController.createContextMenu();
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -167,13 +218,29 @@ public class SenScriptController implements Initializable{
 	}
 
 	public void initComboBox() {
-		File scriptFiles = new File(Project.getProjectScriptPath());
-		String[] c = scriptFiles.list();
-		txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
-		txtLoadFileName.getItems().add("New script ...");
-		if (scriptFiles.isDirectory() && c != null) {
-			for (int i = 0; i < c.length; i++) {
-				txtLoadFileName.getItems().add(c[i]);
+		// add by yiwei yao, add support for database mode
+		// *************************************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File scriptFiles = new File(Project.getProjectScriptPathForDB());
+			String[] c = scriptFiles.list();
+			txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+			txtLoadFileName.getItems().add("New script ...");
+			if (scriptFiles.isDirectory() && c != null) {
+				for (int i = 0; i < c.length; i++) {
+					txtLoadFileName.getItems().add(c[i]);
+				}
+			}
+		// *************************************************************************************************
+			
+		} else {
+			File scriptFiles = new File(Project.getProjectScriptPath());
+			String[] c = scriptFiles.list();
+			txtLoadFileName.getItems().removeAll(txtLoadFileName.getItems());
+			txtLoadFileName.getItems().add("New script ...");
+			if (scriptFiles.isDirectory() && c != null) {
+				for (int i = 0; i < c.length; i++) {
+					txtLoadFileName.getItems().add(c[i]);
+				}
 			}
 		}
 	}

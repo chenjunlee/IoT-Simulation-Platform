@@ -7,12 +7,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
@@ -33,24 +33,24 @@ import cupcarbon.CupCarbon;
 public class WorldMap extends JXMapKit {
 
 	public static boolean darkMap = false;
-	
+
 	private static final long serialVersionUID = 1L;
 	private static MapLayer layer;
 	private final int max = 19;
-	public static String tileType = ".png";	
-	public static String tileUrl = Tiles.TILE0;	
+	public static String tileType = ".png";
+	public static String tileUrl = Tiles.TILE0;
 	public static boolean local = true;
 	public static boolean gmap = false; // to use google maps (not yet integrated)
-	public static String tileName = Tiles.TILE2;	
+	public static String tileName = Tiles.TILE2;
 	public static int mapIdx = 2;
-	
-	public WorldMap() {				
+
+	public WorldMap() {
 		WorldMapExecute();
 		layer = new MapLayer(getMainMap());
 	}
-	
+
 	public void WorldMapExecute() {
-				TileFactoryInfo info = new TileFactoryInfo(0, max, max, 256, true, true, "http://tile.openseamap.org", "x", "y", "z") {			
+				TileFactoryInfo info = new TileFactoryInfo(0, max, max, 256, true, true, "http://tile.openseamap.org", "x", "y", "z") {
 					public String getTileUrl(int x, int y, int zoom) {
 						zoom = max - zoom;
 						if(local) {
@@ -65,9 +65,9 @@ public class WorldMap extends JXMapKit {
 								return tileUrl + "&x="+x+"&y="+y+"&z="+zoom+"&s=Ga";
 							}
 							else {
-								return tileUrl+zoom+"/"+x+"/"+y+tileType ;					
+								return tileUrl+zoom+"/"+x+"/"+y+tileType ;
 							}
-							
+
 						}
 					}
 				};
@@ -77,15 +77,19 @@ public class WorldMap extends JXMapKit {
 				TileFactory tf = new DefaultTileFactory(info);
 
 				setTileFactory(tf);
-				
+
 				setDataProviderCreditShown(true);
-				setName("CupCarbon Map");				
-				setCenterPosition(new GeoPosition(48.39052932411496, -4.486016035079956));// Brest		
-				
-				setZoom(2);
+				setName("UMB Map");
+
+				// UMass Boston
+				setCenterPosition(new GeoPosition(42.3146025, -71.0393664));
+				setZoom(3);
+
+				//setCenterPosition(new GeoPosition(48.39052932411496, -4.486016035079956));// Brest
+				//setZoom(2);
 	}
 
-	
+
 	public static void simulate() {
 		layer.simulate();
 	}
@@ -93,11 +97,11 @@ public class WorldMap extends JXMapKit {
 	public static void simulateAll() {
 		layer.simulateAll();
 	}
-	
+
 	public static void simulateSensors() {
 		layer.simulateSensors();
 	}
-	
+
 	public static void simulateMobiles() {
 		layer.simulateMobiles();
 	}
@@ -113,7 +117,7 @@ public class WorldMap extends JXMapKit {
 	public static void setSelectionOfAllNodes(boolean selection, int type, boolean addSelection) {
 		layer.setSelectionOfAllNodes(selection, type, addSelection);
 	}
-	
+
 	public static void setSelectionOfAllMobileNodes(boolean selection, int type, boolean addSelection) {
 		layer.setSelectionOfAllMobileNodes(selection, type, addSelection);
 	}
@@ -125,15 +129,15 @@ public class WorldMap extends JXMapKit {
 	public static void setSelectionOfAllMarkers(boolean selection, boolean addSelection) {
 		layer.setSelectionOfAllMarkers(selection, addSelection);
 	}
-	
+
 	public static void setSelectionOfAllBuildings(boolean selection, boolean addSelection) {
 		layer.setSelectionOfAllBuildings(selection, addSelection);
 	}
-	
+
 	public void setLoc(GeoPosition gp) {
 		setCenterPosition(new GeoPosition(48.39188295873048, -4.44371223449707));
-	}	
-	
+	}
+
 	public static void changeMap(int index) {
 		MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles"+File.separator+"mer.png"));
 		mapIdx = index;
@@ -153,26 +157,26 @@ public class WorldMap extends JXMapKit {
 		case 12 : CupCarbon.cupCarbonController.checkMapMenuItem(12); changeTiles(Tiles.TILE12, false); darkMap(false); break;
 		}
 	}
-	
+
 	public static void darkMap(boolean b) {
 		MapLayer.dark = b;
 		if(b && NetworkParameters.radioLinksColor==0) {
 			NetworkParameters.radioLinksColor=2;
 		}
 	}
-	
+
 	public static void changeTiles(String s, boolean gmap) {
 		WorldMap.gmap = gmap ;
 		WorldMap.local = false ;
-		WorldMap.tileUrl = s;						
+		WorldMap.tileUrl = s;
 		MapLayer.repaint();
-	}	
-	
+	}
+
 	public static void changeLocalTiles(String s) {
 		WorldMap.gmap = false ;
 		WorldMap.local = true ;
 		WorldMap.tileName = s;
-		
+
 		Thread th = new Thread() {
 			@Override
 			public void run() {
@@ -181,5 +185,5 @@ public class WorldMap extends JXMapKit {
 		};
 		th.start();
 	}
-	
+
 }

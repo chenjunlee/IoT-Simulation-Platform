@@ -44,6 +44,12 @@ public class Building implements MouseListener, KeyListener {
 	
 	private double height = 10 ;
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param document
+	 * 
+	 * Building constructor, not functional.
+	 */
 	public Building(Document document) {
 //		mapZoom = MapLayer.mapViewer.getZoom();
 //		this.nPoints = nPoints;

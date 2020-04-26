@@ -1,22 +1,3 @@
-/*----------------------------------------------------------------------------------------------------------------
- * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
- * www.cupcarbon.com
- * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013 Ahcene Bounceur
- * ----------------------------------------------------------------------------------------------------------------
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *----------------------------------------------------------------------------------------------------------------*/
-
 package natural_events;
 
 import java.awt.BasicStroke;
@@ -51,27 +32,27 @@ import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class Gas2 extends MobileG {
+public class Lighting extends MobileG {
 
 	protected LinkedList<Double> valueTime;
 	protected LinkedList<Double> values;
 	protected int valueIndex = 0;
 
-	private String idFL = "A"; // ID First Letter
+	private String idFL = "L"; // ID First Letter
 
-	public Gas2(double x, double y, double z, double radius) {
+	public Lighting(double x, double y, double z, double radius) {
 		super(x, y, z, radius, "", DeviceList.number++);
 	}
 
-	public Gas2(double x, double y, double z, double radius, int id) {
+	public Lighting(double x, double y, double z, double radius, int id) {
 		super(x, y, z, radius, "", id);
 	}
 
-	public Gas2(double x, double y, double z, double radius, String gpsFileName, int id) {
+	public Lighting(double x, double y, double z, double radius, String gpsFileName, int id) {
 		super(x, y, z, radius, gpsFileName, id);
 	}
 
-	public Gas2(String x, String y, String z, String radius, String gpsFileName, int id) {
+	public Lighting(String x, String y, String z, String radius, String gpsFileName, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), gpsFileName, id);
 	}
 
@@ -230,9 +211,9 @@ public class Gas2 extends MobileG {
 	}
 
 	@Override
-	public Gas2 duplicate() {
+	public Gas duplicate() {
 		selected = false;
-		Gas2 gas = new Gas2(longitude, latitude, elevation, radius);
+		Gas gas = new Gas(longitude, latitude, elevation, radius);
 		gas.setHide(hide);
 		gas.setDrawBatteryLevel(drawBatteryLevel);
 		gas.setScriptFileName(scriptFileName);
@@ -243,8 +224,8 @@ public class Gas2 extends MobileG {
 	}
 
 	@Override
-	public Gas2 duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
-		Gas2 gas = duplicate();
+	public Gas duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
+		Gas gas = duplicate();
 		gas.shift(sLongitude, sLatitude, sElevation);
 		return gas;
 	}
@@ -281,31 +262,6 @@ public class Gas2 extends MobileG {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 *@author Yiwei Yao
-	 *@return List<Document>
-	 *saveToDB return a list of Document that contains the informs of Gas with prefix device.
-	 */
-	@Override
-	public List<Document> saveToDB() {
-		List<Document> documents = new ArrayList<Document>();
-		Document document = new Document()
-				.append("prefix", "device")
-				.append("device_type", getType())
-				.append("device_id", getId())
-				.append("device_longitude", getLongitude())
-				.append("device_latitude", getLatitude())
-				.append("device_elevation", getElevation())
-				.append("device_radius", getRadius())
-				.append("device_hide", getHide());
-		if (!getGPSFileName().equals(""))
-			document.append("device_gps_file_name", getGPSFileName());
-		if (!getNatEventFileName().equals(""))
-			document.append("natural_event_file_name", getNatEventFileName());
-		documents.add(document);
-		return documents;
 	}
 
 	public void loadValuesFromFile() {
@@ -377,6 +333,31 @@ public class Gas2 extends MobileG {
 				valueIndex = 1;
 			}
 		}
+	}
+
+	/**
+	 *@author Yiwei Yao
+	 *@return List<Document>
+	 *saveToDB return a list of Document that contains the informs of Lighting with prefix device.
+	 */
+	@Override
+	public List<Document> saveToDB() {
+		List<Document> documents = new ArrayList<Document>();
+		Document document = new Document()
+				.append("prefix", "device")
+				.append("device_type", getType())
+				.append("device_id", getId())
+				.append("device_longitude", getLongitude())
+				.append("device_latitude", getLatitude())
+				.append("device_elevation", getElevation())
+				.append("device_radius", getRadius())
+				.append("device_hide", getHide());
+		if (!getGPSFileName().equals(""))
+			document.append("device_gps_file_name", getGPSFileName());
+		if (!getNatEventFileName().equals(""))
+			document.append("natural_event_file_name", getNatEventFileName());
+		documents.add(document);
+		return documents;
 	}
 
 

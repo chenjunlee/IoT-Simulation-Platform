@@ -5,6 +5,18 @@ import java.util.Arrays;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
+/**
+ * @author Yiwei Yao
+ *
+ * handle printdb command
+ * printdb String[] arg
+ * example:
+ * printdb hello 12 23 34
+ * 
+ * in Mongodb:
+ * sensorid: XXX
+ * 12:31:00 4/19/20: hello 12 23 34
+ */
 public class Command_PRINTDB extends Command {
 	
 	protected String [] arg ;

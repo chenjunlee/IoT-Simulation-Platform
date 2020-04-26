@@ -139,6 +139,15 @@ public class SenScript {
 		ps.println(text);
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param text
+	 * 
+	 * printToDB Store String text into DB"iot_result"
+	 * and update the current project collection
+	 * in a format:
+	 * "yyyy/MM/dd HH:mm:ss": text
+	 */
 	public void printToDB(String text) {
 		String name = Project.projectName;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

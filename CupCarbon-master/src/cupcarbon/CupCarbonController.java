@@ -1,6 +1,7 @@
 package cupcarbon;
 
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,7 @@ import com.mongodb.client.MongoCursor;
 import action.CupAction;
 import action.CupActionAddRadioModule;
 import action.CupActionBlock;
+import action.CupActionDeleteDevice;
 import action.CupActionDeleteRadioModule;
 import action.CupActionModifDeviceElevation;
 import action.CupActionModifDeviceGpsFile;
@@ -64,6 +66,9 @@ import action.CupActionStack;
 import arduino.Arduino;
 import buildings.BuildingList;
 import cupcarbon_script.CupCarbonServer;
+import database.ExportToClient;
+import database.ExportToDB;
+import database.ImportFromDB;
 import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
@@ -131,93 +136,131 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import utilities.MapCalc;
 import visibility.VisibilityLauncher;
+import user.User;
+import user.UserList;
 
 public class CupCarbonController implements Initializable {
-	
+
 	private WorldMap map = null;
 
 	protected FaultInjector faultInjector = null;
 
 	ConsoleWindow console ;
-	
+
+	//=========================== Bang Tran
+	@FXML
+	private ComboBox<String> comboBoxEncryptedOption;
+	@FXML
+	public ComboBox<String> comboUsers;
+	@FXML
+	private TextField txtLatency;
+	@FXML
+	private TextField txtThroughput;
+	@FXML
+	private CheckBox checkboxTemperatureSens;
+	@FXML
+	private CheckBox checkboxHumiditySens;
+	@FXML
+	private CheckBox checkboxGasSens;
+	@FXML
+	private CheckBox checkboxLightSens;
+	@FXML
+	private CheckBox checkboxWindLevelSens;
+	@FXML
+	private CheckBox checkboxWaterLevelSens;
+	@FXML
+	private Button buttonClearConcernedArea;
+	@FXML
+	private Button buttonSetConcernedArea;
+	@FXML
+	private ListView<String> listViewConcernedSensors;
+
+	@FXML
+	public Button buttonSaveUserPreferences;
+	@FXML
+	public Button buttonRunSimulationCS682;
+	@FXML
+	public Button buttonGenerateSenScripts;
+	//=========================== Bang Tran
+
 	@FXML
 	private TextField suCoverage ;
-	
+
 	@FXML
 	private TextField suDirection ;
-	
+
 	@FXML
 	private Label labelInfo1 ;
-	
+
 	@FXML
 	private Label labelInfo2 ;
-	
+
 	@FXML
 	private Label labelInfo3 ;
-	
+
 	@FXML
 	private Label labelInfo4 ;
-	
+
 	@FXML
 	private Label labelInfo5 ;
-	
+
 	@FXML
 	private Label labelInfo6 ;
-	
+
 	@FXML
 	private Label labelInfo7 ;
-	
+
 	@FXML
 	private Label labelInfo8 ;
-	
+
 	@FXML
 	private Label labelInfo9 ;
-	
+
 	@FXML
 	private Label labelInfo10 ;
-	
+
 	@FXML
 	private Label labelInfo11 ;
-	
+
 	@FXML
 	private Label labelInfo12 ;
-	
+
 	@FXML
 	private Label labelInfo13 ;
-	
+
 	@FXML
 	private Label labelInfo14 ;
-	
+
 	@FXML
 	private Label labelInfo15 ;
 
 	@FXML
 	private Label labelInfo16 ;
-	
+
 	@FXML
 	private Label labelInfo17 ;
 
 	@FXML
 	private Label labelInfo18 ;
-	
+
 	@FXML
 	private Text textReady;
-	
+
 	@FXML
 	private SwingNode sn ;
-	
+
 	@FXML
 	private VBox vbox ;
-				
+
 	//@FXML
 	//public TextArea textOut;
-	
+
 	//@FXML
 	//public TextArea textErr;
-		
+
 	@FXML
 	public Slider bg_slider;
-	
+
 	@FXML
 	public Button saveButton;
 
@@ -256,25 +299,25 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public ComboBox<String> radio_spreading_factor;
-	
+
 	@FXML
 	public ComboBox<String> radio_code_rate;
-	
+
 	@FXML
 	public ComboBox<String> radio_conso_tx_model;
-	
+
 	@FXML
 	public ComboBox<String> radio_conso_rx_model;
 
 	@FXML
 	public Button spreading_factor_apply_button;
-	
+
 	@FXML
 	public Button code_rate_apply_button;
 
 	@FXML
 	public Label simulationTimeLabel;
-	
+
 	@FXML
 	public Label zoomLabel;
 
@@ -331,10 +374,10 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public CheckBox macCheckBox;
-	
+
 	@FXML
 	public TextField macProbaTextField;
-	
+
 	@FXML
 	public CheckBox ackCheckBox;
 
@@ -431,7 +474,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public TextField radio_ch;
-	
+
 	@FXML
 	public TextField radio_pl;
 
@@ -511,19 +554,59 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
+	/**
+	 * @author Bang Tran
+	 */
+	public void initComboBoxUsers(){
+		resetComboBoxUsers();
+		comboUsers.getSelectionModel()
+			.selectedItemProperty()
+			.addListener( (options, oldValue, newValue) -> {
+				if(oldValue != newValue)
+					loadUserPreferrences();
+					User user = UserList.users.get(comboUsers.getSelectionModel().getSelectedIndex());
+					MapLayer.repaint();
+					listViewConcernedSensors.getItems().clear();
+					if(user.getSensorsInsideArea()!=null && user.getSensorsInsideArea().size() > 0 ){
+						for(SensorNode s: user.getSensorsInsideArea() )
+							listViewConcernedSensors.getItems().add(s.getName());
+					}
+			}
+	    );
+	}
+
+	/**
+	 * @author Bang Tran
+	 */
+	public void resetComboBoxUsers(){
+		comboUsers.getItems().removeAll(comboUsers.getItems());
+
+		for(User u: user.UserList.users)
+			comboUsers.getItems().add(u.getName());
+
+		if(user.UserList.users.size() > 0){
+			comboUsers.getSelectionModel().select(0);
+			loadUserPreferrences();
+		}
+		listViewConcernedSensors.getItems().clear();
+	}
+
+
+
+
 	public void initComboBoxes() {
 		radio_spreading_factor.getItems().removeAll(radio_spreading_factor.getItems());
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
 		radio_spreading_factor.getSelectionModel().select(0);
-		
+
 		radio_code_rate.getItems().removeAll(radio_code_rate.getItems());
 		radio_code_rate.getItems().addAll("0", "1", "2", "3", "4");
 		radio_code_rate.getSelectionModel().select(0);
-		
+
 		radio_conso_tx_model.getItems().removeAll(radio_conso_tx_model.getItems());
 		radio_conso_tx_model.getItems().addAll(RadioModule.CLASSICAL_TX, RadioModule.HEINZELMAN_TX, "(n/8.0)*etx*p", "0.00000005*n+0.0000000001*n*(r*p)");
 		radio_conso_tx_model.setValue("");
-		
+
 		radio_conso_rx_model.getItems().removeAll(radio_conso_rx_model.getItems());
 		radio_conso_rx_model.getItems().addAll(RadioModule.CLASSICAL_RX, RadioModule.HEINZELMAN_RX, "(n/8.0)*erx", "0.00000005*n");
 		radio_conso_rx_model.setValue("");
@@ -545,6 +628,70 @@ public class CupCarbonController implements Initializable {
 		radioNameComboBox.getItems().addAll("radio1", "radio2", "radio3", "radio4", "radio5", "radio6", "radio7",
 				"radio8", "radio9", "radio10");
 		radioNameComboBox.getSelectionModel().select(0);
+
+
+		//================== Bang Tran
+		comboBoxEncryptedOption.getItems().addAll("Yes", "No");
+		initComboBoxUsers();
+
+		//================== Bang Tran
+	}
+
+	/**
+	 *@author Bang Tran
+	 * This method load preferences of current user
+	 */
+	private void loadUserPreferrences(){
+		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+		UserList.lastUser = UserList.currentUser;
+		UserList.currentUser = idx;
+
+		User user = UserList.users.get(idx);
+
+		txtLatency.setText(String.format("%.2f", user.preferredLatency));
+		txtThroughput.setText(String.format("%.2f", user.preferredThroughput));
+		//txtFrequency.setText(String.format("%.2f", user.preferredFrequency));
+		comboBoxEncryptedOption.getSelectionModel().select(user.dataEncrypted ? 0:1);
+
+		checkboxGasSens.setSelected(user.gasSensing);
+		checkboxTemperatureSens.setSelected(user.temperatureSensing);
+		checkboxHumiditySens.setSelected(user.humiditySensing);
+		checkboxWaterLevelSens.setSelected(user.waterLevelSensing);
+		checkboxWindLevelSens.setSelected(user.windLevelSensing);
+		checkboxLightSens.setSelected(user.lightSensing);
+
+
+	}
+
+	/**
+	 *@author Bang Tran
+	 * This method save user's preferences
+	 */
+	public void saveUserPreferrences(){
+		int userIdx = comboUsers.getSelectionModel().getSelectedIndex();
+		// add by yiwei, return when no project which means userList is not reset yet.
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Save User Preferrences");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create project first!");
+			alert.showAndWait();
+			return;
+		}
+
+		UserList.users.get(userIdx).preferredLatency = Float.parseFloat(txtLatency.getText());
+		UserList.users.get(userIdx).preferredThroughput = Float.parseFloat(txtThroughput.getText());
+		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
+		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
+
+		UserList.users.get(userIdx).temperatureSensing = checkboxTemperatureSens.isSelected();
+		UserList.users.get(userIdx).humiditySensing = checkboxHumiditySens.isSelected();
+		UserList.users.get(userIdx).gasSensing = checkboxGasSens.isSelected();
+		UserList.users.get(userIdx).lightSensing = checkboxLightSens.isSelected();
+		UserList.users.get(userIdx).windLevelSensing = checkboxWindLevelSens.isSelected();
+		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
+
+		//save user's preferences to database
 	}
 
 	@Override
@@ -559,13 +706,13 @@ public class CupCarbonController implements Initializable {
 			openLastProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			saveProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN));
 			resetItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
-			
+
 			menuBar.setUseSystemMenuBar(true);
 			//menuBar.useSystemMenuBarProperty().set(true);
 		}
-		
+
 		initComboBoxes();
-		
+
 		gpsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		deviceListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -577,11 +724,11 @@ public class CupCarbonController implements Initializable {
 //		CupCarbonConsoleStream consoleOut = new CupCarbonConsoleStream(textOut);
 //		PrintStream ps1 = new PrintStream(consoleOut, true);
 //		System.setOut(ps1);
-//		
+//
 //		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
 //		PrintStream ps2 = new PrintStream(consoleErr, true);
 //		System.setErr(ps2);
-				
+
 		try {
 			System.out.println("> CupCarbon U-One");
 			FileInputStream licenceFile = new FileInputStream("utils"+File.separator+"cupcarbon_licence.txt");
@@ -594,21 +741,21 @@ public class CupCarbonController implements Initializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		if(CupCarbon.internetIsAvailable()) {
 			System.out.println("Connection: OK");
 			WorldMap.changeMap(0);
 		}
 		else
 			System.out.println("Connection: NO");
-		
+
 		try {
 			console = new ConsoleWindow();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@FXML
 	public void zoomP() {
 		map.setZoom(map.getZoomSlider().getValue() - 1);
@@ -675,7 +822,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void openConsole() {
 		console.toFront();
@@ -749,7 +896,7 @@ public class CupCarbonController implements Initializable {
 		WorldMap.addNodeInMap('2');
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void addWeather() {
 		if(DeviceList.weather==null) {
@@ -782,6 +929,61 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
+	/**
+	 * @author Bang Tran
+	 */
+	@FXML
+	public void saveNetworkToDatabase() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							ExportToDB.saveProjectToDB();
+						} catch(Exception e) {
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("Error");
+							alert.setHeaderText(null);
+							alert.setContentText(e.toString());
+							alert.showAndWait();
+						}
+					}
+				});
+			}
+		});
+	}
+	//====Bang Tran - End
+
+
+	/**
+	 * @author Bang Tran
+	 */
+	@FXML
+	public void reloadFromDatabase() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ImportFromDB.openProject();
+				} catch(Exception e) {
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Error");
+					alert.setHeaderText(null);
+					alert.setContentText(e.toString());
+					alert.showAndWait();
+				}
+
+				resetComboBoxUsers();
+
+			}
+		});
+
+
+	}
+	//====Bang Tran - End
+
 	@FXML
 	public void connection() {
 		saveButton.setDisable(false);
@@ -797,7 +999,7 @@ public class CupCarbonController implements Initializable {
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void propagation_vt() {
 		saveButton.setDisable(false);
@@ -927,7 +1129,12 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void deleteRoute() {
 		String fileName = gpsListView.getSelectionModel().getSelectedItem();
-		File file = new File(Project.getProjectGpsPath() + File.separator + fileName);
+		File file = null;
+		if(Project.projectPath == "DataBase Mode") {
+			file = new File(Project.getProjectGpsPathForDB() + File.separator + fileName);
+		} else {
+			file = new File(Project.getProjectGpsPath() + File.separator + fileName);
+		}
 
 		boolean delete = false;
 
@@ -943,7 +1150,11 @@ public class CupCarbonController implements Initializable {
 		if (delete) {
 			saveButton.setDisable(false);
 			file.delete();
-			getListOfRoutes();
+			if(Project.projectPath == "DataBase Mode") {
+				getListOfRoutesForDB();
+			} else {
+				getListOfRoutes();
+			}
 			initScriptGpsEventComboBoxes();
 			mapFocus();
 		}
@@ -953,7 +1164,12 @@ public class CupCarbonController implements Initializable {
 	public void saveRoute() {
 		if (!Project.projectName.equals("")) {
 			if (MarkerList.size() > 0) {
-				File gpsFolder = new File(Project.getProjectGpsPath());
+				File gpsFolder = null;
+				if(Project.projectPath == "DataBase Mode") {
+					gpsFolder = new File(Project.getProjectGpsPathForDB());
+				} else {
+					gpsFolder = new File(Project.getProjectGpsPath());
+				}
 				File[] gpsFiles = gpsFolder.listFiles();
 				int i = 0;
 				boolean found = false;
@@ -979,10 +1195,17 @@ public class CupCarbonController implements Initializable {
 				if (saveOk) {
 					saveButton.setDisable(false);
 					txtFileName.setText(Project.getGpsFileExtension(txtFileName.getText()));
-					MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
-							txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
-							Integer.parseInt(loopNumber.getText()));
-					getListOfRoutes();
+					if(Project.projectPath == "DataBase Mode") {
+						MarkerList.saveGpsCoordsForDB(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
+								txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
+								Integer.parseInt(loopNumber.getText()));
+						getListOfRoutesForDB();
+					} else {
+						MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
+								txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
+								Integer.parseInt(loopNumber.getText()));
+						getListOfRoutes();
+					}
 					initScriptGpsEventComboBoxes();
 					mapFocus();
 				}
@@ -1015,7 +1238,7 @@ public class CupCarbonController implements Initializable {
 		}
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void macChecked() {
 		if (macCheckBox.isSelected()) {
@@ -1109,9 +1332,9 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Open CupCarbon file");
-		
+
 				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon Sources", "*.cup"));
-		
+
 				File file = fileChooser.showOpenDialog(CupCarbon.stage);
 				if (file != null) {
 					Project.openProject(file.getParentFile().toString(), file.getName().toString());
@@ -1122,15 +1345,19 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void createContextMenu() {
 		CupCarbonContextMenu.create(sn, CupCarbonController.this);
 	}
 
 	public void openProjectLoadParameters() {
 		CupCarbon.cupCarbonController.simulationParametersApply();
-		loadSimulationParams();
-		getListOfRoutes();
+		if(Project.projectPath == "DataBase Mode") {
+			getListOfRoutesForDB();
+		} else {
+			loadSimulationParams();
+			getListOfRoutes();
+		}
 		updateObjectListView();
 		initScriptGpsEventComboBoxes();
 		createContextMenu();
@@ -1159,9 +1386,9 @@ public class CupCarbonController implements Initializable {
 		map.getZoomSlider().setPaintTicks(false);
 
 		sn.setContent(map);
-		
+
 		sn.requestFocus();
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -1188,66 +1415,72 @@ public class CupCarbonController implements Initializable {
 				textReady.setVisible(false);
 			}
 		}).start();
-		
+
 	}
-	
+
+	/**
+	 * @author Yiwei Yao
+	 * @param simulationData
+	 * set simulation params when open from database
+	 */
 	public void loadSimulationParamsFromDB(FindIterable<Document> simulationData) {
 		MongoCursor<Document> simulationDataIterator = simulationData.iterator();
+
 		while(simulationDataIterator.hasNext()) {
 			Document Selectedsimulation = simulationDataIterator.next();
 			if(Selectedsimulation.containsKey("simulationtime")) {
-				simulationTimeTextField.setText((String) Selectedsimulation.get("simulationtime"));
+				simulationTimeTextField.setText(Double.toString(Selectedsimulation.getDouble("simulationtime")));
 			}
 			if(Selectedsimulation.containsKey("mobility")) {
-				mobilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mobility")));
+				mobilityCheckBox.setSelected(Selectedsimulation.getBoolean("mobility"));
 			}
 			if(Selectedsimulation.containsKey("simulationspeed")) {
-				simulationSpeedTextField.setText((String) Selectedsimulation.get("simulationspeed"));
+				simulationSpeedTextField.setText(Integer.toString(Selectedsimulation.getInteger("simulationspeed")));
 			}
 			if(Selectedsimulation.containsKey("arrowspeed")) {
-				arrowSpeedTextField.setText((String) Selectedsimulation.get("arrowspeed"));
+				arrowSpeedTextField.setText(Integer.toString(Selectedsimulation.getInteger("arrowspeed")));
 			}
 			if(Selectedsimulation.containsKey("log")) {
-				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("log")));
+				logCheckBox.setSelected(Selectedsimulation.getBoolean("log"));
 			}
 			if(Selectedsimulation.containsKey("results")) {
-				logCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("results")));
+				logCheckBox.setSelected(Selectedsimulation.getBoolean("results"));
 			}
 			if(Selectedsimulation.containsKey("acktype")) {
-				probaComboBox.getSelectionModel().select((int) Double.parseDouble((String) Selectedsimulation.get("results")));
+				probaComboBox.getSelectionModel().select(Double.toString(Selectedsimulation.getDouble("acktype")));
 			}
 			if(Selectedsimulation.containsKey("ackproba")) {
-				probaTextField.setText((String) Selectedsimulation.get("ackproba"));
+				probaTextField.setText(Double.toString(Selectedsimulation.getDouble("ackproba")));
 			}
 			if(Selectedsimulation.containsKey("acklinks")) {
-				ackShowCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("acklinks")));
+				ackShowCheckBox.setSelected(Selectedsimulation.getBoolean("acklinks"));
 			}
 			if(Selectedsimulation.containsKey("ack")) {
-				ackCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("ack")));
+				ackCheckBox.setSelected(Selectedsimulation.getBoolean("ack"));
 			}
 			if(Selectedsimulation.containsKey("symmetricalinks")) {
-				symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("symmetricalinks")));
+				symmetricalLinkCheckBox.setSelected(Selectedsimulation.getBoolean("symmetricalinks"));
 			}
 			if(Selectedsimulation.containsKey("clockdrift")) {
-				clockDriftCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("clockdrift")));
+				clockDriftCheckBox.setSelected(Selectedsimulation.getBoolean("clockdrift"));
 			}
 			if(Selectedsimulation.containsKey("visibility")) {
-				visibilityCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("visibility")));
+				visibilityCheckBox.setSelected(Selectedsimulation.getBoolean("visibility"));
 			}
 			if(Selectedsimulation.containsKey("results_writing_period")) {
-				resultsWPeriod.setText((String) Selectedsimulation.get("results_writing_period"));
+				resultsWPeriod.setText(Double.toString(Selectedsimulation.getDouble("results_writing_period")));
 			}
 			if(Selectedsimulation.containsKey("mac_layer")) {
-				macCheckBox.setSelected(Boolean.parseBoolean((String) Selectedsimulation.get("mac_layer")));
+				macCheckBox.setSelected(Selectedsimulation.getBoolean("mac_layer"));
 			}
 			if(Selectedsimulation.containsKey("macproba")) {
-				macProbaTextField.setText((String) Selectedsimulation.get("macproba"));
+				macProbaTextField.setText(Double.toString(Selectedsimulation.getDouble("macproba")));
 			}
 			ackChecked();
 			macChecked();
 		}
 	}
-	
+
 
 	public void loadSimulationParams() {
 		Platform.runLater(new Runnable() {
@@ -1270,7 +1503,7 @@ public class CupCarbonController implements Initializable {
 					symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					clockDriftCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					visibilityCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
-					resultsWPeriod.setText(br.readLine().split(":")[1]);					
+					resultsWPeriod.setText(br.readLine().split(":")[1]);
 					macCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					macProbaTextField.setText(br.readLine().split(":")[1]);
 					ackChecked();
@@ -1379,7 +1612,7 @@ public class CupCarbonController implements Initializable {
 		CupActionBlock block = new CupActionBlock();
 		double newLongitude = Double.parseDouble(device_longitude.getText());
 		for (SensorNode sensor : DeviceList.sensors) {
-			if (sensor.isSelected()) {				
+			if (sensor.isSelected()) {
 				double lo = sensor.getLongitude();
 				double la = sensor.getLatitude();
 				int [] coord = MapCalc.geoToPixelMapA(la, lo);
@@ -1494,7 +1727,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void suCoverageApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1514,7 +1747,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void suDirectionApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1640,7 +1873,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void code_rate_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1659,7 +1892,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_conso_tx_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1678,7 +1911,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_conso_rx_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1735,7 +1968,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void radio_pl_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1958,7 +2191,7 @@ public class CupCarbonController implements Initializable {
 			mapItem12.setSelected(true);
 			break;
 		}
-		
+
 	}
 
 	@FXML
@@ -2020,7 +2253,7 @@ public class CupCarbonController implements Initializable {
 	public void setMap11() {
 		WorldMap.changeMap(11);
 	}
-	
+
 	@FXML
 	public void setMap12() {
 		WorldMap.changeMap(12);
@@ -2190,7 +2423,7 @@ public class CupCarbonController implements Initializable {
 				device_latitude.setText("" + currentDevice.getLatitude());
 				device_elevation.setText("" + currentDevice.getElevation());
 				device_radius.setText("" + currentDevice.getRadius());
-				
+
 				uartComboBox.setValue("" + currentDevice.getUartDataRate());
 				device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
 				updateLabeLInfos();
@@ -2234,10 +2467,10 @@ public class CupCarbonController implements Initializable {
 					device_elevation.setText("" + currentDevice.getElevation());
 					device_radius.setText("" + currentDevice.getRadius());
 					sensor_radius.setText("" + currentDevice.getSensorUnitRadius());
-					
+
 					suCoverage.setText("" + currentDevice.getSUCoverage());
 					suDirection.setText("" + currentDevice.getSUDirection());
-					
+
 					device_emax.setText("" + currentDevice.getBatteryLevel());
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
@@ -2249,42 +2482,95 @@ public class CupCarbonController implements Initializable {
 	}
 
 	public void initScriptGpsEventComboBoxes() {
-		File gpsFiles = new File(Project.getProjectGpsPath());
-		String[] s = gpsFiles.list();
-		if (s == null)
-			s = new String[1];
-		gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
-		gpsFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					gpsFileComboBox.getItems().add(s[i]);
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File gpsFiles = new File(Project.getProjectGpsPathForDB());
+			String[] s = gpsFiles.list();
+			if (s == null)
+				s = new String[1];
+			gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
+			gpsFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						gpsFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File gpsFiles = new File(Project.getProjectGpsPath());
+			String[] s = gpsFiles.list();
+			if (s == null)
+				s = new String[1];
+			gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
+			gpsFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						gpsFileComboBox.getItems().add(s[i]);
+			}
 		}
 
-		File scriptFiles = new File(Project.getProjectScriptPath());
-		s = scriptFiles.list();
-		if (s == null)
-			s = new String[1];
-		scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
-		scriptFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					scriptFileComboBox.getItems().add(s[i]);
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File scriptFiles = new File(Project.getProjectScriptPathForDB());
+			String[] s = scriptFiles.list();
+			if (s == null)
+				s = new String[1];
+			scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
+			scriptFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						scriptFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File scriptFiles = new File(Project.getProjectScriptPath());
+			String[] s = scriptFiles.list();
+			if (s == null)
+				s = new String[1];
+			scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
+			scriptFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						scriptFileComboBox.getItems().add(s[i]);
+			}
 		}
 
-		File neteventFiles = new File(Project.getProjectNatEventPath());
-		s = neteventFiles.list();
-		if (s == null)
-			s = new String[1];
-		nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
-		nateventFileComboBox.getItems().add("");
-		for (int i = 0; i < s.length; i++) {
-			if (s[i] != null)
-				if (!s[i].startsWith("."))
-					nateventFileComboBox.getItems().add(s[i]);
+		// add by yiwei, add supoort for database mode.
+		// ******************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			File neteventFiles = new File(Project.getProjectNatEventPathForDB());
+			String[] s = neteventFiles.list();
+			if (s == null)
+				s = new String[1];
+			nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
+			nateventFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						nateventFileComboBox.getItems().add(s[i]);
+			}
+		// ******************************************************************************
+		} else {
+			File neteventFiles = new File(Project.getProjectNatEventPath());
+			String[] s = neteventFiles.list();
+			if (s == null)
+				s = new String[1];
+			nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
+			nateventFileComboBox.getItems().add("");
+			for (int i = 0; i < s.length; i++) {
+				if (s[i] != null)
+					if (!s[i].startsWith("."))
+						nateventFileComboBox.getItems().add(s[i]);
+			}
 		}
 	}
+
+
 
 	public void getRadioList() {
 		SensorNode sensor = (SensorNode) currentDevice;
@@ -2332,7 +2618,7 @@ public class CupCarbonController implements Initializable {
 						spreading_factor_apply_button.setDisable(false);
 						radio_spreading_factor.getSelectionModel().select("" + rm.getSpreadingFactor());
 					}
-					
+
 					if (rm.getCodeRate() == -1) {
 						radio_code_rate.setDisable(true);
 						code_rate_apply_button.setDisable(true);
@@ -2342,7 +2628,7 @@ public class CupCarbonController implements Initializable {
 						code_rate_apply_button.setDisable(false);
 						radio_code_rate.getSelectionModel().select("" + rm.getCodeRate());
 					}
-					
+
 					radio_conso_tx_model.getSelectionModel().select("" + rm.getRadioConsoTxModel());
 					radio_conso_rx_model.getSelectionModel().select("" + rm.getRadioConsoRxModel());
 				}
@@ -2392,7 +2678,7 @@ public class CupCarbonController implements Initializable {
 		stage.setScene(scene);
 		stage.initOwner(CupCarbon.stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.showAndWait();		
+		stage.showAndWait();
 	}
 
 	@FXML
@@ -2417,7 +2703,7 @@ public class CupCarbonController implements Initializable {
 	public void sensorCoverage() {
 		SensorSetCover.sensorSetCover();
 	}
-	
+
 	@FXML
 	public void sensorCycle() {
 		CycleFromNode cfm = new CycleFromNode();
@@ -2458,7 +2744,7 @@ public class CupCarbonController implements Initializable {
 		EnvelopeLPCN_wc lpcn = new EnvelopeLPCN_wc();
 		lpcn.start();
 	}
-	
+
 	@FXML
 	public void runLPCNAlgorithm() {
 		EnvelopeLPCN lpcn = new EnvelopeLPCN();
@@ -2517,7 +2803,7 @@ public class CupCarbonController implements Initializable {
 		DeviceList.selectByMy(bytxtfield.getText());
 		updateSelectionInListView();
 	}
-	
+
 	@FXML
 	public void selectByLed() {
 		DeviceList.selectByLed(bytxtfield.getText());
@@ -2541,7 +2827,7 @@ public class CupCarbonController implements Initializable {
 		DeviceList.selectMarkedSensors();
 		updateSelectionInListView();
 	}
-	
+
 	@FXML
 	public void selectDeadSensors() {
 		DeviceList.selectDeadSensors();
@@ -2550,7 +2836,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void selectAllSensors() {
-		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());		
+		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());
 		updateSelectionInListView();
 	}
 
@@ -2673,6 +2959,7 @@ public class CupCarbonController implements Initializable {
 		uartComboBox.getSelectionModel().select(0);
 		device_drift.setText("");
 		sensorName.setText("");
+
 		// radio
 		radioListView.getItems().removeAll(radioListView.getItems());
 		radioNameComboBox.getSelectionModel().select(0);
@@ -2690,8 +2977,9 @@ public class CupCarbonController implements Initializable {
 		radio_code_rate.getSelectionModel().select(0);
 		radio_conso_tx_model.setValue("");
 		radio_conso_rx_model.setValue("");
-		
+
 		numberOfDevices.setText("N = " + DeviceList.getSize());
+
 	}
 
 	public void initListViewSelections() {
@@ -2786,7 +3074,30 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void getListOfRoutes() {
 		gpsListView.getItems().removeAll(gpsListView.getItems());
-		File gpsFolder = new File(Project.getProjectGpsPath());
+		File gpsFolder = null;
+		// add by Yiwei Yao support Database gps file view lists
+		if(Project.projectPath == "DataBase Mode") {
+			gpsFolder = new File(Project.getProjectGpsPathForDB());
+		} else {
+			gpsFolder = new File(Project.getProjectGpsPath());
+		}
+		File[] gpsFiles = gpsFolder.listFiles();
+		if (gpsFolder.exists()) {
+			for (int i = 0; i < gpsFiles.length; i++) {
+				if (!(gpsFiles[i].getName().startsWith("."))) {
+					gpsListView.getItems().add(gpsFiles[i].getName());
+				}
+			}
+		}
+	}
+
+	/**
+	 * @author Yiwei Yao
+	 * return a list of gps file from database gps folder.
+	 */
+	public void getListOfRoutesForDB() {
+		gpsListView.getItems().removeAll(gpsListView.getItems());
+		File gpsFolder = new File(Project.getProjectGpsPathForDB());
 		File[] gpsFiles = gpsFolder.listFiles();
 		if (gpsFolder.exists()) {
 			for (int i = 0; i < gpsFiles.length; i++) {
@@ -2801,15 +3112,24 @@ public class CupCarbonController implements Initializable {
 	public void loadRoute() {
 		Platform.runLater(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				if (!gpsListView.getSelectionModel().isEmpty()) {
 					saveButton.setDisable(false);
 					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
-		
-					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
-		
+
+					if(Project.projectPath == "DataBase Mode") {
+						MarkerList.open(Project.getProjectGpsPathForDB() + File.separator + gpsFileName);
+					} else {
+						MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
+					}
+
 					try {
-						BufferedReader br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
+						BufferedReader br = null;
+						if(Project.projectPath == "DataBase Mode") {
+							br = new BufferedReader(new FileReader(Project.getProjectGpsPathForDB() + File.separator + gpsFileName));
+						} else {
+							br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
+						}
 						String line;
 						txtFileName.setText(gpsFileName);
 						line = br.readLine();
@@ -2829,7 +3149,7 @@ public class CupCarbonController implements Initializable {
 						}
 						line = br.readLine();
 						loopNumber.setText(line);
-		
+
 						br.close();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -2887,7 +3207,7 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
-		
+
 	}
 
 	@FXML
@@ -2911,7 +3231,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork500() {
 		Platform.runLater(new Runnable() {
@@ -2924,7 +3244,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork1000() {
 		Platform.runLater(new Runnable() {
@@ -2940,7 +3260,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork10() {
 		Platform.runLater(new Runnable() {
@@ -3065,12 +3385,6 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void applyParameters() {
 		simulationParametersApply();
-		// System.out.println(Project.getTmpProjectNodePath());
-		// System.out.println(Project.getTmpProjectRadioPath());
-		// String s = Project.getProjectNodePath()+"/sensor_73";
-		// SensorNode sn = DeviceList.loadSensor(s);
-		// DeviceList.addSensor(sn);
-		// MapLayer.repaint();
 	}
 
 	@FXML
@@ -3285,11 +3599,15 @@ public class CupCarbonController implements Initializable {
 		initRecentProjectMenu();
 	}
 
+	// changed by Yiwei Yao
 	@FXML
 	public void saveProject() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				// add DataBase mode support, if projectPath equals DataBase mode
+				// then find a new place to store in the file system.
+				// after that open the project by the old way.
 				if(Project.projectPath.equals("DataBase Mode")) {
 					Stage stage = new Stage();
 					FileChooser fileChooser = new FileChooser();
@@ -3316,20 +3634,19 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
-	// new 
-	// if project not create name a project name first.
+
+
+	/**
+	 * @author Yiwei Yao
+	 * save project to DB. if projectPath or project name is not set, create a new
+	 * project make project into database mode. otherwise save the project.
+	 */
 	@FXML
 	public void saveProjectToDB() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
-//					Alert alert = new Alert(AlertType.WARNING);
-//					alert.setTitle("Warning!");
-//					alert.setHeaderText(null);
-//					alert.setContentText("Project must be created or must be open.");
-//					alert.showAndWait();
 					try {
 						new DBProjectCreateWindow();
 					} catch(IOException e) {}
@@ -3344,25 +3661,22 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
+	/**
+	 * @author Yiwei Yao
+	 * openProjectFromDB Call DBProjectSelectWindow().
+	 */
 	@FXML
 	public void openProjectFromDB() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-//				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
-//					Alert alert = new Alert(AlertType.WARNING);
-//					alert.setTitle("Warning!");
-//					alert.setHeaderText(null);
-//					alert.setContentText("Project must be created or must be open.");
-//					alert.showAndWait();
 					try {
 						new DBProjectSelectWindow();
 					} catch(IOException e) {}
-					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + "DataBase Mode" + "]");
-//				} else {
-//					ImportToDB.saveProjectToDB();
-//				}
+					openProjectLoadParameters();
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.projectPath + "]" + " (" + Project.DBFilePath + ")");
+
 			}
 		});
 	}
@@ -3378,9 +3692,9 @@ public class CupCarbonController implements Initializable {
 					s = br.readLine();
 				String path = s.split("#")[0];
 				String name = s.split("#")[1];
-				
+
 				displayShortMessage(name);
-				
+
 				br.close();
 				Project.openProject(path, name);
 				CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
@@ -3395,42 +3709,42 @@ public class CupCarbonController implements Initializable {
 			openProjectLoadParameters();
 		});
 	}
-	
+
 	@FXML
 	public void insertMarkers() {
 		MarkerList.insertMarkers();
 	}
-	
+
 	@FXML
 	public void drawAllRoutes() {
 		MarkerList.reset();
 		Routes.loadRoutes();
 	}
-	
+
 	@FXML
 	public void drawSelectedRoutes() {
 		NetworkParameters.displayAllRoutes = true;
 		MarkerList.reset();
 		Routes.loadListOfRoutes(gpsListView.getSelectionModel().getSelectedItems());
 	}
-	
+
 	@FXML
 	public void hideAllRoutes() {
 		NetworkParameters.displayAllRoutes = false;
 		Routes.hideAll();
 	}
-	
+
 	@FXML
 	public void startServer() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				new CupCarbonServer().start();		
+				new CupCarbonServer().start();
 				mapFocus();
 			}
 		});
 	}
-	
+
 	@FXML
 	public void initIDs() {
 		DeviceList.initIDs();
@@ -3440,14 +3754,127 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void sliderValueChanged() {
-		MapLayer.bg_transparency=(int)(bg_slider.getValue()*2.5);		
+		MapLayer.bg_transparency=(int)(bg_slider.getValue()*2.5);
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 */
+	public void generateSenScripts(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Generating SenScript");
+		alert.setHeaderText(null);
+		alert.setContentText("This functions will generate SenScript for all users");
+		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 */
+	public void runSimulationCs682(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Run simulation");
+		alert.setHeaderText(null);
+		alert.setContentText("Run the simulation after generating SenScript for all users");
+		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 * This method set concerned area for an user. Needs place 2 markers to determine the area
+	 *
+	 */
+	public void setConcernedArea(){
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+
+		if(MarkerList.markers.size()>=2) {
+			MapLayer.concernedMarker1 = MarkerList.markers.get(0);
+			MapLayer.concernedMarker2 = MarkerList.markers.get(1);
+
+			// add error warning if project is created. Add by Yiwei
+			if(UserList.users.isEmpty()) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Set concerned area");
+				alert.setHeaderText(null);
+				alert.setContentText("Should create user first!");
+				alert.showAndWait();
+				return;
+			}
+
+			User u = UserList.users.get(selectedUserIndex);
+			u.selectedArea = true;
+			u.setConcernedArea(MarkerList.markers.get(0).getLatitude(), MarkerList.markers.get(0).getLongitude(),
+							   MarkerList.markers.get(1).getLatitude(), MarkerList.markers.get(1).getLongitude());
+
+			if(u.getSensorsInsideArea()!=null && u.getSensorsInsideArea().size() > 0 ){
+				listViewConcernedSensors.getItems().clear();
+				for(SensorNode s: u.getSensorsInsideArea() )
+					listViewConcernedSensors.getItems().add(s.getName());
+			}
+
+			//empty markers after set area for user
+			MarkerList.deleteAll();
+
+			//repaint the map
+			MapLayer.repaint();
+
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Set concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText("Add 2 Markes To Determine Your Area");
+			alert.showAndWait();
+		}
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 *
+	 * This method remove concerned area for an user.
+	 * clear the rectangle on the map and unmark all devices inside the rectangle
+	 *
+	 */
+	public void clearConcernedArea(){
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		if(selectedUserIndex < 0 ) return; //in the case of no user
+		// add by yiwei, return when no project which means userList is not reset yet.
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("clear concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create project first!");
+			alert.showAndWait();
+			return;
+		}
+		User u = UserList.users.get(selectedUserIndex);
+		if( !u.selectedArea ) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Clear concerned area");
+			alert.setHeaderText(null);
+			alert.setContentText(u.getName() + "hasn't set his concerned region yet");
+			alert.showAndWait();
+			return;
+		}
+
+		listViewConcernedSensors.getItems().clear();
+		u.removeConcernedArea();
+		MapLayer.repaint();
+	}
+
+
+
 	@FXML
 	public Label stlabel;
-	
+
 	public void updateLabeLInfos() {
 		Platform.runLater(() -> {
 			int n_s = 0;
@@ -3459,7 +3886,7 @@ public class CupCarbonController implements Initializable {
 			int n_b = 0;
 			int n_mark = 0;
 			int n_unmark = 0;
-			
+
 			int n_s_o = 0;
 			int n_s_s = 0;
 			int n_s_ms = 0;
@@ -3469,9 +3896,9 @@ public class CupCarbonController implements Initializable {
 			int n_i_s = 0;
 			int n_wi_s = 0;
 			int n_wo_s = 0;
-			
+
 			n_b = BuildingList.size();
-			
+
 			for(Device device : DeviceList.devices) {
 				if(device.getType() == Device.MOBILE) {
 					n_m++;
@@ -3486,10 +3913,10 @@ public class CupCarbonController implements Initializable {
 
 			//for(SensorNode sensor : DeviceList.sensors) {
 			for(int i=0; i<DeviceList.sensors.size(); i++) {
-				SensorNode sensor = DeviceList.sensors.get(i);			
+				SensorNode sensor = DeviceList.sensors.get(i);
 				if(sensor.getNeighbors().size()==0) n_i_s++;
 				if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
-				
+
 				if(sensor.getType() == Device.SENSOR) {
 					n_s++;
 					if(sensor.isSelected()) n_s_s++;
@@ -3505,12 +3932,20 @@ public class CupCarbonController implements Initializable {
 				if(sensor.isMarked()) n_mark++; else n_unmark++;
 				if(sensor.isSelected()) n_s_o++;
 			}
-
-			File f = new File(Project.getProjectGpsPath()); 
+			File f = null;
+			if(Project.projectPath == "DataBase Mode") {
+				f = new File(Project.getProjectGpsPathForDB());
+			} else {
+				f = new File(Project.getProjectGpsPath());
+			}
 			if(f.list() != null)
-				n_r = new File(Project.getProjectGpsPath()).list().length;
-			
-			labelInfo1.setText("Number of Sensors: " + n_s);		
+				if(Project.projectPath == "DataBase Mode") {
+					n_r = new File(Project.getProjectGpsPathForDB()).list().length;
+				} else {
+					n_r = new File(Project.getProjectGpsPath()).list().length;
+				}
+
+			labelInfo1.setText("Number of Sensors: " + n_s);
 			labelInfo2.setText("Number of Directional Sensors: " + n_ms);
 			labelInfo3.setText("Number of Base Stations: " + n_bs);
 			labelInfo4.setText("Number of Mobiles: " + n_m);
@@ -3530,7 +3965,7 @@ public class CupCarbonController implements Initializable {
 			labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
 		});
 	}
-	
+
 	public void displayLongMessage(String s) {
 		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 		textReady.setText(s);
@@ -3540,11 +3975,11 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayPermanentMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3552,7 +3987,7 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void displayShortMessage(String s) {
 		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 		textReady.setText(s);
@@ -3562,7 +3997,7 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayShortGoodMessage(String s) {
 		textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 		textReady.setText(s);
@@ -3572,11 +4007,11 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-	
+
 	public void displayPermanentErrMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(1,0.5,0.0,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3585,21 +4020,21 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void hidePermanentErrMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setVisible(false);
 			}
 		});
 		th.start();
 	}
-	
+
 	public void displayShortGoodMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
@@ -3611,7 +4046,7 @@ public class CupCarbonController implements Initializable {
 		});
 		th.start();
 	}
-	
+
 	public void displayShortErrMessage(String s) {
 		textReady.setFill(new Color(1,0,0,0.5));
 		textReady.setText(s);
@@ -3622,7 +4057,7 @@ public class CupCarbonController implements Initializable {
 		textReady.setVisible(false);
 		//consolePane.setExpanded(true);
 	}
-	
+
 	public void displayShortErrMessageTh(String s) {
 		new Thread(() -> {
 			textReady.setFill(new Color(1,0,0,0.5));
@@ -3634,7 +4069,7 @@ public class CupCarbonController implements Initializable {
 			textReady.setVisible(false);
 		}).start();
 	}
-	
+
 	public void displayLongErrMessageTh(String s) {
 		new Thread(() -> {
 			textReady.setFill(new Color(1,0,0,0.5));
@@ -3646,5 +4081,38 @@ public class CupCarbonController implements Initializable {
 			textReady.setVisible(false);
 		}).start();
 	}
-	
+
+/***************************
+ * Chenjun Li edited
+ **************************/
+
+	@FXML
+	public void addTemp() {
+		WorldMap.addNodeInMap('c');
+		mapFocus();
+	}
+
+	@FXML
+	public void addWat() {
+		WorldMap.addNodeInMap('d');
+		mapFocus();
+	}
+
+	@FXML
+	public void addWin() {
+		WorldMap.addNodeInMap('e');
+		mapFocus();
+	}
+
+	@FXML
+	public void addHum() {
+		WorldMap.addNodeInMap('a');
+		mapFocus();
+	}
+
+	@FXML
+	public void addLig() {
+		WorldMap.addNodeInMap('b');
+		mapFocus();
+	}
 }

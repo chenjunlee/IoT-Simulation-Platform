@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.ConsoleController">
+<AnchorPane prefHeight="400.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.ConsoleController">
    <children>
       <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <items>
@@ -14,7 +14,7 @@
                <children>
                   <TextArea fx:id="textOut" opacity="0.9" prefHeight="150.0" prefWidth="1348.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font name="Courier" size="10.0" />
+                        <Font size="12.0" />
                      </font>
                   </TextArea>
                </children>
@@ -23,7 +23,7 @@
                <children>
                   <TextArea fx:id="textErr" opacity="0.9" prefHeight="200.0" prefWidth="200.0" scrollLeft="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font name="Courier" size="10.0" />
+                        <Font size="12.0" />
                      </font>
                   </TextArea>
                </children>

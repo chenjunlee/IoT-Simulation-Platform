@@ -8,6 +8,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * @author Yiwei Yao
+ * 
+ * DBProjectCreateWindow Link dbprojectcreate.fxml and construct the window.
+ */
 public class DBProjectCreateWindow {
 
 	public DBProjectCreateWindow() throws IOException {

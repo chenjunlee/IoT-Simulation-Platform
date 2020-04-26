@@ -177,6 +177,11 @@ public class BaseStation extends StdSensorNode {
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "basestation_"+ref);
 	}
 	
+	/**
+	 *@author Yiwei Yao
+	 *return List<Document>
+	 *saveToDB returns a list of document so that can insert into db.
+	 */
 	@Override
 	public List<Document> saveToDB() {
 		List<Document> documents = new ArrayList<Document>();

@@ -58,6 +58,10 @@ public class BuildingList {
 		}
 	}
 	
+	/**
+	 * @param document
+	 * create a new building with input document. and then add to buildings list.
+	 */
 	public static void addFromDB(Document document) {		
 		buildings.add(new Building(document));
 	}
@@ -128,6 +132,12 @@ public class BuildingList {
 		}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @return Document
+	 * saveToDB save buildings to database with prefix "building"
+	 * X and Y Coords may save in a wrong way
+	 */ 
 	public static Document saveToDB() {
 		Document document = new Document();
 		document.append("prefix", "building");
@@ -139,6 +149,7 @@ public class BuildingList {
 		}
 		return document;
 	}
+	
 	public static void open(String fileName) {
 				init();
 				try {
@@ -160,6 +171,12 @@ public class BuildingList {
 				}
 	}
 	
+	/**
+	 * @author Yiwei Yao
+	 * @param buildingData
+	 * @throws IOException
+	 * openFromDB parse buildingData from database.
+	 */
 	public static void openFromDB(FindIterable<Document> buildingData) throws IOException {
 		init();
 		MongoCursor<Document> buildingDataIterator = buildingData.iterator();

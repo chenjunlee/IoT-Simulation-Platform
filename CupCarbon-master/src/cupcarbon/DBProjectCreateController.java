@@ -13,22 +13,32 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import project.Project;
 
+/**
+ * @author Yiwei Yao
+ *
+ * DBProjectCreateController control the windows of dbprojectcreate.fxml
+ */
 public class DBProjectCreateController implements Initializable {
-	
+
 	@FXML
 	private TextField projectName;
-	
+
 	@FXML
 	private Button done;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
 
 	}
-	
 
-	
+
+	/**
+	 * if the project is not set.
+	 * for example, the project is not created or imported
+	 * then create the project and set project path to database mode and save to db
+	 * otherwise save to db directly.
+	 */
 	@FXML
 	public void save() {
 		boolean success = false;
@@ -38,7 +48,7 @@ public class DBProjectCreateController implements Initializable {
 			name = name.replaceAll(" ", "");
 			Project.projectName = name;
 			Project.projectPath = "DataBase Mode";
-			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + "DataBase Mode" + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.projectPath + "]" + " (" + Project.DBFilePath + ")");
 			ImportToDB.saveProjectToDB();
 			success = true;
 		}
