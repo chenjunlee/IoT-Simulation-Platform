@@ -318,7 +318,14 @@ public class Gas extends MobileG {
 		String[] ts;
 		try {
 			if (!nateventFileName.equals("")) {
-				fis = new FileInputStream(Project.getProjectNatEventPath() + File.separator + nateventFileName);
+				// add by yiwei change for database mode
+				// *******************************************************************************************
+				if(Project.projectPath == "DataBase Mode") {
+					fis = new FileInputStream(Project.getProjectNatEventPathForDB() + File.separator + nateventFileName);
+				} else {
+					fis = new FileInputStream(Project.getProjectNatEventPath() + File.separator + nateventFileName);
+				}
+				// *******************************************************************************************
 				b = new BufferedReader(new InputStreamReader(fis));
 				b.readLine();
 				while ((s = b.readLine()) != null) {

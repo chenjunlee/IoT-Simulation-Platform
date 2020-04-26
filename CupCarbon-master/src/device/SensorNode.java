@@ -416,7 +416,15 @@ public abstract class SensorNode extends DeviceWithRadio {
 	@Override
 	public void loadScript() {
 		script = new SenScript(this);	
-		String projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
+		String projectScriptPath = "";
+		// add by yiwei change for database mode
+		// *******************************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			projectScriptPath = Project.getProjectScriptPathForDB() + File.separator + scriptFileName;
+		} else {
+			projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
+		}
+		// *******************************************************************************************
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
 		
@@ -437,8 +445,17 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public void loadScript(String fileName) {
 		if(!fileName.endsWith(".csc"))
 			fileName += ".csc";
-		script = new SenScript(this);		
-		String projectScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
+		script = new SenScript(this);	
+		String projectScriptPath = "";
+		// add by yiwei change for database mode
+		// *******************************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			projectScriptPath = Project.getProjectScriptPathForDB() + File.separator + scriptFileName;
+		} else {
+			projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
+		}
+		// *******************************************************************************************
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
 		
@@ -458,7 +475,15 @@ public abstract class SensorNode extends DeviceWithRadio {
 		else
 			script.init2();
 		//script = new SenScript(this, true);
-		String projectScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
+		String projectScriptPath = "";
+		// add by yiwei change for database mode
+		// *******************************************************************************************
+		if(Project.projectPath == "DataBase Mode") {
+			projectScriptPath = Project.getProjectScriptPathForDB() + File.separator + scriptFileName;
+		} else {
+			projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
+		}
+		// *******************************************************************************************
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
 		

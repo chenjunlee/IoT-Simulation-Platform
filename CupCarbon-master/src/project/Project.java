@@ -81,6 +81,10 @@ public final class Project {
 	public static String getProjectNatEventPathForDB() {
 		return DBFilePath + File.separator + "natevents";
 	}
+	
+	public static String getProjectLogPathForDB() {
+		return DBFilePath + File.separator + "logs";
+	}
 	// ***************************************************************************
 
 	public static String getProjectPathName() {
@@ -570,16 +574,6 @@ public final class Project {
 			return getProjectNatEventPath() + File.separator + name + ".evt";
 	}
 	
-	// add by Yiwei Yao
-	// ******************************************************************************
-	public static String getNatEventFileFromNameForDB(String name) {
-		if (name.endsWith(".evt"))
-			return getProjectNatEventPathForDB() + File.separator + name;
-		else
-			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
-	}
-	// ******************************************************************************
-
 	// add by Yiwei Yao
 	// ******************************************************************************
 	public static String getNatEventFileFromNameForDB(String name) {

@@ -149,14 +149,14 @@ public class SenScript {
 	 * "yyyy/MM/dd HH:mm:ss": text
 	 */
 	public void printToDB(String text) {
-		String name = Project.projectName;
+		System.out.println(text);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String currentDate = dtf.format(now);
 		UpdateOptions up = new UpdateOptions();
 		up.upsert(true);
-		MongoCollection<Document> project = DBMethods.getDB("iot_result").getCollection(name);
-		project.updateOne(Filters.and(Filters.eq("project", name), Filters.eq("sensor", sensor.getName())), new Document("$set", new Document(currentDate, text)), up);
+		MongoCollection<Document> project = DBMethods.getDB("cs682").getCollection("result");
+		project.insertOne(new Document().append(currentDate, text));
 	}
 	
 	

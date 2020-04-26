@@ -13,7 +13,11 @@ public class SimLog {
 	
 	public SimLog() {
 		try {
-			logFile = new PrintStream(new FileOutputStream(Project.getProjectLogPath() + "/log" + ".txt"));
+			if(Project.projectPath == "DataBase Mode") {
+				logFile = new PrintStream(new FileOutputStream(Project.getProjectLogPathForDB() + "/log" + ".txt"));
+			} else {
+				logFile = new PrintStream(new FileOutputStream(Project.getProjectLogPath() + "/log" + ".txt"));
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
