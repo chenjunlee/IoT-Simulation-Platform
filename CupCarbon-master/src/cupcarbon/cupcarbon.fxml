@@ -1390,9 +1390,17 @@
                      <children>
                         <Accordion fx:id="accord" prefHeight="297.0" prefWidth="220.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <panes>
-                              <TitledPane fx:id="acc12" text="UMB-CS682" textFill="#0f0fae">
+                              <TitledPane prefHeight="46.0" prefWidth="200.0" text="Uers" textFill="BLUE">
+                                 <content>
+                                    <ComboBox fx:id="comboUsers" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="158.0" style="-fx-font-size: 8pt;" />
+                                 </content>
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="11.0" />
+                                 </font>
+                              </TitledPane>
+                              <TitledPane fx:id="acc12" text="User's Preferences" textFill="#0f0fae">
+                                 <font>
+                                    <Font size="11.0" />
                                  </font>
                                  <content>
                                     <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" pannable="true" prefViewportHeight="449.0" prefViewportWidth="233.0" vbarPolicy="NEVER" AnchorPane.bottomAnchor="-10.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="-10.0" AnchorPane.topAnchor="-10.0">
@@ -1410,31 +1418,31 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <TextField fx:id="txtThroughput" promptText="0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                      <TextField fx:id="txtThroughput" promptText="0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
                                                       </TextField>
-                                                      <Label prefHeight="17.0" text="Latency:" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                                                      <Label prefHeight="17.0" text="Latency:" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+
                                                          <font>
                                                             <Font size="11.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="Throughput:" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                                      <Label text="Throughput:" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                                                          <font>
                                                             <Font size="11.0" />
                                                          </font>
                                                       </Label>
-                                                      <ComboBox fx:id="comboBoxEncryptedOption" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="102.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                      <Label text="Encrypted: " GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                                                      <ComboBox fx:id="comboBoxEncryptedOption" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="102.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                      <Label text="Encrypted: " GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                                                          <font>
                                                             <Font size="11.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label text="ms" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                      <Label text="ms" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -1442,7 +1450,7 @@
                                                             <Insets left="10.0" />
                                                          </GridPane.margin>
                                                       </Label>
-                                                      <Label text="Kbit" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                      <Label text="Kbit" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                          <font>
                                                             <Font size="11.0" />
                                                          </font>
@@ -1450,9 +1458,7 @@
                                                             <Insets left="10.0" />
                                                          </GridPane.margin>
                                                       </Label>
-                                                      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="80.0" text="User" textAlignment="RIGHT" textFill="#f80202" GridPane.rowIndex="1" />
-                                                      <ComboBox fx:id="comboUsers" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="158.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="txtLatency" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="45.0" promptText="10" text="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                      <TextField fx:id="txtLatency" maxWidth="1.7976931348623157E308" prefHeight="23.0" prefWidth="45.0" promptText="10" text="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -1569,7 +1575,7 @@
                                                       <Insets left="5.0" />
                                                    </VBox.margin>
                                                 </Label>
-                                                <ListView fx:id="listViewConcernedSensors" maxHeight="1.7976931348623157E308" onMouseClicked="#selectDevicesOfTheListView" prefHeight="118.0" prefWidth="221.0" style="-fx-font-size: 10;" />
+                                                <ListView fx:id="listViewConcernedSensors" maxHeight="1.7976931348623157E308" onMouseClicked="#selectDevicesOfTheListView" prefHeight="66.0" prefWidth="220.0" style="-fx-font-size: 10;" />
                                                 <HBox prefHeight="8.0" prefWidth="220.0" />
                                                 <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="219.0" spacing="20.0">
                                                    <children>
@@ -1615,21 +1621,6 @@
                                        </padding>
                                     </ScrollPane>
                                  </content>
-                              </TitledPane>
-                              <TitledPane animated="false" text="UMB-CS682-DataBase" textFill="#0f0fae">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#openProjectFromDB" prefHeight="24.0" prefWidth="96.0" text="Open" />
-                                          <Button layoutX="135.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveProjectToDB" prefHeight="24.0" prefWidth="96.0" text="Save" />
-                                          <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="159.0" text="Link DataBase File" />
-                                          <Button layoutX="43.0" layoutY="121.0" mnemonicParsing="false" onAction="#result" prefHeight="54.0" prefWidth="159.0" text="Data Result" />
-                                       </children>
-                                    </AnchorPane>
-                                </content>
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
                               </TitledPane>
                               <TitledPane fx:id="acc11" onMouseClicked="#updateLabeLInfos" text="Network information">
                                  <content>
@@ -3233,6 +3224,21 @@
                                        </padding>
                                     </ScrollPane>
                                  </content>
+                              </TitledPane>
+                              <TitledPane animated="false" text="UMB-CS682-DataBase" textFill="#0f0fae" visible="false">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#openProjectFromDB" prefHeight="24.0" prefWidth="96.0" text="Open" />
+                                          <Button layoutX="135.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveProjectToDB" prefHeight="24.0" prefWidth="96.0" text="Save" />
+                                          <Button layoutX="43.0" layoutY="53.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="159.0" text="Link DataBase File" />
+                                          <Button layoutX="43.0" layoutY="121.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="159.0" text="Data Result" />
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
                               </TitledPane>
                           </panes>
                         </Accordion>

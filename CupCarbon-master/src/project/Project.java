@@ -7,12 +7,12 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
@@ -57,7 +57,7 @@ import user.UserList;
 import visibility.VisibilityLauncher;
 
 public final class Project {
-	
+
 	public static String projectPath = "";
 	public static String projectName = "";
 	//add by Yiwei Yao for db file path
@@ -77,12 +77,12 @@ public final class Project {
 	public static String getProjectScriptPathForDB() {
 		return DBFilePath + File.separator + "scripts";
 	}
-	
+
 	public static String getProjectNatEventPathForDB() {
 		return DBFilePath + File.separator + "natevents";
 	}
 	// ***************************************************************************
-	
+
 	public static String getProjectPathName() {
 		return projectPath + File.separator + projectName;
 	}
@@ -102,7 +102,7 @@ public final class Project {
 	public static String getProjectBuildingPathName() {
 		return projectPath + File.separator + "config"+ File.separator +"buildings.cfg";
 	}
-	
+
 	public static String getProjectGpsPath() {
 		return projectPath + File.separator + "gps";
 	}
@@ -110,11 +110,11 @@ public final class Project {
 	public static String getProjectScriptPath() {
 		return projectPath + File.separator + "scripts";
 	}
-	
+
 	public static String getProjectNatEventPath() {
 		return projectPath + File.separator + "natevents";
 	}
-	
+
 	public static String getProjectNetworkPath() {
 		return projectPath + File.separator + "network";
 	}
@@ -131,7 +131,7 @@ public final class Project {
 	public static String getProjectRadioPath(){
 		return projectPath + File.separator + "config"+ File.separator +"sensor_radios";
 	}
-	
+
 	public static void saveProject() {
 		cleanProjectDirectories();
 		saveParameters();
@@ -140,9 +140,9 @@ public final class Project {
 		}
 		if(MarkerList.size()>0) MarkerList.save(getProjectMarkerPath());
 		if(BuildingList.size()>0) BuildingList.save(getProjectBuildingPathName());
-		saveSimulationParams();		
+		saveSimulationParams();
 	}
-	
+
 	public static void saveSimulationParams() {
 		try {
 			PrintStream ps = new PrintStream(Project.projectPath + File.separator + "config" + File.separator + "simulationParams.cfg");
@@ -167,7 +167,7 @@ public final class Project {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void reset() {
 		projectPath = "";
 		projectName = "";
@@ -181,7 +181,7 @@ public final class Project {
 		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		Routes.reset();
 	}
-	
+
 	public static void openProject(String path, String name) {
 		Thread th = new Thread(new Runnable() {
 			@Override
@@ -207,14 +207,14 @@ public final class Project {
 						DeviceList.calculatePropagations();
 						VisibilityLauncher.calculate();
 					}
-					
+
 					if(NetworkParameters.displayAllRoutes) {
 						MarkerList.reset();
 						Routes.loadRoutes();
 					}
-					else 
+					else
 						Routes.hideAll();
-					
+
 					CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
 				}
 				else {
@@ -243,7 +243,7 @@ public final class Project {
 			file = new File(path + File.separator + "natevents");
 			file.mkdir();
 			file = new File(path + File.separator + "tmp");
-			file.mkdir();			
+			file.mkdir();
 			file = new File(path + File.separator + "config");
 			file.mkdir();
 			file = new File(path + File.separator + "scripts");
@@ -276,7 +276,7 @@ public final class Project {
 			alert.showAndWait();
 		}
 	}
-	
+
 	public static void copyFromTo(String path1, String path2, String directory) {
 		try {
 			File fileS = new File(path1+File.separator+directory);
@@ -296,7 +296,7 @@ public final class Project {
 		}
 		catch(IOException e) {e.printStackTrace();}
 	}
-	
+
 	public static void copyResProjectFiles(String path1, String path2) {
 		copyFromTo(path1, path2, "scripts");
 		copyFromTo(path1, path2, "gps");
@@ -314,12 +314,12 @@ public final class Project {
 		}
 		catch(FileNotFoundException e) {
 			System.err.println("[CupCarbon] No Simulation Parameter file");
-		} 
+		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void addExamples(String path) {
 		try {
 			FileOutputStream fos = new FileOutputStream(path + File.separator + "transmitter.csc");
@@ -327,13 +327,13 @@ public final class Project {
 			ps.println("//Transmitter 2\natget id id\nloop\ndata p $id A\nsend $p\ndelay 1000\ndata p $id B\nsend $p\ndelay 1000");
 			ps.close();
 			fos.close();
-			
+
 			fos = new FileOutputStream(path + File.separator + "router.csc");
 			ps = new PrintStream(fos);
 			ps.println("//Router 2\natget id id\nloop\nwait\nread rp\nrdata $rp rid v\ndata p $id $v\nsend $p * $rid");
 			ps.close();
 			fos.close();
-			
+
 			fos = new FileOutputStream(path + File.separator + "receiver.csc");
 			ps = new PrintStream(fos);
 			ps.println("//Receiver 2\nloop\nwait\nread rp\nrdata $rp rid v\nif($v==A)\n  mark 1\nelse\n  mark 0\nend");
@@ -345,13 +345,13 @@ public final class Project {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static LinkedList<String> recentProjectList ;
 	public static void saveRecentPath() {
 		try {
 			recentProjectList = new LinkedList<String>();
 			String current = projectPath+"#"+projectName;
-			recentProjectList.add(current);			
+			recentProjectList.add(current);
 			FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+File.separator+"utils"+File.separator+"recent.rec");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String s = "" ;
@@ -367,7 +367,7 @@ public final class Project {
 			}
 
 			FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir")+File.separator+"utils"+File.separator+"recent.rec");
-			PrintStream ps = new PrintStream(fos);	
+			PrintStream ps = new PrintStream(fos);
 			for(int i=0; i<recentProjectList.size(); i++) {
 				ps.println(recentProjectList.get(i));
 			}
@@ -433,6 +433,7 @@ public final class Project {
 			if(selectedData.containsKey("display_all_routes")) {
 				NetworkParameters.displayAllRoutes = selectedData.getBoolean("display_all_routes");
 			}
+
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -441,12 +442,12 @@ public final class Project {
 					else
 						WorldMap.changeMap(2);
 				}
-			});	
-		}	
+			});
+		}
 		CupCarbon.cupCarbonController.applyParameters();
 	}
-	
-	public static void loadParameters() {		
+
+	public static void loadParameters() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(getProjectPathName()));
 			System.out.println(br.readLine());
@@ -457,9 +458,9 @@ public final class Project {
 			double la = Double.parseDouble(br.readLine().split(":")[1]);
 			double lo = Double.parseDouble(br.readLine().split(":")[1]);
 			int mapIndex = Integer.parseInt(br.readLine().split(":")[1]);
-						
+
 			MapLayer.mapViewer.setCenterPosition(new GeoPosition(la, lo));
-			
+
 			String [] keyVal ;
 			String s ;
 			while((s=br.readLine()) != null) {
@@ -481,7 +482,7 @@ public final class Project {
 				}
 			}
 			br.close();
-			
+
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -491,9 +492,9 @@ public final class Project {
 						WorldMap.changeMap(2);
 				}
 			});
-			
+
 			CupCarbon.cupCarbonController.applyParameters();
-			
+
 		} catch (FileNotFoundException e) {
 			System.err.println("[CupCarbon ERROR] -> No recent project !");
 		} catch (IOException e) {
@@ -502,12 +503,11 @@ public final class Project {
 			System.err.println("[CupCarbon ERROR] -> loadParameters() Project -> Param manquant");
 		}
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @return Document
 	 * saveParametersToDB save properties of project into document with a prefix project.
-	 * 
 	 */
 	public static Document saveParametersToDB() {
 		Document document = new Document();
@@ -533,8 +533,8 @@ public final class Project {
 		System.out.println(document);
 		System.out.println(document.size());
 		return document;
-	}	
-	
+	}
+
 	public static void saveParameters() {
 		try {
 			PrintStream fos = new PrintStream(new FileOutputStream(getProjectPathName()));
@@ -580,13 +580,23 @@ public final class Project {
 	}
 	// ******************************************************************************
 
+	// add by Yiwei Yao
+	// ******************************************************************************
+	public static String getNatEventFileFromNameForDB(String name) {
+		if (name.endsWith(".evt"))
+			return getProjectNatEventPathForDB() + File.separator + name;
+		else
+			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
+	}
+	// ******************************************************************************
+
 	public static String getNatEventFileExtension(String name) {
 		if (name.endsWith(".evt"))
 			return name;
 		else
 			return name + ".evt";
 	}
-	
+
 	public static String getGpsFileFromName(String name) {
 		if (name.endsWith(".gps"))
 			return getProjectGpsPath() + File.separator + name;
@@ -603,7 +613,7 @@ public final class Project {
 			return getProjectGpsPathForDB() + File.separator + name + ".gps";
 	}
 	// ******************************************************************************
-	
+
 	public static String getGpsFileExtension(String name) {
 		if (name.endsWith(".gps"))
 			return name;
@@ -627,7 +637,7 @@ public final class Project {
 			return getProjectScriptPathForDB() + File.separator + name + ".csc";
 	}
 	// ******************************************************************************
-	
+
 	public static String getScriptFileExtension(String name) {
 		if (name.endsWith(".csc"))
 			return name;
@@ -661,44 +671,44 @@ public final class Project {
 			return name;
 		else
 			return name + ".res";
-	}	
-	
+	}
+
 	public static void cleanProjectDirectories() {
-		if(MarkerList.markers != null) 
+		if(MarkerList.markers != null)
 			if(MarkerList.markers.size()==0) {
 				File f = new File(Project.projectPath+File.separator+"config"+File.separator+"markers.cfg");
 				f.delete();
 			}
-		
-		if(BuildingList.buildings != null) 
+
+		if(BuildingList.buildings != null)
 			if(BuildingList.buildings.size()==0) {
 				File f = new File(Project.projectPath+File.separator+"config"+File.separator+"buildings.cfg");
 				f.delete();
 			}
-		
+
 		deleteFiles(Project.projectPath+File.separator+"config"+File.separator+"nodes");
 		deleteFiles(Project.projectPath+File.separator+"config"+File.separator+"sensor_radios");
 	}
-		
+
 	public static void deleteFiles(String path) {
 		File file = new File(path);
 		String [] list = file.list();
 		for(int i=0; i<list.length; i++) {
 			String s = path+File.separator+list[i];
 			File f = new File(s);
-			if(f.isFile()) {	
+			if(f.isFile()) {
 				f.delete();
 			}
 		}
 	}
-	
-	public static void listParameters() {		
+
+	public static void listParameters() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(getProjectPathName()));
 			System.out.println(br.readLine());
 			System.out.println(br.readLine());
 			System.out.println(br.readLine());
-									
+
 			String [] keyval ;
 			String s ;
 			while((s=br.readLine()) != null) {
@@ -720,7 +730,7 @@ public final class Project {
 				}
 			}
 			br.close();
-			
+
 		} catch (FileNotFoundException e) {
 			System.err.println("[CupCarbon ERROR] -> No recent project !");
 		} catch (IOException e) {

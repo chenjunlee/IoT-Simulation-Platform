@@ -17,7 +17,7 @@ import device.SensorNode;
 import markers.MarkerList;
 import project.Project;
 import simulation.SimulationInputs;
-import markers.MarkerList;	
+import markers.MarkerList;
 import buildings.BuildingList;
 import user.User;
 import user.UserList;
@@ -27,6 +27,14 @@ import user.UserList;
  *
  */
 public class ImportToDB {
+
+	/**
+	 * @author Bang Tran
+	 */
+	public static void saveNetworkToDB(){
+
+	}
+
 
 	public static void saveProjectToDB() {
 		MongoCollection<Document> project = DBMethods.getDB("iot").getCollection(Project.projectName);
@@ -47,8 +55,7 @@ public class ImportToDB {
 		project.insertMany(otherDocuments);
 		saveUsersToDB(projectUser);
 	}
-	
-	
+
 	// ***************************************************************
 	// below is helper method
 	// ***************************************************************
@@ -57,22 +64,24 @@ public class ImportToDB {
 		User user;
 		Vector<User> users = UserList.users;
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
+
 			user = iterator.next();				
+
 			userDocument.add(user.saveToDB());
 		}
 		projectUser.insertMany(userDocument);
 	}
-	
+
 	public static void saveDevicesAndSensorsToDB() {
 		MongoCollection<Document> project = DBMethods.getDB("iot").getCollection(Project.projectName);
 		List<Document> documents = new ArrayList<Document>();
 		Device device;
 		Vector<Device> devices = DeviceList.devices;
 		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
-			device = iterator.next();				
+			device = iterator.next();
 			documents.addAll(device.saveToDB());
 		}
-		
+
 		SensorNode sensor;
 		Vector<SensorNode> sensors = DeviceList.sensors;
 		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
@@ -81,7 +90,7 @@ public class ImportToDB {
 		}
 		project.insertMany(documents);
 	}
-	
+
 	public static Document saveSimulationParams() {
 		Document document = new Document();
 		document.append("prefix", "simulation")

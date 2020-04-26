@@ -905,6 +905,7 @@ public abstract class Device extends MapObject implements Cloneable {
 
 	public abstract Device duplicate() ;
 	public abstract Device duplicateWithShift(double sh1, double sh2, double sh3) ;
+
 	public abstract void save(String fileName) ;	
 	// save to database
 	public abstract List<Document> saveToDB() ;

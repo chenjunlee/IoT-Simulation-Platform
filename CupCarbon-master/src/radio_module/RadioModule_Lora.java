@@ -11,33 +11,33 @@ public class RadioModule_Lora extends RadioModule {
 
 	protected int spreadingFactor = 7;
 	protected int codeRate = 0;
-	
+
 	public RadioModule_Lora(SensorNode sensorNode, String name) {
 		super(sensorNode, name);
 		init();
 	}
 
 	public void init() {
-		frequency = 868e5; 
+		frequency = 868e5;
 		//868 MHz for Europe
 		//915 MHz for North America
 		//433 MHz band for Asia
-		
+
 		radioRangeColor1 = UColor.BLUE_TTRANSPARENT;
 		radioRangeColor2 = UColor.BLUE_TRANSPARENT;
 		setRadioRangeRadius(5000);
 		setRadioRangeRadiusOri(5000);
-	}	
-	
+	}
+
 	public int getStandard() {
 		return RadioModule.LORA;
 	}
-	
+
 	@Override
 	public String getStandardName() {
 		return "LORA";
 	}
-	
+
 	public double getTransmitPower() {
 		double tpW = (Math.pow(10, transmitPower/10.))/1000.;
 		double nTpW = tpW * 1e6;
@@ -45,7 +45,7 @@ public class RadioModule_Lora extends RadioModule {
 		double nTpDbm = 10*Math.log10(nTpW/1000.);
 		return nTpDbm;
 	}
-	
+
 	@Override
 	public RadioModule duplicate(SensorNode sensorNode) {
 		RadioModule nRadioModule = new RadioModule_Lora(sensorNode, name);
@@ -64,11 +64,11 @@ public class RadioModule_Lora extends RadioModule {
 		nRadioModule.setRadioConsoRxModel(getRadioConsoRxModel());
 		return nRadioModule;
 	}
-	
+
 	public static String getPayLoad(String data) {
 		return "";
 	}
-	
+
 	@Override
 	public void save(PrintStream fos, RadioModule currentRadioModule) {
 		if (currentRadioModule.getName().equals(getName()))
@@ -90,7 +90,6 @@ public class RadioModule_Lora extends RadioModule {
 		fos.println("conso_tx_model:" + getRadioConsoTxModel());
 		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
-	
 	/**
 	 *@author Yiwei Yao
 	 *@param int index, RadioModule currentRadioModule, String deviceId, Document document
@@ -102,13 +101,17 @@ public class RadioModule_Lora extends RadioModule {
 	 */
 	@Override
 	public Document saveToDB(int index, RadioModule currentRadioModule, String deviceId, Document document) {
-		if(!document.containsKey("prefix")) 
+
+		if(!document.containsKey("prefix"))
 			document.append("prefix", "radio_module");
-		if(!document.containsKey("device_id")) 
+
+		if(!document.containsKey("device_id"))
 				document.append("device_id", deviceId);
-		if (currentRadioModule.getName().equals(getName())) 
+
+		if (currentRadioModule.getName().equals(getName()))
 			document.append("current_radio_name", getName())
 				.append("current_radio_index", index);
+
 		document.append("radio_name"+ index, getName())
 			.append("radio_standard"+ index, getStandardName())
 			.append("radio_my"+ index, getMy())
@@ -126,21 +129,21 @@ public class RadioModule_Lora extends RadioModule {
 			.append("conso_rx_model"+ index, getRadioConsoRxModel());
 		return document;
 	}
-	
+
 	public int getSpreadingFactor() {
 		return spreadingFactor;
 	}
-	
+
 	public void setSpreadingFactor(int spreadingFactor) {
 		this.spreadingFactor = spreadingFactor ;
 	}
-	
+
 	public int getCodeRate() {
 		return codeRate;
 	}
-	
+
 	public void setCodeRate(int codeRate) {
 		this.codeRate = codeRate ;
 	}
-	
+
 }

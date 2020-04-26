@@ -10,12 +10,11 @@ import javafx.stage.Stage;
 
 /**
  * @author Yiwei Yao
- * 
  * DBProjectSelectWindow Link dbprojectselect.fxml and construct the window.
  *
  */
 public class DBProjectSelectWindow {
-	
+
 	public DBProjectSelectWindow() throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("Select Project Name");
@@ -23,7 +22,8 @@ public class DBProjectSelectWindow {
 		loader.setLocation(SenScriptWindow.class.getResource("dbprojectselect.fxml"));
 		BorderPane panneau = (BorderPane) loader.load();
 		Scene scene = new Scene(panneau);
-		stage.setScene(scene);		
+		stage.setScene(scene);
+
 		//stage.initOwner(CupCarbon.stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();

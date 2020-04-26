@@ -64,7 +64,7 @@ public class CupCarbon extends Application {
 	public static Stage stage;
 	public static CupCarbonController cupCarbonController;
 	public static boolean macos = false;
-	
+
 	// Add by Yiwei Yao
 	public static String DBFilePath = "";
 
@@ -101,7 +101,7 @@ public class CupCarbon extends Application {
 		// Add by Yiwei Yao initial db file folder and print out the path
 		initDBProjectFiles();
 		System.out.println("Files Path for Database Project: " + DBFilePath);
-		
+
 		System.out.println("03111441122123263122253111131132311317312221232617123");	//Signature
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];
@@ -171,7 +171,7 @@ public class CupCarbon extends Application {
 	public void stop() {
 		System.exit(0);
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * initial DB Script, nature event, GPS file path;

@@ -16,34 +16,36 @@ import com.mongodb.client.MongoIterable;
  * @author Yiwei Yao
  *
  */
-public class DBMethods {	
+
+public class DBMethods {
+
 	static MongoClient  mongo = ConnectToDB.mongoClient;
-	
+
 	//get db
 	public static MongoDatabase getDB(String dbName) {
 		return mongo.getDatabase(dbName);
 	}
-	
+
 	//get a list of collections
 	public static MongoIterable<String> getCollections(MongoDatabase db) {
 		return db.listCollectionNames();
 	}
-	
-//	get the number of results in a collection
+
+	//	get the number of results in a collection
 	public static long collectionsCount(MongoCollection<Document> collection) {
 		return collection.count();
 	}
-	
+
 	// get a collection
 	public static MongoCollection<Document> getCollection(MongoDatabase db, String collection) {
 		return db.getCollection(collection);
 	}
-	
+
 	// read operation
 	public static FindIterable<Document> find(MongoCollection<Document> collection) {
 		return collection.find();
 	}
-	
+
 	// find document with prefix
 	public static FindIterable<Document> findWithPrefix(MongoCollection<Document> collection, String prefix) {
 		BasicDBObject query = new BasicDBObject();
@@ -51,12 +53,24 @@ public class DBMethods {
 		FindIterable<Document> data = collection.find(query);
 		return data;
 	}
-	
+
 	// drop collection
 	public static void dropCollection(MongoCollection<Document> collection) {
 		collection.drop();
 	}
-	
+
+
+	/**
+	 *
+	 * @author Bang Tran
+	 */
+	// empty collection
+	public static void emptyCollection(MongoCollection<Document> collection) {
+		collection.deleteMany(new BasicDBObject());
+	}
+	//==== Bang Tran End
+
+
 	// write operation
 //	public static void insert(Document document, MongoCollection<Document> collection) {
 //		collection.insertOne(document);

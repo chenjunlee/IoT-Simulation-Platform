@@ -230,6 +230,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			addThing = true;
 		}
+
 		//add by Chenjun
 		if (lastKey == 'a') {
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -252,6 +253,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addThing = true;
 		}
 		
+
 		if(magnetic && addThing) {
 			g.drawLine(mX-6, mY, mX+6, mY);
 			g.drawLine(mX, mY-6, mX, mY+6);
@@ -466,6 +468,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 		
+
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();
 			for(SensorNode sensor : DeviceList.sensors) {

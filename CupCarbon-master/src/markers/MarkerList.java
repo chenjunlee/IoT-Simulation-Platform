@@ -124,8 +124,6 @@ public class MarkerList {
 		}
 		return markList;
 	}
-	
-	
 	/**
 	 * @author Yiwei Yao
 	 * @param markData
@@ -137,15 +135,15 @@ public class MarkerList {
 		MongoCursor<Document> markDataIterator = markData.iterator();
 		while(markDataIterator.hasNext()) {
 			Document SelectedMark = markDataIterator.next();
-			addNodeByType(""+SelectedMark.get("longitude"), 
-					""+SelectedMark.get("latitude"), 
-					""+SelectedMark.get("elevation"), 
+			addNodeByType(""+SelectedMark.get("longitude"),
+					""+SelectedMark.get("latitude"),
+					""+SelectedMark.get("elevation"),
 					""+SelectedMark.get("radius"));
 		}
-		MapLayer.repaint();
+		//MapLayer.repaint();
 	}
-	
-	
+
+
 	public static void open(String fileName) {
 		//Routes.reset();
 		reset();
@@ -385,7 +383,6 @@ public class MarkerList {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
 		boolean selection = false;

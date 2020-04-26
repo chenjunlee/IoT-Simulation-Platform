@@ -8,6 +8,7 @@ import org.bson.Document;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 
+
 import device.SensorNode;
 import map.MapLayer;
 
@@ -41,7 +42,7 @@ public class UserList {
 		if(currentUser >=0 )
 			users.get(currentUser).drawBackgroundCurrentUser(g);
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @param userData
@@ -50,16 +51,20 @@ public class UserList {
 	public static void openFromDB(FindIterable<Document> userData) {
 		//Routes.reset();
 		reset();
+
+
 		MongoCursor<Document> userDataIterator = userData.iterator();
 		while(userDataIterator.hasNext()) {
 			Document SelectedUser = userDataIterator.next();
-			System.out.println("get user: ");
+			//System.out.println("get user: ");
 			User user = getUser(SelectedUser.getString("name"));
-			System.out.println("usrname: " + SelectedUser.getString("name"));
+			//System.out.println("usrname: " + SelectedUser.getString("name"));
+
 			user.setLatitude1(SelectedUser.getDouble("latitude1"));
 			user.setLatitude2(SelectedUser.getDouble("latitude2"));
 			user.setLongitude1(SelectedUser.getDouble("longitude1"));
 			user.setLongitude2(SelectedUser.getDouble("longitude2"));
+
 			user.setTemperatureSensing(SelectedUser.getBoolean("temperatureSensing"));
 			user.setHumiditySensing(SelectedUser.getBoolean("humiditySensing"));
 			user.setGasSensing(SelectedUser.getBoolean("gasSensing"));
@@ -71,9 +76,13 @@ public class UserList {
 			user.setPreferredThroughput(SelectedUser.getDouble("preferredThroughput"));
 			user.setPreferredFrequency(SelectedUser.getLong("preferredFrequency"));
 			user.setSelectedArea(SelectedUser.getBoolean("selectedArea"));
-//			users.add(user);
+
+			//users.add(user);
 		}
-//		MapLayer.repaint();
+
+
+		//MapLayer.repaint();
+
 		for(User u: users) {
 			u.getSensorsInsideArea();
 		}
@@ -82,8 +91,7 @@ public class UserList {
 	public static void resetFromDB() {
 		users = new Vector<User>();
 	}
-	
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @return User

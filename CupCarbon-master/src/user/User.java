@@ -13,7 +13,9 @@ import org.bson.Document;
 
 import device.DeviceList;
 import device.SensorNode;
+
 import device.CloudServer;
+
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -27,10 +29,11 @@ public class User {
 	public boolean selectedArea = false;
 	public Color areaBoderColor=new Color(255, 0, 0);
 
-	private double latitude1=0;
-	private double latitude2=0;
-	private double longitude1=0;
-	private double longitude2=0;
+	private double latitude1=0.0;
+	private double latitude2=0.0;
+	private double longitude1=0.0;
+	private double longitude2=0.0;
+
 
 	public boolean temperatureSensing= false;
 	public boolean humiditySensing = false;
@@ -40,11 +43,13 @@ public class User {
 	public boolean waterLevelSensing = false;
 	public boolean dataEncrypted = false;
 
-	public double preferredLatency = 10; //>= 10 ms
-	public double preferredThroughput = 0; //>= 0kbit
-	public long preferredFrequency = 3600000; //1 minutes = 3600*1000 ms
+
+	public double preferredLatency = 10.0; //>= 10 ms
+	public double preferredThroughput = 0.0; //>= 0kbit
+	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
 	
 	public CloudServer userServer = null;
+
 
 	public User(String uname){
 		Random r = new Random();
@@ -54,15 +59,14 @@ public class User {
 	public String getName(){ return name; }
 
 	public void reset(){
-		preferredFrequency = 3600000;
-		preferredLatency = 10;
-		preferredThroughput = 0;
-		latitude1 = longitude1 = latitude2 = longitude2 = 0;
+		preferredFrequency = 3600000L;
+		preferredLatency = 10.0;
+		preferredThroughput = 0.0;
+		latitude1 = longitude1 = latitude2 = longitude2 = 0.0;
 		selectedArea = false;
 		areaBoderColor=new Color(255, 0, 0);
-		//add by Chenjun
-		userServer = null;
-	}
+    userServer = null;
+	};
 
 	/**
 	 * @param lat1: Latitude of first coordinate
@@ -205,10 +209,10 @@ public class User {
 			.append("preferredFrequency", preferredFrequency);
 		return document;
 	}
-	
+
 	/**
 	 * setter and getter helpers
-	 * 
+	 *
 	 */
 	public boolean isSelectedArea() {
 		return selectedArea;
@@ -303,6 +307,7 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	//add by Chenjun
 	public void setUserServer(CloudServer userServer) {
 		this.userServer = userServer;
@@ -311,5 +316,4 @@ public class User {
 	public CloudServer getUserServer() {
 		return userServer;
 	}
-
 }
