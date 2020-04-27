@@ -3256,15 +3256,512 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 100 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator100() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 100;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 200 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator200() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 200;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 300 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator300() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 300;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 400 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator400() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 400;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 500 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator500() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 500;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 600 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator600() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 600;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 700 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator700() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 700;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 800 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator800() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 800;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 900 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator900() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 900;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Not Uniform distribution generate random network 1000 sensor nodes.
+	 */
+	@FXML
+	public void CS682NUDRandomGenerator1000() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 1000;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomRouterCS682(generateNumber);
+				DeviceList.addRandomBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 100 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator100() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 100;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 200 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator200() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 200;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 300 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator300() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 300;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 400 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator400() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 400;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 500 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator500() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 500;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 600 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator600() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 600;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 700 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator700() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 700;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 800 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator800() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 800;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 900 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator900() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 900;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * Uniform distribution generate random network 1000 sensor nodes.
+	 */
+	@FXML
+	public void CS682UDRandomGenerator1000() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int generateNumber = 1000;
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensorsCS682(generateNumber);
+				DeviceList.addRandomNatEventCS682(generateNumber);
+				DeviceList.addRandomUDRouterCS682(generateNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateNumber);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+
+	}
+	
 	@FXML
 	public void generateRandomNetwork50() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				int generateSensorNumber = DeviceList.addRandomSensorsCS682();
-				DeviceList.addRandomNatEventCS682(generateSensorNumber);
-				DeviceList.addRandomRouterCS682(generateSensorNumber);
-				DeviceList.addRandomBaseStationCS682(generateSensorNumber);
+				DeviceList.addRandomSensors(50,0);
 				mapFocus();
 			}
 		});
@@ -3276,10 +3773,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				int generateSensorNumber = DeviceList.addRandomSensorsCS682();
-				DeviceList.addRandomNatEventCS682(generateSensorNumber);
-				DeviceList.addRandomUDRouterCS682(generateSensorNumber);
-				DeviceList.addRandomUDBaseStationCS682(generateSensorNumber);
+				DeviceList.addRandomSensors(100,0);
 				mapFocus();
 			}
 		});

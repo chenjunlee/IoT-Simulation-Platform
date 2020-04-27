@@ -880,6 +880,34 @@
                      </graphic></MenuItem>
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Uniform Distribution Generator">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator100" text="100" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator200" text="200" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator300" text="300" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator400" text="400" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator500" text="500" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator600" text="600" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator700" text="700" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator800" text="800" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator900" text="900" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682UDRandomGenerator1000" text="1000" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Traditional Generator">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator100" text="100" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator200" text="200" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator300" text="300" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator400" text="400" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator500" text="500" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator600" text="600" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator700" text="700" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator800" text="800" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator900" text="900" />
+                  <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator1000" text="1000" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>
