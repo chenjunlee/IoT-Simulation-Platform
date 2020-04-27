@@ -57,7 +57,9 @@ public class User {
 	public double preferredThroughput = 0.0; //>= 0kbit
 	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
 
-	public CloudServer userServer = null;
+	//Chenjun
+	public BaseStation userStation = null;
+	public Vector<String> userEvents = new Vector<String>();
 
 
 	public User(String uname){
@@ -77,9 +79,12 @@ public class User {
 		selectedLocation = false;
 		areaBoderColor=new Color(255, 0, 0);
 
-
-
-		userServer = null;
+		//add by Chenjun
+		if(userStation != null) {
+			userStation.removeUser(this);
+			userStation = null;
+		}
+		userEvents.clear();
 	};
 
 	/**
@@ -405,11 +410,26 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 
 	//add by Chenjun
-	public void setUserServer(CloudServer userServer) {
-		this.userServer = userServer;
-		this.userServer.setUser(this);
+	public void setBaseStation(BaseStation userStation) {
+		this.userStation = userStation;
+		this.userStation.addUser(this);
 	}
-	public CloudServer getUserServer() {
-		return userServer;
+	public BaseStation getBaseStation() {
+		return userStation;
+	}
+	public void addEvent(String s) {
+		if(userEvents.contains(s)) {
+			return;
+		} else {
+			userEvents.add(s);
+		}
+	}
+	public void removeEvent(String s) {
+		if(userEvents.contains(s)) {
+			userEvents.remove(s);
+		}
+	}
+	public Vector<String> getEvents() {
+		return userEvents;
 	}
 }
