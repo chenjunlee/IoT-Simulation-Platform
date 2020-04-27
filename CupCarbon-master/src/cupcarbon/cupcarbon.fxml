@@ -835,11 +835,11 @@
                   <RadioMenuItem fx:id="mapItem0" mnemonicParsing="false" onAction="#setMap0" text="OSM Light">
                      <toggleGroup>
                         <ToggleGroup fx:id="radioGroupMap" />
-                     </toggleGroup></RadioMenuItem>                                   
+                     </toggleGroup></RadioMenuItem>
                   <RadioMenuItem fx:id="mapItem1" mnemonicParsing="false" onAction="#setMap1" text="OSM Dark" toggleGroup="$radioGroupMap" />
                   <RadioMenuItem fx:id="mapItem12" mnemonicParsing="false" onAction="#setMap12" text="OSM B&amp;W" toggleGroup="$radioGroupMap" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <RadioMenuItem fx:id="mapItem2" mnemonicParsing="false" onAction="#setMap2" selected="true" text="Standard 1" toggleGroup="$radioGroupMap" />                                   
+                  <RadioMenuItem fx:id="mapItem2" mnemonicParsing="false" onAction="#setMap2" selected="true" text="Standard 1" toggleGroup="$radioGroupMap" />
                   <RadioMenuItem fx:id="mapItem3" mnemonicParsing="false" onAction="#setMap3" text="Standard 2" toggleGroup="$radioGroupMap" />
                   <RadioMenuItem fx:id="mapItem4" mnemonicParsing="false" onAction="#setMap4" text="Standard 3 [Dark]" toggleGroup="$radioGroupMap" />
                   <RadioMenuItem fx:id="mapItem5" mnemonicParsing="false" onAction="#setMap5" text="Standard 4 [Black]" toggleGroup="$radioGroupMap" />

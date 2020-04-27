@@ -58,7 +58,9 @@ public class User {
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
 
-	public CloudServer userServer = null;
+	//Chenjun
+	public BaseStation userStation = null;
+	public Vector<String> userEvents = new Vector<String>();
 
 
 	public User(String uname){
@@ -79,10 +81,14 @@ public class User {
 		startTime = 0;
 		endTime = 0;
 
-
 		areaBoderColor=new Color(255, 0, 0);
 
-		userServer = null;
+		//add by Chenjun
+		if(userStation != null) {
+			userStation.removeUser(this);
+			userStation = null;
+		}
+		userEvents.clear();
 	};
 
 	/**
@@ -237,24 +243,24 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		if(this.selectedLocation == false) return null;
 
 		double distance = 0;
-		Device BS = null;
+		Device res = null;
 
 		for(Device d : DeviceList.sensors){
 			if(d.getType() == Device.BASE_STATION){
-				if (BS == null){
-					BS = d;
+				if (res == null){
+					res = d;
 					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
 					continue;
 				}
 
 				if(distance > MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude()) ) {
-					BS = d;
+					res = d;
 					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
 				}
 			}
 		}
 
-		return (BaseStation) BS;
+		return (BaseStation) res;
 	}
 
 	/**
@@ -407,11 +413,30 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 
 	//add by Chenjun
-	public void setUserServer(CloudServer userServer) {
-		this.userServer = userServer;
-		this.userServer.setUser(this);
+	public void setBaseStation(BaseStation userStation) {
+		this.userStation = userStation;
+		if(userStation != null) {
+			this.userStation.addUser(this);
+		} else {
+			System.out.println("No base station exsist");
+		}
 	}
-	public CloudServer getUserServer() {
-		return userServer;
+	public BaseStation getBaseStation() {
+		return userStation;
+	}
+	public void addEvent(String s) {
+		if(userEvents.contains(s)) {
+			return;
+		} else {
+			userEvents.add(s);
+		}
+	}
+	public void removeEvent(String s) {
+		if(userEvents.contains(s)) {
+			userEvents.remove(s);
+		}
+	}
+	public Vector<String> getEvents() {
+		return userEvents;
 	}
 }

@@ -87,7 +87,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected double drssi = 0; // rssi in distance (meter)
 	
 	//Chenjun
-	private User user = null;
+	private Vector<User> users = new Vector<User>();
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -945,11 +945,24 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return getSensorUnit().getDirection();
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	//Chenjun
+	public void addUser(User user) {
+		if(users.contains(user))
+			return;
+		else
+			users.add(user);
 	}
 	
-	public User getUser() {
-		return user;
+	public Vector<User> getUsers() {
+		return users;
+	}
+	
+	public void removeUser(User user) {
+		if(users.contains(user))
+			users.remove(user);
+	}
+	
+	public void clearUser() {
+		users.clear();
 	}
 }

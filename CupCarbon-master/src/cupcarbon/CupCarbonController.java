@@ -4358,8 +4358,8 @@ public class CupCarbonController implements Initializable {
 			block.addAction(action);
 		}
 		for(User user : UserList.users) {
-			if(user.getUserServer() != null) {
-				CloudServer cs = user.getUserServer();
+			if(user.getBaseStation() != null) {
+				BaseStation cs = user.getBaseStation();
 				String currentScriptFileName = cs.getScriptFileName();
 				CupAction action = new CupActionModifSensorScriptFile((SensorNode) cs, currentScriptFileName,
 						"User.csc");
@@ -4534,16 +4534,20 @@ public class CupCarbonController implements Initializable {
 				int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
 				Marker geoLocation = MarkerList.markers.get(0);
 				UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
-				MarkerList.deleteAll();
-				MapLayer.repaint();
-
 
 				BaseStation bb = UserList.users.get(selectedUserIndex).getNearestBaseStation();
-				if(bb!=null)
+				
+				if(bb==null) {
+					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found, going to generate a new base station at user location");
+					BaseStation newStation = new BaseStation(geoLocation.getLongitude(), geoLocation.getLatitude(), 0, 0, 100, 20, -1);
+					DeviceList.add(newStation);
+					UserList.users.get(selectedUserIndex).setBaseStation(newStation);
+				} else {
 					System.out.println(UserList.users.get(selectedUserIndex).getName() + " has nearest BaseStation is: " + bb.getName());
-
-				if(bb==null)
-					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found");
+					UserList.users.get(selectedUserIndex).setBaseStation(bb);
+				}
+				MarkerList.deleteAll();
+				MapLayer.repaint();
 			}
 		});
 	}
@@ -4895,5 +4899,65 @@ public class CupCarbonController implements Initializable {
 	public void addLig() {
 		WorldMap.addNodeInMap('b');
 		mapFocus();
+	}
+	@FXML
+	public void selectTemp() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxTemperatureSens.isSelected()) {
+			u.addEvent("Temperature");
+		} else {
+			u.removeEvent("Temperature");
+		}
+	}
+	@FXML
+	public void selectWater() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxWaterLevelSens.isSelected()) {
+			u.addEvent("Water");
+		} else {
+			u.removeEvent("Water");
+		}
+	}
+	@FXML
+	public void selectWind() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxWindLevelSens.isSelected()) {
+			u.addEvent("Wind");
+		} else {
+			u.removeEvent("Wind");
+		}
+	}
+	@FXML
+	public void selectGas() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxGasSens.isSelected()) {
+			u.addEvent("Gas");
+		} else {
+			u.removeEvent("Gas");
+		}
+	}
+	@FXML
+	public void selectLight() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxLightSens.isSelected()) {
+			u.addEvent("Light");
+		} else {
+			u.removeEvent("Light");
+		}
+	}
+	@FXML
+	public void selectHum() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxHumiditySens.isSelected()) {
+			u.addEvent("Humidity");
+		} else {
+			u.removeEvent("Humidity");
+		}
 	}
 }
