@@ -98,7 +98,7 @@ public class DeviceList {
 		int generateNumber = generateSensorNumber / 4;
 		int gemerateNumberInEachBlock = generateNumber / 4;
 		System.out.println("====================================================================");
-		System.out.println("Uniform distribution ramdomly generating " + generateNumber + " routers");
+		System.out.println("Uniform distribution ramdomly generating " + generateNumber + " BaseStations");
 		CupActionBlock block = new CupActionBlock();
 		if(MarkerList.markers.size()==2) {
 			Marker marker1 = MarkerList.markers.get(0);
@@ -225,11 +225,12 @@ public class DeviceList {
 	 *
 	 * method to generator random sensor for network, and return generate number
 	 */
-	public static int addRandomSensorsCS682() {
+	public static void addRandomSensorsCS682(int generateNumber) {
 		// the number of sensors should bigger than 100, less than 1000
-		int upperBound = 1000;
-		int lowerBound = 99;
-		int generateNumber = lowerBound + (int)(Math.random() * ((upperBound - lowerBound) + 1));
+		// use of random generate, abandoned
+//		int upperBound = 1000;
+//		int lowerBound = 99;
+//		int generateNumber = lowerBound + (int)(Math.random() * ((upperBound - lowerBound) + 1));
 		System.out.println("====================================================================");
 		System.out.println("ramdomly generating " + generateNumber + " sensors");
 		CupActionBlock block = new CupActionBlock();
@@ -284,7 +285,6 @@ public class DeviceList {
 			System.out.println("====================================================================");
 			System.out.println("ramdomly generate " + generateNumber + " sensors finished!");
 		}
-		return generateNumber;
 	}
 
 	public static void addRandomBaseStationCS682(int generateSensorNumber) {
