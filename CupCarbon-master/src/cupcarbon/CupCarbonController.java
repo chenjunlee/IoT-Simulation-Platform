@@ -4493,9 +4493,8 @@ public class CupCarbonController implements Initializable {
 				Marker geoLocation = MarkerList.markers.get(0);
 				UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
 
-
 				BaseStation bb = UserList.users.get(selectedUserIndex).getNearestBaseStation();
-
+				
 				if(bb==null) {
 					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found, going to generate a new base station at user location");
 					BaseStation newStation = new BaseStation(geoLocation.getLongitude(), geoLocation.getLatitude(), 0, 0, 100, 20, -1);
