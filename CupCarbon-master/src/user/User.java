@@ -57,7 +57,8 @@ public class User {
 	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms  - get data every seconds
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
-
+	public int delayTime = 1;
+	
 	//Chenjun
 	public BaseStation userStation = null;
 	public Vector<String> userEvents = new Vector<String>();
@@ -438,5 +439,23 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 	public Vector<String> getEvents() {
 		return userEvents;
+	}
+	public void setTimeStart(long t) {
+		startTime = t;
+	}
+	public long getTimeStart() {
+		return startTime;
+	}
+	public void setTimeEnd(long t) {
+		endTime = t;
+	}
+	public long getTimeEnd() {
+		return endTime;
+	}
+	public void setTimeDelay(int t) {
+		delayTime = t;
+	}
+	public int getTimeDelay() {
+		return timeDelay;
 	}
 }
