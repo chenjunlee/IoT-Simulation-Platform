@@ -128,6 +128,7 @@ import radio_module.RadioModule;
 import radio_module.RadioModule_Lora;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
+import simulation.WisenSimulationDB;
 import solver.CycleFromNode;
 import solver.EnvelopeJarvis;
 import solver.EnvelopeLPCN;
@@ -995,6 +996,7 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				try {
 					ImportFromDB.openProject();
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.DBFilePath + "]");
 				} catch(Exception e) {
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.setTitle("Error");
@@ -1048,6 +1050,11 @@ public class CupCarbonController implements Initializable {
 
 	public WisenSimulation wisenSimulation;
 
+	//Add by Yiwei Yao
+	//for run from db
+	public WisenSimulationDB wisenSimulationDB;
+
+
 	@FXML
 	public void stopSimulation() {
 		Platform.runLater(new Runnable() {
@@ -1058,8 +1065,10 @@ public class CupCarbonController implements Initializable {
 				qStopSimulationButton.setDefaultButton(false);
 				runSimulationButton.setDisable(false);
 				qRunSimulationButton.setDisable(false);
-				if (wisenSimulation != null)
+				if (wisenSimulation != null) {
 					wisenSimulation.stopSimulation();
+				}
+
 				mapFocus();
 			}
 		});
@@ -3813,6 +3822,26 @@ public class CupCarbonController implements Initializable {
 	 *
 	 */
 	public void generateSenScripts(){
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			String currentScriptFileName = sensor.getScriptFileName();
+			CupAction action = new CupActionModifSensorScriptFile((SensorNode) sensor, currentScriptFileName,
+					"Router.csc");
+			block.addAction(action);
+		}
+		for(User user : UserList.users) {
+			if(user.getUserServer() != null) {
+				CloudServer cs = user.getUserServer();
+				String currentScriptFileName = cs.getScriptFileName();
+				CupAction action = new CupActionModifSensorScriptFile((SensorNode) cs, currentScriptFileName,
+						"User.csc");
+				block.addAction(action);
+			}
+		}
+
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Generating SenScript");
 		alert.setHeaderText(null);
@@ -3824,8 +3853,49 @@ public class CupCarbonController implements Initializable {
 	/**
 	 * @author Bang Tran UMB
 	 *
+	 * changed by Yiwei Yao
+	 * it will run two threads one is use wisenSimulation used to log
+	 * one is wisenSimulationDB used to run simulation.
+	 *
 	 */
 	public void runSimulationCs682(){
+		if (!Project.projectName.equals(""))
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					//textOut.clear();
+					//textErr.clear();
+					ConsoleController.controller.clear();
+					saveButton.setDisable(false);
+					qRunSimulationButton.setDefaultButton(false);
+					qStopSimulationButton.setDefaultButton(true);
+					runSimulationButton.setDisable(true);
+					qRunSimulationButton.setDisable(true);
+					simulationParametersApply();
+					wisenSimulation = new WisenSimulation();
+					if (wisenSimulation.ready()) {
+						Thread th = new Thread(wisenSimulation);
+						th.start();
+
+					} else {
+						WisenSimulation.updateButtons();
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("SenScript");
+						alert.setHeaderText(null);
+						alert.setContentText("Sensors without Script!");
+						alert.showAndWait();
+						selectSensorsWithoutScript();
+					}
+				}
+			});
+		else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning!");
+			alert.setHeaderText(null);
+			alert.setContentText("Project must be created first.");
+			alert.showAndWait();
+		}
+		mapFocus();
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Run simulation");
 		alert.setHeaderText(null);
@@ -3911,17 +3981,16 @@ public class CupCarbonController implements Initializable {
 				for(SensorNode s: u.getSensorsInsideArea() )
 					listViewConcernedSensors.getItems().add(s.getName());
 
-
-
 				//Add one CloudServer to user at the corner of area
 				//you can move it to anywhere
 				//add by Chenjun
-				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, -1);
+				//commit by yiwei, since -1 for sensor id is not working, I changed it to 99 for now.
+				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, 99);
 				DeviceList.add(userServer);
 				u.setUserServer(userServer);
 
-				//empty markers after set area for user
-				MarkerList.deleteAll();
+				  //empty markers after set area for user
+				  MarkerList.deleteAll();
 			}
 			MapLayer.repaint();
 

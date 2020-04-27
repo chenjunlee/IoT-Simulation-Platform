@@ -186,6 +186,7 @@ public class CupCarbon extends Application {
 		java.nio.file.Path scriptFilePath = Paths.get(currentPath.toString(), file, "scripts");
 		java.nio.file.Path gpsFilePath = Paths.get(currentPath.toString(), file, "gps");
 		java.nio.file.Path natureEventFilePath = Paths.get(currentPath.toString(), file, "natevents");
+		java.nio.file.Path logsPath = Paths.get(currentPath.toString(), file, "logs");
 		if(!(Files.exists(scriptFilePath) && Files.isDirectory(filePath))) {
 			scriptFilePath.toFile().mkdir();
 	    }
@@ -194,6 +195,9 @@ public class CupCarbon extends Application {
 	    }
 		if(!(Files.exists(natureEventFilePath) && Files.isDirectory(filePath))) {
 			natureEventFilePath.toFile().mkdir();
+	    }
+		if(!(Files.exists(logsPath) && Files.isDirectory(filePath))) {
+			logsPath.toFile().mkdir();
 	    }
 		DBFilePath = filePath.toString();
 	}

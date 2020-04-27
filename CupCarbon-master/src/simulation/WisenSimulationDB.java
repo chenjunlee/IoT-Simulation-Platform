@@ -27,12 +27,12 @@
  * @author Lounis Massinissa
  */
 
+/**
+ * @author Yiwei Yao
+ * 
+ * change from WisenSimulation 
+ */
 package simulation;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 
 import cupcarbon.CupCarbon;
 import device.MessageEventList;
@@ -47,7 +47,7 @@ import map.MapLayer;
 import markers.Routes;
 import project.Project;
 
-public class WisenSimulation implements Runnable {
+public class WisenSimulationDB implements Runnable {
 	
 	public static double time = 0.0;
 	public static double sTime = 0.0;
@@ -62,9 +62,10 @@ public class WisenSimulation implements Runnable {
 
 	private boolean generateResults = true ;
 	
-	public static SimLog simLog; 
+//	public static SimLog simLog; 
 	
-	public WisenSimulation() {
+	public WisenSimulationDB() {
+		
 	}
 
 	// ------------------------------------------------------------
@@ -93,7 +94,7 @@ public class WisenSimulation implements Runnable {
 		Routes.loadRoutes();
 		resultsWritingTime = 0.0;
 		
-		simLog = new SimLog();
+//		simLog = new SimLog();
 		
 		mobilityAndEvents = SimulationInputs.mobilityAndEvents;
 		System.out.println("Mobility: "+mobilityAndEvents);		
@@ -103,8 +104,8 @@ public class WisenSimulation implements Runnable {
 
 		System.out.println("Initialization ... ");
 		
-		simLog.add("===========================");
-		simLog.add("Initialization");
+		WisenSimulation.simLog.add("===========================");
+		WisenSimulation.simLog.add("Initialization");
 		
 		MultiChannels.init();
 		MessageEventList.numberOfSentMessages = 0;
@@ -157,9 +158,9 @@ public class WisenSimulation implements Runnable {
 			boolean moving = false ;
 			String fMessage = "";
 			
-			simLog.add("======================================================");
-			simLog.add("START SIMULATION");
-			simLog.add("======================================================");
+			WisenSimulation.simLog.add("======================================================");
+			WisenSimulation.simLog.add("START SIMULATION");
+			WisenSimulation.simLog.add("======================================================");
 
 			// ------------------------------------------------------
 			// ------------------------------------------------------
@@ -227,16 +228,16 @@ public class WisenSimulation implements Runnable {
 				
 				consolPrint(time + " : ");	
 				
-				simLog.add("");
-				simLog.add("----------------------------------------------------------------------------");
-				simLog.add("Time : "+time);
-				simLog.add("Min (milliseconds) : "+min);
+				WisenSimulation.simLog.add("");
+				WisenSimulation.simLog.add("----------------------------------------------------------------------------");
+				WisenSimulation.simLog.add("Time : "+time);
+				WisenSimulation.simLog.add("Min (milliseconds) : "+min);
 				
 				consolPrintln("--------------------------------------");
 				consolPrint(""+time);
 				
 				if(!fMessage.replace("\n", "").equals("")) 
-					simLog.add(fMessage);
+					WisenSimulation.simLog.add(fMessage);
 				
 				fMessage = "";
 				
@@ -264,7 +265,7 @@ public class WisenSimulation implements Runnable {
 					for (SensorNode sensor : DeviceList.sensors) {
 						if(!sensor.isDead()) {
 							if (sensor.getEvent2() == 0) {
-								simLog.add(sensor.getIdFL()+sensor.getId()+" SENSOR MOVING");
+								WisenSimulation.simLog.add(sensor.getIdFL()+sensor.getId()+" SENSOR MOVING");
 								if (!sensor.getGPSFileName().equals("")) {
 									sensor.moveToNext(true, 0);
 									sensor.setEvent2(sensor.getNextTime());									
@@ -277,7 +278,7 @@ public class WisenSimulation implements Runnable {
 					for (Device device : DeviceList.devices) {
 						if(!device.isDead()) {
 							if (device.getEvent2() == 0) {
-								simLog.add(device.getIdFL()+device.getId()+" DEVICE MOVING");
+								WisenSimulation.simLog.add(device.getIdFL()+device.getId()+" DEVICE MOVING");
 								if (!device.getGPSFileName().equals("")) {
 									device.moveToNext(true, 0);
 									device.setEvent2(device.getNextTime());									
@@ -285,7 +286,7 @@ public class WisenSimulation implements Runnable {
 							}
 							
 							if (device.getEvent3() == 0) {
-								simLog.add(device.getIdFL()+device.getId()+" VALUE GENERATION");
+								WisenSimulation.simLog.add(device.getIdFL()+device.getId()+" VALUE GENERATION");
 								if (!device.getNatEventFileName().equals("")) {
 									device.generateNextValue();
 									device.setEvent3(device.getNextValueTime());									
@@ -419,7 +420,7 @@ public class WisenSimulation implements Runnable {
 				isSimulating = false;
 				System.err.println("[CUPCARBO:Simulation] Simulation Progress: 0");
 			}
-			simLog.close();
+			WisenSimulation.simLog.close();
 //			ps.close();		
 			MultiChannels.init();
 			isSimulating = false;
