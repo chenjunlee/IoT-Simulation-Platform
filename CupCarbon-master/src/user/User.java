@@ -412,7 +412,10 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	//add by Chenjun
 	public void setBaseStation(BaseStation userStation) {
 		this.userStation = userStation;
-		this.userStation.addUser(this);
+		if(userStation != null) {
+			System.out.println("No base station exsist");
+			this.userStation.addUser(this);
+		}
 	}
 	public BaseStation getBaseStation() {
 		return userStation;
