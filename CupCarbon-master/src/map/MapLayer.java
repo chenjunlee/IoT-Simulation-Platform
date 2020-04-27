@@ -135,7 +135,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	//??? Bang Tran - Begin
 	public static Marker concernedMarker1, concernedMarker2;
 	public static boolean displayUserAreas = true;
-	public static UserList usersList = null;
+	//public static UserList usersList = null;
 	//??? Bang Tran - End
 
 
@@ -156,10 +156,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		geoZoneList = new GeoZoneList();
 		markerList = new MarkerList();
 		nodeList = new DeviceList();
-
-		//Bang Tran - Begin
-		usersList = new UserList();
-		//Bang Tran - End
 	}
 
 	public boolean isstartSelection() {
@@ -252,7 +248,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			addThing = true;
 		}
-		
+
 
 		if(magnetic && addThing) {
 			g.drawLine(mX-6, mY, mX+6, mY);
@@ -339,10 +335,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	private static void drawUserAreas(Graphics2D g){
 		//if(displayUserAreas == false)
 		//	return;
-		if(UserList.users == null)
+
+		if(UserList.users == null || UserList.users.size() == 0)
 			return;
 
-		usersList.drawUserAreas(g);
+		UserList.drawUserAreas(g);
+
 	}
 
 	public static DeviceList getDeviceList() {
@@ -373,7 +371,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 
 	private int expanded = 0;
 
-	
+
 	//edited by Chenjun add lastkey from a - e
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -436,15 +434,15 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 
-		
+
 		if (lastKey == 'b') {
 			CupAction action = new CupActionAddDevice(new Lighting(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
-		}		
+		}
 
-		
+
 		if (lastKey == 'c') {
 			CupAction action = new CupActionAddDevice(new Temperature(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
@@ -452,22 +450,22 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 
-		
+
 		if (lastKey == 'd') {
 			CupAction action = new CupActionAddDevice(new WaterLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
-		}		
+		}
 
-		
+
 		if (lastKey == 'e') {
 			CupAction action = new CupActionAddDevice(new WindLevel(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
 		}
-		
+
 
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();

@@ -9,24 +9,30 @@ package user;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
+
 import org.bson.Document;
 
 import device.DeviceList;
 import device.SensorNode;
-
+import map.MapLayer;
+import device.BaseStation;
 import device.CloudServer;
-
+import device.Device;
 import utilities.MapCalc;
 import utilities.UColor;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 
 public class User {
 	public String name;
 	public boolean selectedArea = false;
+	public boolean selectedLocation = false;
 	public Color areaBoderColor=new Color(255, 0, 0);
 
 	private double latitude1=0.0;
@@ -66,9 +72,14 @@ public class User {
 		preferredLatency = 10.0;
 		preferredThroughput = 0.0;
 		latitude1 = longitude1 = latitude2 = longitude2 = 0.0;
+		locationLatitude = locationLatitude = 0.0;
 		selectedArea = false;
+		selectedLocation = false;
 		areaBoderColor=new Color(255, 0, 0);
-    userServer = null;
+
+
+
+		userServer = null;
 	};
 
 	/**
@@ -89,15 +100,15 @@ public class User {
 	}
 
 	public void removeConcernedArea(){
-		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
+		/*
+s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int [] coord2 = MapCalc.geoToPixelMapA(latitude2, longitude2);
-
 		int x1 = Math.min(coord1[0], coord2[0]);
 		int y1 = Math.min(coord1[1], coord2[1]);
 		int x2 = Math.max(coord1[0], coord2[0]);
 		int y2 = Math.max(coord1[1], coord2[1]);
-
 		//unmark all nodes inside the area
+
 		if( !DeviceList.sensors.isEmpty() )
 			for (SensorNode sensor : DeviceList.sensors) {
 				int [] coord = MapCalc.geoToPixelMapA(sensor.getLatitude(), sensor.getLongitude());
@@ -105,10 +116,9 @@ public class User {
 					sensor.unmark();
 				}
 			}
-
+		*/
 		latitude1 = longitude1 = latitude2 = longitude2 = 0.0;
 		selectedArea = false;
-
 	}
 
 	/**
@@ -137,16 +147,45 @@ public class User {
 		g.setStroke(new BasicStroke(1.5f));
 		g.drawRect(x1, y1, x2-x1, y2-y1);
 
-		//mark all nodes inside the area
-		if( !DeviceList.sensors.isEmpty() )
-			for (SensorNode sensor : DeviceList.sensors) {
-				int [] coord = MapCalc.geoToPixelMapA(sensor.getLatitude(), sensor.getLongitude());
-				if(coord[1] > y1 && coord[0] > x1 &&   coord[1] < y2 && coord[0] < x2) {
-					sensor.mark();
-				}
-		}
+//		//mark all nodes inside the area
+//		if( !DeviceList.sensors.isEmpty() )
+//			for (SensorNode sensor : DeviceList.sensors) {
+//				int [] coord = MapCalc.geoToPixelMapA(sensor.getLatitude(), sensor.getLongitude());
+//				if(coord[1] > y1 && coord[0] > x1 &&   coord[1] < y2 && coord[0] < x2) {
+//					sensor.mark();
+//				}
+//		}
 	}
 
+
+	/**
+	 *
+	 * this function will show user icon on the map
+	 */
+	public void drawUserIcon(Graphics2D g, boolean currentUser){
+		if(this.selectedLocation == false)
+			 return;
+
+		int[] coord = MapCalc.geoToPixelMapA(this.locationLatitude, this.locationLongitude);
+		int x = coord[0];
+		int y = coord[1];
+
+		if(currentUser){
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/marker_rounded_light_blue.png")).getImage();
+			g.drawImage(image, x, y, null);
+		} else {
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/flag_green.png")).getImage();
+			g.drawImage(image, x, y, null);
+		}
+
+
+	}
+
+
+	/**
+	 *
+	 * This function will draw the background of rectange for Current user
+	 */
 	public void drawBackgroundCurrentUser(Graphics2D g){
 		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int [] coord2 = MapCalc.geoToPixelMapA(latitude2, longitude2);
@@ -187,6 +226,35 @@ public class User {
 	}
 
 	/**
+	 *
+	 * @return The nearest BaseStaion
+	 */
+
+	public BaseStation getNearestBaseStation(){
+		if(this.selectedLocation == false) return null;
+
+		double distance = 0;
+		Device BS = null;
+
+		for(Device d : DeviceList.sensors){
+			if(d.getType() == Device.BASE_STATION){
+				if (BS == null){
+					BS = d;
+					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
+					continue;
+				}
+
+				if(distance > MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude()) ) {
+					BS = d;
+					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
+				}
+			}
+		}
+
+		return (BaseStation) BS;
+	}
+
+	/**
 	 * @author Yiwei Yao
 	 * @return
 	 * return Document includes user properties.
@@ -195,11 +263,14 @@ public class User {
 		Document document = new Document();
 		document.append("prefix", "user")
 			.append("selectedArea", selectedArea)
+			.append("selectedLocation", selectedLocation)
 			.append("name", name)
 			.append("latitude1", latitude1)
 			.append("latitude2", latitude2)
 			.append("longitude1", longitude1)
 			.append("longitude2", longitude2)
+			.append("locationLongitude", locationLongitude)
+			.append("locationLatitude", locationLatitude)
 			.append("temperatureSensing", temperatureSensing)
 			.append("humiditySensing", humiditySensing)
 			.append("gasSensing", gasSensing)
@@ -319,9 +390,16 @@ public class User {
 		return location;
 	}
 	public void setGeoLocation(double lon, double lat ){
+		this.selectedLocation = true;
 		locationLatitude = lat;
 		locationLongitude = lon;
 	}
+	public void unsetGeoLocation(){
+		this.selectedLocation = false;
+		locationLatitude = 0.0;
+		locationLongitude = 0.0;
+	}
+
 	public double getLatitude(){
 		return locationLatitude;
 	}

@@ -73,6 +73,7 @@ import database.ImportToDB;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+import device.BaseStation;
 //add by Chenjun
 import device.CloudServer;
 
@@ -3292,7 +3293,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 200 sensor nodes.
@@ -3317,7 +3318,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 300 sensor nodes.
@@ -3342,7 +3343,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 400 sensor nodes.
@@ -3367,7 +3368,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 500 sensor nodes.
@@ -3392,7 +3393,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 600 sensor nodes.
@@ -3417,7 +3418,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 700 sensor nodes.
@@ -3442,7 +3443,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 800 sensor nodes.
@@ -3467,7 +3468,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 900 sensor nodes.
@@ -3492,7 +3493,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Not Uniform distribution generate random network 1000 sensor nodes.
@@ -3517,7 +3518,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 100 sensor nodes.
@@ -3542,7 +3543,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 200 sensor nodes.
@@ -3567,7 +3568,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 300 sensor nodes.
@@ -3592,7 +3593,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 400 sensor nodes.
@@ -3617,7 +3618,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 500 sensor nodes.
@@ -3642,7 +3643,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 600 sensor nodes.
@@ -3667,7 +3668,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 700 sensor nodes.
@@ -3692,7 +3693,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 800 sensor nodes.
@@ -3717,7 +3718,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 900 sensor nodes.
@@ -3742,7 +3743,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * Uniform distribution generate random network 1000 sensor nodes.
@@ -3767,7 +3768,7 @@ public class CupCarbonController implements Initializable {
 		});
 
 	}
-	
+
 	@FXML
 	public void generateRandomNetwork50() {
 		Platform.runLater(new Runnable() {
@@ -4440,27 +4441,25 @@ public class CupCarbonController implements Initializable {
 		int idx = comboUsers.getSelectionModel().getSelectedIndex();
 		if(idx < 0) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Erro");
+			alert.setTitle("Error");
 			alert.setHeaderText(null);
 			alert.setContentText("There's no user to delete");
 			alert.showAndWait();
 		}
 
-		comboUsers.getItems().remove(idx);
-		UserList.users.remove(idx);
-		listViewConcernedSensors.getItems().clear();
-		if(UserList.users.size() > 0){
-			comboUsers.getSelectionModel().select(0);
-			loadUserPreferrences();
-		}
-		MapLayer.repaint();
-//
-//
-//		Alert alert = new Alert(AlertType.INFORMATION);
-//		alert.setTitle("Remove User");
-//		alert.setHeaderText(null);
-//		alert.setContentText("This functions will delete current users");
-//		alert.showAndWait();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				comboUsers.getItems().remove(idx);
+				UserList.users.remove(idx);
+				listViewConcernedSensors.getItems().clear();
+				if(UserList.users.size() > 0){
+					comboUsers.getSelectionModel().select(0);
+					loadUserPreferrences();
+				}
+				MapLayer.repaint();
+			}
+		});
 	}
 
 
@@ -4469,26 +4468,42 @@ public class CupCarbonController implements Initializable {
 	 * This method will set the location of User
 	 */
 	public void setUserLocation(){
-		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
-		if(MarkerList.markers.size() >=1 || selectedUserIndex >= 0 ) {
-//			Platform.runLater(new Runnable() {
-//				@Override
-//				public void run() {
-
-			Marker geoLocation = MarkerList.markers.get(0);
-			UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
-
-				//				}
-//			});
-		  MarkerList.deleteAll();
-		} else {
+		if(MarkerList.markers.size() == 0 ){
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Erro");
+			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("Select an user and\nPut 01 marker on the map to set the location for this user");
+			alert.setContentText("Put 01 marker on the map to set the location for user");
 			alert.showAndWait();
 			return;
 		}
+
+		if (UserList.users.size() == 0 || comboUsers.getSelectionModel().getSelectedIndex() < 0 ){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("You have to select 01 user to set the location");
+			alert.showAndWait();
+			return;
+		}
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+				Marker geoLocation = MarkerList.markers.get(0);
+				UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
+				MarkerList.deleteAll();
+				MapLayer.repaint();
+
+
+				BaseStation bb = UserList.users.get(selectedUserIndex).getNearestBaseStation();
+				if(bb!=null)
+					System.out.println(UserList.users.get(selectedUserIndex).getName() + " has nearest BaseStation is: " + bb.getName());
+
+				if(bb==null)
+					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found");
+			}
+		});
 	}
 
 
@@ -4499,52 +4514,58 @@ public class CupCarbonController implements Initializable {
 	 *
 	 */
 	public void setConcernedArea(){
-		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		//if there is no user in UserList --> nothing to do
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create user first!");
+			alert.showAndWait();
+			return;
+		}
 
-		if(MarkerList.markers.size()>=2) {
-			MapLayer.concernedMarker1 = MarkerList.markers.get(0);
-			MapLayer.concernedMarker2 = MarkerList.markers.get(1);
-
-			// add error warning if project is created. Add by Yiwei
-			if(UserList.users.isEmpty()) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Set concerned area");
-				alert.setHeaderText(null);
-				alert.setContentText("Should create user first!");
-				alert.showAndWait();
-				return;
-			}
-
-			User u = UserList.users.get(selectedUserIndex);
-			u.selectedArea = true;
-			u.setConcernedArea(MarkerList.markers.get(0).getLatitude(), MarkerList.markers.get(0).getLongitude(),
-							   MarkerList.markers.get(1).getLatitude(), MarkerList.markers.get(1).getLongitude());
-
-			if(u.getSensorsInsideArea()!=null && u.getSensorsInsideArea().size() > 0 ){
-				listViewConcernedSensors.getItems().clear();
-				for(SensorNode s: u.getSensorsInsideArea() )
-					listViewConcernedSensors.getItems().add(s.getName());
-
-				//Add one CloudServer to user at the corner of area
-				//you can move it to anywhere
-				//add by Chenjun
-				//commit by yiwei, since -1 for sensor id is not working, I changed it to 99 for now.
-				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, 99);
-				DeviceList.add(userServer);
-				u.setUserServer(userServer);
-
-				  //empty markers after set area for user
-				  MarkerList.deleteAll();
-			}
-			MapLayer.repaint();
-
-		} else {
+		//If there're less than 2 marker on the map --> nothing to do
+		if(MarkerList.markers.size() < 2) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Set concerned area");
 			alert.setHeaderText(null);
 			alert.setContentText("Add 2 Markes To Determine Your Area");
 			alert.showAndWait();
 		}
+
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+				MapLayer.concernedMarker1 = MarkerList.markers.get(0);
+				MapLayer.concernedMarker2 = MarkerList.markers.get(1);
+
+				User u = UserList.users.get(selectedUserIndex);
+				u.selectedArea = true;
+				u.setConcernedArea(MarkerList.markers.get(0).getLatitude(), MarkerList.markers.get(0).getLongitude(),
+								   MarkerList.markers.get(1).getLatitude(), MarkerList.markers.get(1).getLongitude());
+
+				if(u.getSensorsInsideArea()!=null && u.getSensorsInsideArea().size() > 0 ){
+					listViewConcernedSensors.getItems().clear();
+					for(SensorNode s: u.getSensorsInsideArea() )
+						listViewConcernedSensors.getItems().add(s.getName());
+
+					//Add one CloudServer to user at the corner of area
+					//you can move it to anywhere
+					//add by Chenjun
+					//commit by yiwei, since -1 for sensor id is not working, I changed it to 99 for now.
+					//CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, 99);
+					//DeviceList.add(userServer);
+					//u.setUserServer(userServer);
+
+					  //empty markers after set area for user
+				}
+
+				MarkerList.deleteAll();
+				MapLayer.repaint();
+			}
+		});
 	}
 
 
@@ -4556,32 +4577,38 @@ public class CupCarbonController implements Initializable {
 	 *
 	 */
 	public void clearConcernedArea(){
-		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
-		if(selectedUserIndex < 0 ) return; //in the case of no user
-		// add by yiwei, return when no project which means userList is not reset yet.
+
+		//if there is no user in UserList --> nothing to do
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("clear concerned area");
+			alert.setTitle("Error");
 			alert.setHeaderText(null);
-			alert.setContentText("Should create project first!");
-			alert.showAndWait();
-			return;
-		}
-		User u = UserList.users.get(selectedUserIndex);
-		if( !u.selectedArea ) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Clear concerned area");
-			alert.setHeaderText(null);
-			alert.setContentText(u.getName() + "hasn't set his concerned region yet");
+			alert.setContentText("Should create user first!");
 			alert.showAndWait();
 			return;
 		}
 
-		listViewConcernedSensors.getItems().clear();
-		u.removeConcernedArea();
-		MapLayer.repaint();
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		if(selectedUserIndex < 0 ) return; //in the case of no user is selected
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				User u = UserList.users.get(selectedUserIndex);
+				if( !u.selectedArea ) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Clear concerned area");
+					alert.setHeaderText(null);
+					alert.setContentText(u.getName() + "hasn't set his concerned region yet");
+					alert.showAndWait();
+					return;
+				}
+				listViewConcernedSensors.getItems().clear();
+				u.removeConcernedArea();
+				MapLayer.repaint();
+			}
+		});
 	}
-
 
 
 	@FXML

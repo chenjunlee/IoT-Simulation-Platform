@@ -34,9 +34,16 @@ public class UserList {
 		users.add(u);
 	}
 
-	public void drawUserAreas(Graphics2D g){
-		for(User u: users)
+	public static void drawUserAreas(Graphics2D g){
+		int i = -1;
+		for(User u: users){
+			i++;
 			u.drawConcernedAreaOnMap(g);
+			if(i == currentUser)
+				u.drawUserIcon(g, true);
+			else
+				u.drawUserIcon(g, false);
+		}
 
 		if(currentUser >=0 )
 			users.get(currentUser).drawBackgroundCurrentUser(g);
@@ -63,6 +70,8 @@ public class UserList {
 			user.setLatitude2(SelectedUser.getDouble("latitude2"));
 			user.setLongitude1(SelectedUser.getDouble("longitude1"));
 			user.setLongitude2(SelectedUser.getDouble("longitude2"));
+			user.setGeoLocation(SelectedUser.getDouble("locationLongitude"), SelectedUser.getDouble("locationLatitude"));
+			user.selectedLocation = SelectedUser.getBoolean("selectedLocation");
 
 			user.setTemperatureSensing(SelectedUser.getBoolean("temperatureSensing"));
 			user.setHumiditySensing(SelectedUser.getBoolean("humiditySensing"));
