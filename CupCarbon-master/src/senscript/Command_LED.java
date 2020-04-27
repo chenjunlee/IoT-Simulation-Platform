@@ -3,10 +3,10 @@ package senscript;
 import java.util.Vector;
 
 import arduino.BeginInstructions;
-import device.CloudServer;
+import device.BaseStation;
 import device.SensorNode;
 import simulation.WisenSimulation;
-
+import user.User;
 
 /**
  * @author Chenjun
@@ -31,23 +31,53 @@ public class Command_LED extends Command {
 
 	@Override
 	public double execute() {
-		String tableName = sensor.getScript().getVariableValue(arg1);
-		String data = sensor.getScript().getVariableValue(arg2);
-		if(sensor.getClass().equals(CloudServer.class)) {
-			Vector<SensorNode> sensors = sensor.getUser().getSensorsInsideArea();
+		String sensorList = sensor.getScript().getVariableValue(arg1);
+		String eventsList = sensor.getScript().getVariableValue(arg2);
+		if(sensor.getClass().equals(BaseStation.class)) {
+			Vector<User> users = sensor.getUsers();
+			Vector<SensorNode> sensors = new Vector<SensorNode>();
+			Vector<String> events = new Vector<String>();
+			for(User u : users) {
+				Vector<SensorNode> temp = u.getSensorsInsideArea();
+				for(SensorNode s : temp) {
+					if(!sensors.contains(s)) {
+						sensors.add(s);
+					}
+				}
+				Vector<String> temp1 = u.getEvents();
+				for(String t : temp1) {
+					System.out.println(t);
+					if(!events.contains(t)) {
+						events.add(t);
+					}
+				}
+			}
 			int count = sensors.size();
-			sensor.getScript().putVector(tableName, count+1);
-			String [] vector = sensor.getScript().getVector(tableName);
+			int count1 = events.size();
+			sensor.getScript().putVector(sensorList, count+1);
+			sensor.getScript().putVector(eventsList, count1+1);
+			String [] vector = sensor.getScript().getVector(sensorList);
+			String [] vector1 = sensor.getScript().getVector(eventsList);
 			vector[0] = "" + (count +1);
+			vector1[0] = "" + (count1 +1);
 			int index = 1;
 			for(SensorNode s : sensors) {
 				vector[index] ="" +s.getId();
 				index++;
 			}
+			index = 1;
+			for(String t : events) {
+				vector1[index] = "" + t;
+				index++;
+			}
+			
 		} else {
-			sensor.getScript().putVector(tableName, 1);
-			String [] vector = sensor.getScript().getVector(tableName);
-			vector[0] = ""+ 1;
+			sensor.getScript().putVector(sensorList, 1);
+			sensor.getScript().putVector(eventsList, 1);
+			String [] vector = sensor.getScript().getVector(sensorList);
+			String [] vector1 = sensor.getScript().getVector(sensorList);
+			vector[0] = ""+ 1; 
+			vector1[0] = ""+ 1;
 		}
 		
 		return 0;
