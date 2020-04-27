@@ -28,7 +28,6 @@ public class UserList {
 		currentUser = -1;
 		lastUser = -1;
 		users.removeAllElements();
-
 	}
 
 	public static void add(User u){

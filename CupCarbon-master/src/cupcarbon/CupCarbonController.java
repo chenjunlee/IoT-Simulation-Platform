@@ -118,6 +118,7 @@ import javafx.stage.StageStyle;
 import map.MapLayer;
 import map.NetworkParameters;
 import map.WorldMap;
+import markers.Marker;
 import markers.MarkerList;
 import markers.Routes;
 import perso.ExampleClass;
@@ -192,6 +193,8 @@ public class CupCarbonController implements Initializable {
 	public Button buttonAddUser;
 	@FXML
 	public Button buttonRemoveUser;
+	@FXML
+	private Button buttonSetUserLocation;
 	//=========================== Bang Tran
 
 	@FXML
@@ -583,7 +586,6 @@ public class CupCarbonController implements Initializable {
 	 */
 	public void resetComboBoxUsers(){
 		comboUsers.getItems().removeAll(comboUsers.getItems());
-
 		if(UserList.users.size() > 0){
 			for(User u: user.UserList.users)
 				comboUsers.getItems().add(u.getName());
@@ -594,6 +596,16 @@ public class CupCarbonController implements Initializable {
 			}
 			listViewConcernedSensors.getItems().clear();
 		}
+
+//		//for temporary use =======================
+//		for(int i=1; i<=10; i++){
+//			User u = new User("user " + i);
+//			UserList.users.add(u);
+//			comboUsers.getItems().add(u.getName());
+//		}
+//		comboUsers.getSelectionModel().select(0);
+//		UserList.currentUser = 0;
+//		//=============================================
 	}
 
 
@@ -3915,11 +3927,15 @@ public class CupCarbonController implements Initializable {
 	 */
 	@FXML
 	public void buttonAddUser(){
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Add new user");
-		alert.setHeaderText(null);
-		alert.setContentText("This functions will add a new");
-		alert.showAndWait();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+					try {
+						new NewUserWindow();
+						resetComboBoxUsers();
+					} catch(IOException e) {}
+			}
+		});
 	}
 
 	/**
@@ -3951,6 +3967,34 @@ public class CupCarbonController implements Initializable {
 //		alert.setHeaderText(null);
 //		alert.setContentText("This functions will delete current users");
 //		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran
+	 * This method will set the location of User
+	 */
+	public void setUserLocation(){
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		if(MarkerList.markers.size() >=1 || selectedUserIndex >= 0 ) {
+//			Platform.runLater(new Runnable() {
+//				@Override
+//				public void run() {
+
+			Marker geoLocation = MarkerList.markers.get(0);
+			UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
+
+				//				}
+//			});
+		  MarkerList.deleteAll();
+		} else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erro");
+			alert.setHeaderText(null);
+			alert.setContentText("Select an user and\nPut 01 marker on the map to set the location for this user");
+			alert.showAndWait();
+			return;
+		}
 	}
 
 

@@ -310,6 +310,21 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public void setLongitude(double longitude){
+		locationLongitude = longitude;
+	}
+
+	public double[] getGeoLocation(){
+		double[] location = {locationLongitude, locationLatitude};
+		return location;
+	}
+	public void setGeoLocation(double lon, double lat ){
+		locationLatitude = lat;
+		locationLongitude = lon;
+	}
+	public double getLatitude(){
+		return locationLatitude;
+	}
 
 	//add by Chenjun
 	public void setUserServer(CloudServer userServer) {

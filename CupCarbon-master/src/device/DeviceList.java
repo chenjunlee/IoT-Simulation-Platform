@@ -79,7 +79,6 @@ public class DeviceList {
 	public static Vector<SensorNode> sensors = new Vector<SensorNode>();
 	public static Vector<Device> devices = new Vector<Device>();
 	public static Vector<SNEdge> markedEdges = new Vector<SNEdge>();
-
 	public static boolean drawLinks = true;
 	public static LinkedList<LinkedList<Integer>> hulls = new LinkedList<LinkedList<Integer>>();
 	public static int number = 1;
@@ -88,7 +87,7 @@ public class DeviceList {
 	public DeviceList() {
 		reset();
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
@@ -113,7 +112,7 @@ public class DeviceList {
 			double r2 ;
 			double x ;
 			double y ;
-			
+
 			for(int i = 0; i < 2; i++) {
 				for( int j = 0; j < 2; j++) {
 					int cursor = 0;
@@ -122,14 +121,14 @@ public class DeviceList {
 						r2 = Math.random();
 						x = (((m2x-m1x)/2.0)*r1)+m1x+(((m2x-m1x)/2.0)*(i+0.0));
 						y = (((m2y-m1y)/2.0)*r2)+m1y+(((m2y-m1y)/2.0)*(j+0.0));
-						
+
 //						double magnetic_step = 0.000227984;
 //						double delta = 0.0;
 //						if (MapLayer.magnetic) {
 //							x = x - (x % magnetic_step) - (delta % magnetic_step);
 //							y = y - (y % magnetic_step) - (delta % magnetic_step);
 //						}
-						
+
 						boolean ex = false;
 						if(!ex) {
 							cursor++;
@@ -140,8 +139,8 @@ public class DeviceList {
 							block.addAction(action);
 						}
 					}
-					
-				
+
+
 				}
 			}
 			if(block.size()>0) {
@@ -155,11 +154,11 @@ public class DeviceList {
 			System.out.println("Uniform distribution ramdomly generate " + generateNumber + " BaseStation finished!");
 		}
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
-	 * 
+	 *
 	 * add random routers with Uniform distribution
 	 */
 	public static void addRandomUDRouterCS682(int generateSensorNumber) {
@@ -176,12 +175,12 @@ public class DeviceList {
 			double m1y = marker1.getLatitude();
 			double m2x = marker2.getLongitude();
 			double m2y = marker2.getLatitude();
-			
+
 			double r1 ;
 			double r2 ;
 			double x ;
 			double y ;
-			
+
 			for(int i = 0; i < 4; i++) {
 				for( int j = 0; j < 4; j++) {
 					int cursor = 0;
@@ -190,7 +189,7 @@ public class DeviceList {
 						r2 = Math.random();
 						x = (((m2x-m1x)/4.0)*r1)+m1x+(((m2x-m1x)/4.0)*(i+0.0));
 						y = (((m2y-m1y)/4.0)*r2)+m1y+(((m2y-m1y)/4.0)*(j+0.0));
-						
+
 						double magnetic_step = 0.000227984;
 						double delta = 0.0;
 						if (MapLayer.magnetic) {
@@ -220,10 +219,10 @@ public class DeviceList {
 			System.out.println("Uniform distribution ramdomly generate " + generateNumber + " sensors finished!");
 		}
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
-	 * 
+	 *
 	 * method to generator random sensor for network, and return generate number
 	 */
 	public static int addRandomSensorsCS682() {
@@ -287,7 +286,7 @@ public class DeviceList {
 		}
 		return generateNumber;
 	}
-	
+
 	public static void addRandomBaseStationCS682(int generateSensorNumber) {
 		// the number of sensors should bigger than 100, less than 1000
 		int generateNumber = generateSensorNumber / 4;
@@ -340,10 +339,10 @@ public class DeviceList {
 			System.out.println("ramdomly generate " + generateNumber + " BaseStation finished!");
 		}
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
-	 * 
+	 *
 	 */
 	public static void addRandomRouterCS682(int generateSensorNumber) {
 		// the number of sensors should bigger than 100, less than 1000
@@ -397,11 +396,11 @@ public class DeviceList {
 			System.out.println("ramdomly generate " + generateNumber + " sensors finished!");
 		}
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
-	 * 
+	 *
 	 * method to generate random nature Event
 	 */
 	public static void addRandomNatEventCS682(int generateSensorNumber) {
@@ -515,7 +514,7 @@ public class DeviceList {
 								+ " weather: " + weaNumber
 								+ " windLevel: " + winNumber);
 		}
-		
+
 	}
 
 	public static void reset() {
@@ -2652,7 +2651,7 @@ public class DeviceList {
 	 * Parse Radio Document, check up to 10 radio name, if it exists use openRadioModuleFromDBHelper
 	 * to parse, after that set currentRadio.
 	 */
-	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {				
+	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {
 
 		if(selectedRadio.containsKey("radio_name"+1)) {
 			openRadioModuleFromDBHelper(selectedRadio, 1, sensor);
