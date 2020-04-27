@@ -239,24 +239,24 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		if(this.selectedLocation == false) return null;
 
 		double distance = 0;
-		Device BS = null;
+		Device res = null;
 
 		for(Device d : DeviceList.sensors){
 			if(d.getType() == Device.BASE_STATION){
-				if (BS == null){
-					BS = d;
+				if (res == null){
+					res = d;
 					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
 					continue;
 				}
 
 				if(distance > MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude()) ) {
-					BS = d;
+					res = d;
 					distance = MapLayer.distance(locationLongitude, locationLatitude, d.getLongitude(),d.getLatitude());
 				}
 			}
 		}
 
-		return (BaseStation) BS;
+		return (BaseStation) res;
 	}
 
 	/**
@@ -412,7 +412,11 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	//add by Chenjun
 	public void setBaseStation(BaseStation userStation) {
 		this.userStation = userStation;
-		this.userStation.addUser(this);
+		if(userStation != null) {
+			this.userStation.addUser(this);
+		} else {
+			System.out.println("No base station exsist");
+		}
 	}
 	public BaseStation getBaseStation() {
 		return userStation;
