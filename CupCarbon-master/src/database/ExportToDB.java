@@ -9,6 +9,7 @@ import org.bson.Document;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
@@ -32,38 +33,30 @@ public class ExportToDB {
 
 
 	public static void saveProjectToDB() {
-		MongoCollection<Document> devices = DBMethods.getDB(defaultDBName).getCollection(defaultDevicesCollection);
-		MongoCollection<Document> users = DBMethods.getDB(defaultDBName).getCollection(defaultUsersCollection);
-		MongoCollection<Document> simul_preferrences = DBMethods.getDB(defaultDBName).getCollection(defaultSimulPreferencesCollection);
-		//MongoCollection<Document> radio_modules = DBMethods.getDB(defaultDBName).getCollection(defaultRadioModulesCollection);
 		MongoCollection<Document> proj_preferences = DBMethods.getDB(defaultDBName).getCollection(defaultPrjPreferencesCollection);
 
-
-		//Save project preferences
-		DBMethods.emptyCollection(proj_preferences);
+		//Save project preferences to DB
 		try {
+			if(Project.projectName.equals(""))
+				Project.projectName = defaultProjectName;
+			DBMethods.emptyCollection(proj_preferences);
 			proj_preferences.insertOne(Project.saveParametersToDB());
 		} catch(MongoException ex) {
 			System.out.println(ex);
 		}
 
-		//Save devices on the map
-		DBMethods.emptyCollection(devices);
-		if(DeviceList.getSize()>0) {
-			saveDevicesAndSensorsToDB();
-		}
+		saveSimulationParams();
+		saveUsersToDB();
+		saveDevicesAndSensorsToDB();
 
-		//save simulation preferences
-		saveSimulationParams(simul_preferrences);
-
-		//save users
-		DBMethods.emptyCollection(users);
-		saveUsersToDB(users);
 	}
 
 
 	//save every user preferences to database
-	public static void saveUsersToDB(MongoCollection<Document> userCollection) {
+	public static void saveUsersToDB() {
+		if(UserList.users.size() == 0)		return;
+		MongoCollection<Document> usersCollection = DBMethods.getDB(defaultDBName).getCollection(defaultUsersCollection);
+
 		List<Document> userDocument = new ArrayList<Document>();
 		User user;
 		Vector<User> users = UserList.users;
@@ -71,12 +64,18 @@ public class ExportToDB {
 			user = iterator.next();
 			userDocument.add(user.saveToDB());
 		}
-		userCollection.insertMany(userDocument);
+
+		DBMethods.emptyCollection(usersCollection);
+		usersCollection.insertMany(userDocument);
 	}
 
 	//save every sensors and devices to databases
 	public static void saveDevicesAndSensorsToDB() {
+		if(DeviceList.sensors.size() <= 0) return;
+
+
 		MongoCollection<Document> devicesCollection = DBMethods.getDB(defaultDBName).getCollection(defaultDevicesCollection);
+		DBMethods.emptyCollection(devicesCollection);
 
 		List<Document> documents = new ArrayList<Document>();
 		Device device;
@@ -97,7 +96,9 @@ public class ExportToDB {
 	}
 
 	//Save the simulation parameters to database
-	public static void saveSimulationParams(MongoCollection<Document> simulationParamsCollection) {
+	public static void saveSimulationParams() {
+		MongoCollection<Document> simulPreferencesCollection = DBMethods.getDB(defaultDBName).getCollection(defaultSimulPreferencesCollection);
+
 		Document document = new Document();
 		document.append("prefix", "simulation")
 			.append("simulationtime", SimulationInputs.simulationTime)
@@ -120,7 +121,7 @@ public class ExportToDB {
 		List<Document> otherDocuments = new ArrayList<Document>();
 		otherDocuments.add(document);
 
-		DBMethods.emptyCollection(simulationParamsCollection);
-		simulationParamsCollection.insertMany(otherDocuments);
+		DBMethods.emptyCollection(simulPreferencesCollection);
+		simulPreferencesCollection.insertMany(otherDocuments);
 	}
 }

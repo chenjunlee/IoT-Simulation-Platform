@@ -583,14 +583,16 @@ public class CupCarbonController implements Initializable {
 	public void resetComboBoxUsers(){
 		comboUsers.getItems().removeAll(comboUsers.getItems());
 
-		for(User u: user.UserList.users)
-			comboUsers.getItems().add(u.getName());
+		if(UserList.users.size() > 0){
+			for(User u: user.UserList.users)
+				comboUsers.getItems().add(u.getName());
 
-		if(user.UserList.users.size() > 0){
-			comboUsers.getSelectionModel().select(0);;
-			loadUserPreferrences();
+			if(user.UserList.users.size() > 0){
+				comboUsers.getSelectionModel().select(0);;
+				loadUserPreferrences();
+			}
+			listViewConcernedSensors.getItems().clear();
 		}
-		listViewConcernedSensors.getItems().clear();
 	}
 
 
@@ -599,6 +601,7 @@ public class CupCarbonController implements Initializable {
 	 * This function takes reaction when the comboboxUsers change its selected index
 	 */
 	private void onChangeComboBoxUsers(){
+		if (comboUsers.getItems().size() <= 0 )	return;
 		int idx = comboUsers.getSelectionModel().getSelectedIndex();
 		if(idx < 0) return;
 
@@ -846,7 +849,6 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
-
 	}
 
 	@FXML

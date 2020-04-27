@@ -25,14 +25,10 @@ public class UserList {
 	 * @author Yiwei --> fix by Bang Tran
 	 */
 	public static void reset() {
-		users = new Vector<User>();
 		currentUser = -1;
 		lastUser = -1;
+		users.removeAllElements();
 
-		for(int i=1; i<=10; i++){
-			User u = new User("user " + i);
-			UserList.users.add(u);
-		}
 	}
 
 	public static void add(User u){
@@ -53,17 +49,17 @@ public class UserList {
 	 * parse UserData and add into UserList
 	 */
 	public static void openFromDB(FindIterable<Document> userData) {
+
 		//Routes.reset();
 		reset();
 
-
 		MongoCursor<Document> userDataIterator = userData.iterator();
 		while(userDataIterator.hasNext()) {
-			Document SelectedUser = userDataIterator.next();
-			//System.out.println("get user: ");
-			User user = getUser(SelectedUser.getString("name"));
-			//System.out.println("usrname: " + SelectedUser.getString("name"));
 
+			Document SelectedUser = userDataIterator.next();
+
+			User user = new User(SelectedUser.getString("name"));
+			//User user = getUser(SelectedUser.getString("name"));   //null exception bug
 			user.setLatitude1(SelectedUser.getDouble("latitude1"));
 			user.setLatitude2(SelectedUser.getDouble("latitude2"));
 			user.setLongitude1(SelectedUser.getDouble("longitude1"));
@@ -81,11 +77,8 @@ public class UserList {
 			user.setPreferredFrequency(SelectedUser.getLong("preferredFrequency"));
 			user.setSelectedArea(SelectedUser.getBoolean("selectedArea"));
 
-			//users.add(user);
+			users.add(user);
 		}
-
-
-		//MapLayer.repaint();
 
 		for(User u: users) {
 			u.getSensorsInsideArea();

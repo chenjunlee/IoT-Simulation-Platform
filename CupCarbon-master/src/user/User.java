@@ -34,6 +34,9 @@ public class User {
 	private double longitude1=0.0;
 	private double longitude2=0.0;
 
+	private double locationLatitude = 0.0;
+	private double locationLongitude = 0.0;
+
 
 	public boolean temperatureSensing= false;
 	public boolean humiditySensing = false;
@@ -47,7 +50,7 @@ public class User {
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
 	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
-	
+
 	public CloudServer userServer = null;
 
 

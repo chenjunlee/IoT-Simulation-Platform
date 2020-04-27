@@ -60,6 +60,7 @@ public final class Project {
 
 	public static String projectPath = "";
 	public static String projectName = "";
+
 	//add by Yiwei Yao for db file path
 	public static String DBFilePath = cupcarbon.CupCarbon.DBFilePath;
 
@@ -511,9 +512,11 @@ public final class Project {
 	 */
 	public static Document saveParametersToDB() {
 		Document document = new Document();
+
 		document.append("prefix", "project")
 		.append("CupCarbon", CupCarbonVersion.VERSION)
-		.append("name", projectName.substring(0, projectName.length() - 4))
+		//.append("name", projectName.substring(0, projectName.length() - 4))
+		.append("name", projectName)	//bang tran fix this
 		.append("zoom", MapLayer.mapViewer.getZoom())
 		.append("centerposition_la", MapLayer.mapViewer.getCenterPosition().getLatitude())
 		.append("centerposition_lo", MapLayer.mapViewer.getCenterPosition().getLongitude())
@@ -530,6 +533,7 @@ public final class Project {
 		.append("draw_script_file_name", NetworkParameters.drawScriptFileName)
 		.append("display_print_messages", NetworkParameters.displayPrintMessage)
 		.append("display_all_routes", NetworkParameters.displayAllRoutes);
+
 		//System.out.println(document);
 		//System.out.println(document.size());
 		return document;
