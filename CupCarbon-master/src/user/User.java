@@ -52,10 +52,11 @@ public class User {
 	public boolean waterLevelSensing = false;
 	public boolean dataEncrypted = false;
 
-
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
-	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms
+	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms  - get data every seconds
+	public long startTime = 0;					//start time to be activated (on simulation timeline)
+	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
 
 	public CloudServer userServer = null;
 
@@ -75,9 +76,11 @@ public class User {
 		locationLatitude = locationLatitude = 0.0;
 		selectedArea = false;
 		selectedLocation = false;
+		startTime = 0;
+		endTime = 0;
+
+
 		areaBoderColor=new Color(255, 0, 0);
-
-
 
 		userServer = null;
 	};
@@ -280,7 +283,9 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 			.append("dataEncrypted", dataEncrypted)
 			.append("preferredLatency", preferredLatency)
 			.append("preferredThroughput", preferredThroughput)
-			.append("preferredFrequency", preferredFrequency);
+			.append("preferredFrequency", preferredFrequency)
+			.append("startTime", startTime)
+			.append("endTime", endTime)	;
 		return document;
 	}
 
@@ -380,9 +385,6 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public void setLongitude(double longitude){
-		locationLongitude = longitude;
 	}
 
 	public double[] getGeoLocation(){

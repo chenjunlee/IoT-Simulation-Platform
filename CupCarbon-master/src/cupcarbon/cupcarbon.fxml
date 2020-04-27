@@ -1427,20 +1427,20 @@
                                        <children>
                                           <GridPane hgap="3.0" prefHeight="637.0" prefWidth="236.0" snapToPixel="false" vgap="3.0">
                                              <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.0" minWidth="10.0" prefWidth="70.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="38.0" prefWidth="38.0" />
-                                                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="38.0" minWidth="38.0" prefWidth="38.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="88.0" minWidth="38.0" prefWidth="38.0" />
-                                                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="38.0" minWidth="38.0" prefWidth="38.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.0" minWidth="10.0" prefWidth="83.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="20.0" prefWidth="38.0" />
+                                                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="44.0" minWidth="27.0" prefWidth="33.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="88.0" minWidth="32.0" prefWidth="39.0" />
+                                                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="38.0" minWidth="25.0" prefWidth="25.0" />
                                                 <ColumnConstraints />
                                                 <ColumnConstraints />
                                              </columnConstraints>
                                              <rowConstraints>
                                                 <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                                                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="10.0" minHeight="0.0" prefHeight="8.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="30.0" minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="45.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
@@ -1448,6 +1448,7 @@
                                                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                              <children>
@@ -1471,7 +1472,7 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <CheckBox fx:id="checkboxGasSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Gas" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="8">
+                                                <CheckBox fx:id="checkboxGasSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Gas" GridPane.columnSpan="3" GridPane.rowIndex="11">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1479,7 +1480,7 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxLightSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Light" GridPane.columnSpan="2" GridPane.rowIndex="9">
+                                                <CheckBox fx:id="checkboxLightSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Light" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="11">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1497,9 +1498,9 @@
                                                       <Insets left="5.0" />
                                                    </GridPane.margin>
                                                 </Button>
-                                                <ComboBox fx:id="comboBoxEncryptedOption" maxWidth="-Infinity" prefHeight="24.0" prefWidth="61.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                                <ComboBox fx:id="comboBoxEncryptedOption" maxWidth="-Infinity" prefHeight="24.0" prefWidth="61.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
                                                 <Separator prefWidth="200.0" GridPane.columnSpan="7" GridPane.rowIndex="3" />
-                                                <CheckBox fx:id="checkboxTemperatureSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Temperature" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="6">
+                                                <CheckBox fx:id="checkboxTemperatureSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Temperature" GridPane.columnSpan="3" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1507,7 +1508,7 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxHumiditySens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="86.0" text="Humidity" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="7">
+                                                <CheckBox fx:id="checkboxHumiditySens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="86.0" text="Humidity" GridPane.columnSpan="3" GridPane.rowIndex="10">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1515,22 +1516,22 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxWindLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Wind level" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="9">
+                                                <CheckBox fx:id="checkboxWindLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Wind level" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxWaterLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Water level" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="9">
+                                                <CheckBox fx:id="checkboxWaterLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Water level" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
                                                 </CheckBox>
-                                                <TextField fx:id="txtLatency" maxWidth="-Infinity" promptText="minimum latancy (minisecs)" text="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                <TextField fx:id="txtLatency" maxWidth="-Infinity" prefWidth="61.0" promptText="minimum latancy (minisecs)" text="10.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="txtThroughput" maxWidth="-Infinity" promptText="minimum throughput (bits/sec)" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                <TextField fx:id="txtThroughput" maxWidth="-Infinity" prefWidth="61.0" promptText="minimum throughput (bits/sec)" text="0.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
@@ -1577,7 +1578,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button fx:id="buttonSaveUserPreferences" mnemonicParsing="false" onAction="#saveUserPreferrences" text="Save preferences" textAlignment="CENTER" GridPane.columnSpan="4" GridPane.rowIndex="10">
+                                                <Button fx:id="buttonSaveUserPreferences" mnemonicParsing="false" onAction="#saveUserPreferrences" text="Save preferences" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="12">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -1599,12 +1600,12 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="txtLatency1" maxWidth="-Infinity" promptText="must be &gt;= 0" text="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4">
+                                                <TextField fx:id="txtUserStartTime" maxWidth="-Infinity" promptText="must be &gt;= 0" text="0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="txtLatency2" maxWidth="-Infinity" text="86400" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
+                                                <TextField fx:id="txtUserEndTime" maxWidth="-Infinity" text="86400" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="4" GridPane.vgrow="ALWAYS">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
@@ -1623,21 +1624,27 @@
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
+                                                   <padding>
+                                                      <Insets top="1.0" />
+                                                   </padding>
                                                 </Button>
-                                                <Button fx:id="buttonClearConcernedArea11" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearConcernedArea" prefHeight="15.0" prefWidth="90.0" text="Clear" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                                <Button fx:id="buttonClearUserLocation" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearUserLocation" prefHeight="15.0" prefWidth="90.0" text="Clear" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
                                                    <GridPane.margin>
-                                                      <Insets left="5.0" />
+                                                      <Insets left="5.0" right="2.0" />
                                                    </GridPane.margin>
+                                                   <padding>
+                                                      <Insets top="1.0" />
+                                                   </padding>
                                                 </Button>
                                                 <Label text="Get data every" GridPane.rowIndex="5">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="txtLatency12" maxWidth="-Infinity" promptText="must be &gt;= 0" text="1.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                <TextField fx:id="txtUserFrequency" maxWidth="-Infinity" promptText="must be &gt;= 0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>

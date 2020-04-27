@@ -72,6 +72,7 @@ public class UserList {
 			user.setLongitude2(SelectedUser.getDouble("longitude2"));
 			user.setGeoLocation(SelectedUser.getDouble("locationLongitude"), SelectedUser.getDouble("locationLatitude"));
 			user.selectedLocation = SelectedUser.getBoolean("selectedLocation");
+			user.setSelectedArea(SelectedUser.getBoolean("selectedArea"));
 
 			user.setTemperatureSensing(SelectedUser.getBoolean("temperatureSensing"));
 			user.setHumiditySensing(SelectedUser.getBoolean("humiditySensing"));
@@ -79,11 +80,14 @@ public class UserList {
 			user.setLightSensing(SelectedUser.getBoolean("lightSensing"));
 			user.setWindLevelSensing(SelectedUser.getBoolean("windLevelSensing"));
 			user.setWaterLevelSensing(SelectedUser.getBoolean("waterLevelSensing"));
+
 			user.setDataEncrypted(SelectedUser.getBoolean("dataEncrypted"));
 			user.setPreferredLatency(SelectedUser.getDouble("preferredLatency"));
 			user.setPreferredThroughput(SelectedUser.getDouble("preferredThroughput"));
 			user.setPreferredFrequency(SelectedUser.getLong("preferredFrequency"));
-			user.setSelectedArea(SelectedUser.getBoolean("selectedArea"));
+			user.startTime = SelectedUser.getLong("startTime");
+			user.endTime = SelectedUser.getLong("endTime");
+
 
 			users.add(user);
 		}

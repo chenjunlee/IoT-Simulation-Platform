@@ -166,6 +166,13 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	private TextField txtThroughput;
 	@FXML
+	private TextField txtUserStartTime;
+	@FXML
+	private TextField txtUserEndTime;
+	@FXML
+	private TextField txtUserFrequency;
+
+	@FXML
 	private CheckBox checkboxTemperatureSens;
 	@FXML
 	private CheckBox checkboxHumiditySens;
@@ -185,17 +192,21 @@ public class CupCarbonController implements Initializable {
 	private ListView<String> listViewConcernedSensors;
 
 	@FXML
-	public Button buttonSaveUserPreferences;
+	private Button buttonSaveUserPreferences;
 	@FXML
-	public Button buttonRunSimulationCS682;
+	private Button buttonRunSimulationCS682;
 	@FXML
-	public Button buttonGenerateSenScripts;
+	private Button buttonGenerateSenScripts;
 	@FXML
-	public Button buttonAddUser;
+	private Button buttonAddUser;
 	@FXML
-	public Button buttonRemoveUser;
+	private Button buttonRemoveUser;
 	@FXML
 	private Button buttonSetUserLocation;
+	@FXML
+	private Button buttonClearUserLocation;
+
+
 	//=========================== Bang Tran
 
 	@FXML
@@ -586,8 +597,8 @@ public class CupCarbonController implements Initializable {
 	 * @author Bang Tran
 	 */
 	public void resetComboBoxUsers(){
-		comboUsers.getItems().removeAll(comboUsers.getItems());
 		if(UserList.users.size() > 0){
+			comboUsers.getItems().removeAll(comboUsers.getItems());
 			for(User u: user.UserList.users)
 				comboUsers.getItems().add(u.getName());
 
@@ -679,29 +690,28 @@ public class CupCarbonController implements Initializable {
 	 * This method load preferences of current user
 	 */
 	private void loadUserPreferrences(){
+		if(UserList.users.size() == 0)	return;
 		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+		if (idx < 0) return;
 
-		if (idx < 0)
-			return;
-
-		UserList.lastUser = UserList.currentUser;
 		UserList.currentUser = idx;
-
 		User user = UserList.users.get(idx);
 
+		//QoS preferences
 		txtLatency.setText(String.format("%.2f", user.preferredLatency));
 		txtThroughput.setText(String.format("%.2f", user.preferredThroughput));
-		//txtFrequency.setText(String.format("%.2f", user.preferredFrequency));
+		txtUserFrequency.setText(String.format("%d", user.preferredFrequency));
+		txtUserStartTime.setText(String.format("%d", user.startTime));
+		txtUserEndTime.setText(String.format("%d", user.endTime));
 		comboBoxEncryptedOption.getSelectionModel().select(user.dataEncrypted ? 0:1);
 
+		//sensing preferences
 		checkboxGasSens.setSelected(user.gasSensing);
 		checkboxTemperatureSens.setSelected(user.temperatureSensing);
 		checkboxHumiditySens.setSelected(user.humiditySensing);
 		checkboxWaterLevelSens.setSelected(user.waterLevelSensing);
 		checkboxWindLevelSens.setSelected(user.windLevelSensing);
 		checkboxLightSens.setSelected(user.lightSensing);
-
-
 	}
 
 	/**
@@ -710,12 +720,13 @@ public class CupCarbonController implements Initializable {
 	 */
 	public void saveUserPreferrences(){
 		int userIdx = comboUsers.getSelectionModel().getSelectedIndex();
+
 		// add by yiwei, return when no project which means userList is not reset yet.
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Save User Preferrences");
+			alert.setTitle("Error when Save User Preferrences");
 			alert.setHeaderText(null);
-			alert.setContentText("Should create project first!");
+			alert.setContentText("No user to set his preferences");
 			alert.showAndWait();
 			return;
 		}
@@ -723,7 +734,9 @@ public class CupCarbonController implements Initializable {
 		UserList.users.get(userIdx).preferredLatency = Float.parseFloat(txtLatency.getText());
 		UserList.users.get(userIdx).preferredThroughput = Float.parseFloat(txtThroughput.getText());
 		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
-		UserList.users.get(userIdx).dataEncrypted = (comboBoxEncryptedOption.getSelectionModel().getSelectedIndex() == 1) ? false:true;
+		UserList.users.get(userIdx).startTime = Long.parseLong(txtUserStartTime.getText());
+		UserList.users.get(userIdx).endTime = Long.parseLong(txtUserEndTime.getText());
+		UserList.users.get(userIdx).preferredFrequency = Long.parseLong(txtUserFrequency.getText());
 
 		UserList.users.get(userIdx).temperatureSensing = checkboxTemperatureSens.isSelected();
 		UserList.users.get(userIdx).humiditySensing = checkboxHumiditySens.isSelected();
@@ -731,10 +744,6 @@ public class CupCarbonController implements Initializable {
 		UserList.users.get(userIdx).lightSensing = checkboxLightSens.isSelected();
 		UserList.users.get(userIdx).windLevelSensing = checkboxWindLevelSens.isSelected();
 		UserList.users.get(userIdx).waterLevelSensing = checkboxWaterLevelSens.isSelected();
-
-
-		//save user's preferences to database
-
 	}
 
 	@Override
@@ -984,6 +993,12 @@ public class CupCarbonController implements Initializable {
 					public void run() {
 						try {
 							ExportToDB.saveProjectToDB();
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Success");
+							alert.setHeaderText(null);
+							alert.setContentText("Everthing has been saved to MongoDB");
+							alert.showAndWait();
+
 						} catch(Exception e) {
 							Alert alert = new Alert(AlertType.WARNING);
 							alert.setTitle("Error");
@@ -4460,6 +4475,33 @@ public class CupCarbonController implements Initializable {
 				MapLayer.repaint();
 			}
 		});
+	}
+
+
+
+	/**
+	 * @author Bang Tran
+	 * This method will clear the location of User
+	 */
+	public void clearUserLocation(){
+		if (UserList.users.size() == 0 || comboUsers.getSelectionModel().getSelectedIndex() < 0 ){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("You have to select 01 user to clear his location");
+			alert.showAndWait();
+			return;
+		}
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+				UserList.users.get(selectedUserIndex).unsetGeoLocation();;
+				MapLayer.repaint();
+			}
+		});
+
 	}
 
 
