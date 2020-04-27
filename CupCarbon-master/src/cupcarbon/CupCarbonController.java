@@ -188,6 +188,10 @@ public class CupCarbonController implements Initializable {
 	public Button buttonRunSimulationCS682;
 	@FXML
 	public Button buttonGenerateSenScripts;
+	@FXML
+	public Button buttonAddUser;
+	@FXML
+	public Button buttonRemoveUser;
 	//=========================== Bang Tran
 
 	@FXML
@@ -569,17 +573,9 @@ public class CupCarbonController implements Initializable {
 		comboUsers.getSelectionModel()
 			.selectedItemProperty()
 			.addListener( (options, oldValue, newValue) -> {
-				if(oldValue != newValue)
-					loadUserPreferrences();
-					User user = UserList.users.get(comboUsers.getSelectionModel().getSelectedIndex());
-					MapLayer.repaint();
-					listViewConcernedSensors.getItems().clear();
-					if(user.getSensorsInsideArea()!=null && user.getSensorsInsideArea().size() > 0 ){
-						for(SensorNode s: user.getSensorsInsideArea() )
-							listViewConcernedSensors.getItems().add(s.getName());
-					}
-			}
-	    );
+				if(oldValue != newValue )
+					onChangeComboBoxUsers();
+			});
 	}
 
 	/**
@@ -588,17 +584,37 @@ public class CupCarbonController implements Initializable {
 	public void resetComboBoxUsers(){
 		comboUsers.getItems().removeAll(comboUsers.getItems());
 
-		for(User u: user.UserList.users)
-			comboUsers.getItems().add(u.getName());
+		if(UserList.users.size() > 0){
+			for(User u: user.UserList.users)
+				comboUsers.getItems().add(u.getName());
 
-		if(user.UserList.users.size() > 0){
-			comboUsers.getSelectionModel().select(0);
-			loadUserPreferrences();
+			if(user.UserList.users.size() > 0){
+				comboUsers.getSelectionModel().select(0);;
+				loadUserPreferrences();
+			}
+			listViewConcernedSensors.getItems().clear();
 		}
-		listViewConcernedSensors.getItems().clear();
 	}
 
 
+	/**
+	 * @author Bang Tran
+	 * This function takes reaction when the comboboxUsers change its selected index
+	 */
+	private void onChangeComboBoxUsers(){
+		if (comboUsers.getItems().size() <= 0 )	return;
+		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+		if(idx < 0) return;
+
+		listViewConcernedSensors.getItems().clear();
+		loadUserPreferrences();
+		User user = UserList.users.get(idx);
+		MapLayer.repaint();
+		if(user.getSensorsInsideArea()!=null && user.getSensorsInsideArea().size() > 0 ){
+			for(SensorNode s: user.getSensorsInsideArea() )
+				listViewConcernedSensors.getItems().add(s.getName());
+		}
+	}
 
 
 	public void initComboBoxes() {
@@ -651,9 +667,13 @@ public class CupCarbonController implements Initializable {
 	 */
 	private void loadUserPreferrences(){
 		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+
+		if (idx < 0)
+			return;
+
 		UserList.lastUser = UserList.currentUser;
 		UserList.currentUser = idx;
-		
+
 		User user = UserList.users.get(idx);
 
 		txtLatency.setText(String.format("%.2f", user.preferredLatency));
@@ -830,7 +850,6 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
-
 	}
 
 	@FXML
@@ -1030,11 +1049,11 @@ public class CupCarbonController implements Initializable {
 	}
 
 	public WisenSimulation wisenSimulation;
-	
+
 	//Add by Yiwei Yao
 	//for run from db
 	public WisenSimulationDB wisenSimulationDB;
-	
+
 
 	@FXML
 	public void stopSimulation() {
@@ -1049,7 +1068,7 @@ public class CupCarbonController implements Initializable {
 				if (wisenSimulation != null) {
 					wisenSimulation.stopSimulation();
 				}
-					
+
 				mapFocus();
 			}
 		});
@@ -1386,6 +1405,12 @@ public class CupCarbonController implements Initializable {
 	public void reset() {
 		CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION);
 		Project.reset();
+
+		//added by Bang tran
+		//UserList.users.clear();
+		//listViewConcernedSensors.getItems().clear();
+		//comboUsers.getItems().clear();
+
 	}
 
 	@FXML
@@ -1435,10 +1460,10 @@ public class CupCarbonController implements Initializable {
 		}).start();
 
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
-	 * 
+	 *
 	 * open result window
 	 */
 	public void result() {
@@ -1451,7 +1476,7 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 	/**
 	 * @author Yiwei Yao
 	 * @param simulationData
@@ -3819,7 +3844,7 @@ public class CupCarbonController implements Initializable {
 				block.addAction(action);
 			}
 		}
-		
+
 		CupActionStack.add(block);
 		CupActionStack.execute();
 		MapLayer.repaint();
@@ -3833,7 +3858,7 @@ public class CupCarbonController implements Initializable {
 
 	/**
 	 * @author Bang Tran UMB
-	 * 
+	 *
 	 * changed by Yiwei Yao
 	 * it will run two threads one is use wisenSimulation used to log
 	 * one is wisenSimulationDB used to run simulation.
@@ -3857,7 +3882,7 @@ public class CupCarbonController implements Initializable {
 					if (wisenSimulation.ready()) {
 						Thread th = new Thread(wisenSimulation);
 						th.start();
-						
+
 					} else {
 						WisenSimulation.updateButtons();
 						Alert alert = new Alert(AlertType.ERROR);
@@ -3882,6 +3907,50 @@ public class CupCarbonController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("Run the simulation after generating SenScript for all users");
 		alert.showAndWait();
+	}
+
+
+	/**
+	 * @author Bang Tran UMB
+	 */
+	@FXML
+	public void buttonAddUser(){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Add new user");
+		alert.setHeaderText(null);
+		alert.setContentText("This functions will add a new");
+		alert.showAndWait();
+	}
+
+	/**
+	 * @author Bang Tran
+	 */
+	@FXML
+	public void buttonRemoveUser(){
+		int idx = comboUsers.getSelectionModel().getSelectedIndex();
+		if(idx < 0) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erro");
+			alert.setHeaderText(null);
+			alert.setContentText("There's no user to delete");
+			alert.showAndWait();
+		}
+
+		comboUsers.getItems().remove(idx);
+		UserList.users.remove(idx);
+		listViewConcernedSensors.getItems().clear();
+		if(UserList.users.size() > 0){
+			comboUsers.getSelectionModel().select(0);
+			loadUserPreferrences();
+		}
+		MapLayer.repaint();
+//
+//
+//		Alert alert = new Alert(AlertType.INFORMATION);
+//		alert.setTitle("Remove User");
+//		alert.setHeaderText(null);
+//		alert.setContentText("This functions will delete current users");
+//		alert.showAndWait();
 	}
 
 
@@ -3918,7 +3987,6 @@ public class CupCarbonController implements Initializable {
 				for(SensorNode s: u.getSensorsInsideArea() )
 					listViewConcernedSensors.getItems().add(s.getName());
 
-
 				//Add one CloudServer to user at the corner of area
 				//you can move it to anywhere
 				//add by Chenjun
@@ -3926,7 +3994,6 @@ public class CupCarbonController implements Initializable {
 				CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, 99);
 				DeviceList.add(userServer);
 				u.setUserServer(userServer);
-				
 
 				  //empty markers after set area for user
 				  MarkerList.deleteAll();
