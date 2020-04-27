@@ -54,10 +54,9 @@ public class User {
 
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
-	public long preferredFrequency = 3600000L; //1 minutes = 3600*1000 ms  - get data every seconds
+	public long preferredFrequency = 0L; //1 minutes = 3600*1000 ms  - get data every seconds
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
-	public int delayTime = 1;
 	
 	//Chenjun
 	public BaseStation userStation = null;
@@ -72,7 +71,7 @@ public class User {
 	public String getName(){ return name; }
 
 	public void reset(){
-		preferredFrequency = 3600000L;
+		preferredFrequency = 0L;
 		preferredLatency = 10.0;
 		preferredThroughput = 0.0;
 		latitude1 = longitude1 = latitude2 = longitude2 = 0.0;
@@ -80,7 +79,7 @@ public class User {
 		selectedArea = false;
 		selectedLocation = false;
 		startTime = 0;
-		endTime = 0;
+		endTime = 64000;
 
 		areaBoderColor=new Color(255, 0, 0);
 
@@ -452,10 +451,10 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	public long getTimeEnd() {
 		return endTime;
 	}
-	public void setTimeDelay(int t) {
-		delayTime = t;
+	public void setTimeDelay(long t) {
+		preferredFrequency = t;
 	}
-	public int getTimeDelay() {
-		return delayTime;
+	public long getTimeDelay() {
+		return preferredFrequency;
 	}
 }

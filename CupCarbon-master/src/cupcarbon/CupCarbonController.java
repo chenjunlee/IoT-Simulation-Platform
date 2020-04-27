@@ -158,7 +158,6 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	private ComboBox<String> comboBoxEncryptedOption;
 	@FXML
-
 	public ComboBox<String> comboUsers;
 
 	@FXML
@@ -4959,5 +4958,25 @@ public class CupCarbonController implements Initializable {
 		} else {
 			u.removeEvent("Humidity");
 		}
+	}
+	@FXML
+	public void infoApply() {
+		long newTimeStart = Long.parseLong(txtUserStartTime.getText());
+		long newTimeEnd = Long.parseLong(txtUserEndTime.getText());
+		long newTimeDelay = Long.parseLong(txtUserFrequency.getText());
+		
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create user first!");
+			alert.showAndWait();
+			return;
+		}
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		u.setTimeStart(newTimeStart);
+		u.setTimeEnd(newTimeEnd);
+		u.setTimeDelay(newTimeDelay);
 	}
 }

@@ -1472,7 +1472,7 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <CheckBox fx:id="checkboxGasSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Gas" GridPane.columnSpan="3" GridPane.rowIndex="11">
+                                                <CheckBox fx:id="checkboxGasSens" mnemonicParsing="false" onAction="#selectGas" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Gas" GridPane.columnSpan="3" GridPane.rowIndex="11">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1480,7 +1480,7 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxLightSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Light" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="11">
+                                                <CheckBox fx:id="checkboxLightSens" mnemonicParsing="false" onAction="#selectLight" onMouseReleased="#mapFocus" prefWidth="86.0" text="Light" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="11">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1500,7 +1500,7 @@
                                                 </Button>
                                                 <ComboBox fx:id="comboBoxEncryptedOption" maxWidth="-Infinity" prefHeight="24.0" prefWidth="61.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
                                                 <Separator prefWidth="200.0" GridPane.columnSpan="7" GridPane.rowIndex="3" />
-                                                <CheckBox fx:id="checkboxTemperatureSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Temperature" GridPane.columnSpan="3" GridPane.rowIndex="9">
+                                                <CheckBox fx:id="checkboxTemperatureSens" mnemonicParsing="false" onAction="#selectTemp" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Temperature" GridPane.columnSpan="3" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1508,7 +1508,7 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxHumiditySens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="86.0" text="Humidity" GridPane.columnSpan="3" GridPane.rowIndex="10">
+                                                <CheckBox fx:id="checkboxHumiditySens" mnemonicParsing="false" onAction="#selectHum" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="86.0" text="Humidity" GridPane.columnSpan="3" GridPane.rowIndex="10">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1516,12 +1516,12 @@
                                                       <Insets left="3.0" />
                                                    </GridPane.margin>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxWindLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Wind level" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="9">
+                                                <CheckBox fx:id="checkboxWindLevelSens" mnemonicParsing="false" onAction="#selectWind" onMouseReleased="#mapFocus" prefHeight="15.0" prefWidth="96.0" text="Wind level" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
                                                 </CheckBox>
-                                                <CheckBox fx:id="checkboxWaterLevelSens" mnemonicParsing="false" onMouseReleased="#mapFocus" prefWidth="86.0" text="Water level" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10">
+                                                <CheckBox fx:id="checkboxWaterLevelSens" mnemonicParsing="false" onAction="#selectWater" onMouseReleased="#mapFocus" prefWidth="86.0" text="Water level" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="10">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>
@@ -1644,7 +1644,7 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="txtUserFrequency" maxWidth="-Infinity" promptText="must be &gt;= 0" text="1" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                <TextField fx:id="txtUserFrequency" maxWidth="-Infinity" promptText="must be &gt;= 0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
@@ -1657,6 +1657,11 @@
                                                       <Insets left="2.0" />
                                                    </GridPane.margin>
                                                 </Label>
+                                                <Button mnemonicParsing="false" onAction="#infoApply" text="Apply" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                                                   <font>
+                                                      <Font size="11.0" />
+                                                   </font>
+                                                </Button>
                                              </children>
                                           </GridPane>
                                           <Button fx:id="buttonGenerateSenScripts" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#generateSenScripts" prefHeight="34.0" text="Generate SenScript" textAlignment="CENTER">
