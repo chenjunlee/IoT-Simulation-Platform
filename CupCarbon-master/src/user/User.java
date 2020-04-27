@@ -456,6 +456,6 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		delayTime = t;
 	}
 	public int getTimeDelay() {
-		return timeDelay;
+		return delayTime;
 	}
 }
