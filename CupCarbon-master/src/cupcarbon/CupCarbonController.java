@@ -4343,8 +4343,8 @@ public class CupCarbonController implements Initializable {
 			block.addAction(action);
 		}
 		for(User user : UserList.users) {
-			if(user.getUserServer() != null) {
-				CloudServer cs = user.getUserServer();
+			if(user.getBaseStation() != null) {
+				BaseStation cs = user.getUserServer();
 				String currentScriptFileName = cs.getScriptFileName();
 				CupAction action = new CupActionModifSensorScriptFile((SensorNode) cs, currentScriptFileName,
 						"User.csc");
