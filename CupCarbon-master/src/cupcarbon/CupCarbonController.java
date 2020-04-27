@@ -4854,4 +4854,64 @@ public class CupCarbonController implements Initializable {
 		WorldMap.addNodeInMap('b');
 		mapFocus();
 	}
+	@FXML
+	public void selectTemp() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxTemperatureSens.isSelected()) {
+			u.addEvent("Temperature");
+		} else {
+			u.removeEvent("Temperature");
+		}
+	}
+	@FXML
+	public void selectWater() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxWaterLevelSens.isSelected()) {
+			u.addEvent("Water");
+		} else {
+			u.removeEvent("Water");
+		}
+	}
+	@FXML
+	public void selectWind() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxWindLevelSens.isSelected()) {
+			u.addEvent("Wind");
+		} else {
+			u.removeEvent("Wind");
+		}
+	}
+	@FXML
+	public void selectGas() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxGasSens.isSelected()) {
+			u.addEvent("Gas");
+		} else {
+			u.removeEvent("Gas");
+		}
+	}
+	@FXML
+	public void selectLight() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxLightSens.isSelected()) {
+			u.addEvent("Light");
+		} else {
+			u.removeEvent("Light");
+		}
+	}
+	@FXML
+	public void selectHum() {
+		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
+		User u = UserList.users.get(selectedUserIndex);
+		if(checkboxHumiditySens.isSelected()) {
+			u.addEvent("Humidity");
+		} else {
+			u.removeEvent("Humidity");
+		}
+	}
 }
