@@ -41,6 +41,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 
 import action.CupAction;
+import action.CupActionAddDevice;
 import action.CupActionAddSensor;
 import action.CupActionBlock;
 import action.CupActionDeleteDevice;
@@ -57,7 +58,12 @@ import markers.Marker;
 import markers.MarkerList;
 //import markers.Marker;
 import natural_events.Gas;
+import natural_events.Humidity;
+import natural_events.Lighting;
+import natural_events.Temperature;
+import natural_events.WaterLevel;
 import natural_events.Weather;
+import natural_events.WindLevel;
 import project.Project;
 import simulation.WisenSimulation;
 import solver.SensorGraph;
@@ -81,6 +87,435 @@ public class DeviceList {
 
 	public DeviceList() {
 		reset();
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param generateSensorNumber
+	 * add random BaseStation with Uniform distribution
+	 */
+	public static void addRandomUDBaseStationCS682(int generateSensorNumber) {
+		// the number of sensors should bigger than 100, less than 1000
+		int generateNumber = generateSensorNumber / 4;
+		int gemerateNumberInEachBlock = generateNumber / 4;
+		System.out.println("====================================================================");
+		System.out.println("Uniform distribution ramdomly generating " + generateNumber + " routers");
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			
+			for(int i = 0; i < 2; i++) {
+				for( int j = 0; j < 2; j++) {
+					int cursor = 0;
+					while(cursor < gemerateNumberInEachBlock) {
+						r1 = Math.random();
+						r2 = Math.random();
+						x = (((m2x-m1x)/2.0)*r1)+m1x+(((m2x-m1x)/2.0)*(i+0.0));
+						y = (((m2y-m1y)/2.0)*r2)+m1y+(((m2y-m1y)/2.0)*(j+0.0));
+						
+//						double magnetic_step = 0.000227984;
+//						double delta = 0.0;
+//						if (MapLayer.magnetic) {
+//							x = x - (x % magnetic_step) - (delta % magnetic_step);
+//							y = y - (y % magnetic_step) - (delta % magnetic_step);
+//						}
+						
+						boolean ex = false;
+						if(!ex) {
+							cursor++;
+							BaseStation sensor = new BaseStation(x, y, 0, 0, 100, 20, -1);
+							sensor.setScriptFileName("User.csc");
+							sensor.setHide(0);
+							CupAction action = new CupActionAddSensor(sensor);
+							block.addAction(action);
+						}
+					}
+					
+				
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			System.out.println("====================================================================");
+			System.out.println("Uniform distribution ramdomly generate " + generateNumber + " BaseStation finished!");
+		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param generateSensorNumber
+	 * 
+	 * add random routers with Uniform distribution
+	 */
+	public static void addRandomUDRouterCS682(int generateSensorNumber) {
+		// the number of sensors should bigger than 100, less than 1000
+		int generateNumber = generateSensorNumber / 2;
+		int gemerateNumberInEachBlock = generateNumber / 16;
+		System.out.println("====================================================================");
+		System.out.println("Uniform distribution ramdomly generating " + generateNumber + " routers");
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+			
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			
+			for(int i = 0; i < 4; i++) {
+				for( int j = 0; j < 4; j++) {
+					int cursor = 0;
+					while(cursor < gemerateNumberInEachBlock) {
+						r1 = Math.random();
+						r2 = Math.random();
+						x = (((m2x-m1x)/4.0)*r1)+m1x+(((m2x-m1x)/4.0)*(i+0.0));
+						y = (((m2y-m1y)/4.0)*r2)+m1y+(((m2y-m1y)/4.0)*(j+0.0));
+						
+						double magnetic_step = 0.000227984;
+						double delta = 0.0;
+						if (MapLayer.magnetic) {
+							x = x - (x % magnetic_step) - (delta % magnetic_step);
+							y = y - (y % magnetic_step) - (delta % magnetic_step);
+						}
+						boolean ex = false;
+						if(!ex) {
+							cursor++;
+							StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 20, -1);
+							sensor.setScriptFileName("Router.csc");
+							sensor.setHide(0);
+							CupAction action = new CupActionAddSensor(sensor);
+							block.addAction(action);
+						}
+					}
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			System.out.println("====================================================================");
+			System.out.println("Uniform distribution ramdomly generate " + generateNumber + " sensors finished!");
+		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * 
+	 * method to generator random sensor for network, and return generate number
+	 */
+	public static int addRandomSensorsCS682() {
+		// the number of sensors should bigger than 100, less than 1000
+		int upperBound = 1000;
+		int lowerBound = 99;
+		int generateNumber = lowerBound + (int)(Math.random() * ((upperBound - lowerBound) + 1));
+		System.out.println("====================================================================");
+		System.out.println("ramdomly generating " + generateNumber + " sensors");
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			int i=0;
+			while(i < generateNumber) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+
+				double magnetic_step = 0.000227984;
+				double delta = 0.0;
+				if (MapLayer.magnetic) {
+					x = x - (x % magnetic_step) - (delta % magnetic_step);
+					y = y - (y % magnetic_step) - (delta % magnetic_step);
+				}
+				boolean ex = false;
+//				for(Building b : BuildingList.buildings) {
+//					if((b.inside(y, x)) && (!b.isHide())) {
+//						ex = true;
+//						break;
+//					}
+//				}
+				if(!ex) {
+					i++;
+					StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 100, -1);
+					sensor.setScriptFileName("Sensor.csc");
+					sensor.setHide(0);
+					CupAction action = new CupActionAddSensor(sensor);
+					block.addAction(action);
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			System.out.println("====================================================================");
+			System.out.println("ramdomly generate " + generateNumber + " sensors finished!");
+		}
+		return generateNumber;
+	}
+	
+	public static void addRandomBaseStationCS682(int generateSensorNumber) {
+		// the number of sensors should bigger than 100, less than 1000
+		int generateNumber = generateSensorNumber / 4;
+		System.out.println("====================================================================");
+		System.out.println("ramdomly generating " + generateNumber + " BaseStation");
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			int i=0;
+			while(i < generateNumber) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+
+//				double magnetic_step = 0.000227984;
+//				double delta = 0.0;
+//				if (MapLayer.magnetic) {
+//					x = x - (x % magnetic_step) - (delta % magnetic_step);
+//					y = y - (y % magnetic_step) - (delta % magnetic_step);
+//				}
+				boolean ex = false;
+				if(!ex) {
+					i++;
+					BaseStation sensor = new BaseStation(x, y, 0, 0, 100, 20, -1);
+					sensor.setScriptFileName("User.csc");
+					sensor.setHide(0);
+					CupAction action = new CupActionAddSensor(sensor);
+					block.addAction(action);
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			System.out.println("====================================================================");
+			System.out.println("ramdomly generate " + generateNumber + " BaseStation finished!");
+		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * 
+	 */
+	public static void addRandomRouterCS682(int generateSensorNumber) {
+		// the number of sensors should bigger than 100, less than 1000
+		int generateNumber = generateSensorNumber / 2;
+		System.out.println("====================================================================");
+		System.out.println("ramdomly generating " + generateNumber + " routers");
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			int i=0;
+			while(i < generateNumber) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+
+				double magnetic_step = 0.000227984;
+				double delta = 0.0;
+				if (MapLayer.magnetic) {
+					x = x - (x % magnetic_step) - (delta % magnetic_step);
+					y = y - (y % magnetic_step) - (delta % magnetic_step);
+				}
+				boolean ex = false;
+				if(!ex) {
+					i++;
+					StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 20, -1);
+					sensor.setScriptFileName("Router.csc");
+					sensor.setHide(0);
+					CupAction action = new CupActionAddSensor(sensor);
+					block.addAction(action);
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			System.out.println("====================================================================");
+			System.out.println("ramdomly generate " + generateNumber + " sensors finished!");
+		}
+	}
+	
+	/**
+	 * @author Yiwei Yao
+	 * @param generateSensorNumber
+	 * 
+	 * method to generate random nature Event
+	 */
+	public static void addRandomNatEventCS682(int generateSensorNumber) {
+		// the number of Nature Event should bigger than 50, less than 100
+		int upperBound = 100;
+		int lowerBound = 49;
+		int generateNumber = lowerBound + (int)(Math.random() * ((upperBound - lowerBound) + 1));
+		System.out.println("====================================================================");
+		System.out.println("ramdomly generating " + generateNumber + " nature event");
+		int gasNumber = 0;
+		int humNumber = 0;
+		int ligNumber = 0;
+		int temNumber = 0;
+		int watNumber = 0;
+		int weaNumber = 0;
+		int winNumber = 0;
+		CupActionBlock block = new CupActionBlock();
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			int i=0;
+			while(i < generateNumber) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+				boolean ex = false;
+				if(!ex) {
+					i++;
+					int natEventType = (int)(Math.random() * ((6 - 0) + 1));
+					switch(natEventType) {
+					// case 1: gas, case 2: Humidity, case3: Lighting, case4: Temperature, case5: WaterLevel,
+					// case6: Weather, case7: WindLevel
+					  case 1:
+						gasNumber++;
+						Gas gas = new Gas(x, y, 0, 0, -1);
+						gas.setNatEventFileName("gas.evt");
+						gas.setHide(0);
+						CupAction gaction = new CupActionAddDevice(gas);
+						block.addAction(gaction);
+						break;
+					  case 2:
+						humNumber++;
+						Humidity humidity = new Humidity(x, y, 0, 0, -1);
+						humidity.setNatEventFileName("humidity.evt");
+						humidity.setHide(0);
+						CupAction haction = new CupActionAddDevice(humidity);
+						block.addAction(haction);
+					    break;
+					  case 3:
+						ligNumber++;
+						Lighting lighting = new Lighting(x, y, 0, 0, -1);
+						lighting.setNatEventFileName("lighting.evt");
+						lighting.setHide(0);
+						CupAction laction = new CupActionAddDevice(lighting);
+						block.addAction(laction);
+					    break;
+					  case 4:
+						temNumber++;
+						Temperature temperature = new Temperature(x, y, 0, 0, -1);
+						temperature.setNatEventFileName("temperature.evt");
+						temperature.setHide(0);
+						CupAction taction = new CupActionAddDevice(temperature);
+						block.addAction(taction);
+					    break;
+					  case 5:
+						watNumber++;
+						WaterLevel waterLevel = new WaterLevel(x, y, 0, 0, -1);
+						waterLevel.setNatEventFileName("waterLevel.evt");
+						waterLevel.setHide(0);
+						CupAction waction = new CupActionAddDevice(waterLevel);
+						block.addAction(waction);
+					    break;
+					  case 6:
+						winNumber++;
+						WindLevel windLevel = new WindLevel(x, y, 0, 0, -1);
+						windLevel.setNatEventFileName("windLevel.evt");
+						windLevel.setHide(0);
+						CupAction wiaction = new CupActionAddDevice(windLevel);
+						block.addAction(wiaction);
+					    break;
+					  default:
+					    // code block
+					}
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}
+			MapLayer.repaint();
+			// case 1: gas, case 2: Humidity, case3: Lighting, case4: Temperature, case5: WaterLevel,
+			// case6: Weather, case7: WindLevel
+			System.out.println("====================================================================");
+			System.out.println("ramdomly generate gas: " + gasNumber
+								+ " humidity: " + humNumber
+								+ " lighting: " + ligNumber
+								+ " temperature: " + temNumber
+								+ " waterLevel: " + watNumber
+								+ " weather: " + weaNumber
+								+ " windLevel: " + winNumber);
+		}
+		
 	}
 
 	public static void reset() {

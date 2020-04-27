@@ -3236,7 +3236,10 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				DeviceList.addRandomSensors(50,0);
+				int generateSensorNumber = DeviceList.addRandomSensorsCS682();
+				DeviceList.addRandomNatEventCS682(generateSensorNumber);
+				DeviceList.addRandomRouterCS682(generateSensorNumber);
+				DeviceList.addRandomBaseStationCS682(generateSensorNumber);
 				mapFocus();
 			}
 		});
@@ -3248,7 +3251,10 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				DeviceList.addRandomSensors(100,0);
+				int generateSensorNumber = DeviceList.addRandomSensorsCS682();
+				DeviceList.addRandomNatEventCS682(generateSensorNumber);
+				DeviceList.addRandomUDRouterCS682(generateSensorNumber);
+				DeviceList.addRandomUDBaseStationCS682(generateSensorNumber);
 				mapFocus();
 			}
 		});
