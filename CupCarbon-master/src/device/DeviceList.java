@@ -133,7 +133,7 @@ public class DeviceList {
 						if(!ex) {
 							cursor++;
 							BaseStation sensor = new BaseStation(x, y, 0, 0, 100, 20, -1);
-							sensor.setScriptFileName("User.csc");
+							sensor.setScriptFileName("BaseStationWithRouterFunction.csc");
 							sensor.setHide(0);
 							CupAction action = new CupActionAddSensor(sensor);
 							block.addAction(action);
@@ -269,7 +269,7 @@ public class DeviceList {
 				if(!ex) {
 					i++;
 					StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 100, -1);
-					sensor.setScriptFileName("Sensor.csc");
+					sensor.setScriptFileName("SensorWithRouterFunction.csc");
 					sensor.setHide(0);
 					CupAction action = new CupActionAddSensor(sensor);
 					block.addAction(action);
@@ -322,7 +322,7 @@ public class DeviceList {
 				if(!ex) {
 					i++;
 					BaseStation sensor = new BaseStation(x, y, 0, 0, 100, 20, -1);
-					sensor.setScriptFileName("User.csc");
+					sensor.setScriptFileName("BaseStationWithRouterFunction.csc");
 					sensor.setHide(0);
 					CupAction action = new CupActionAddSensor(sensor);
 					block.addAction(action);

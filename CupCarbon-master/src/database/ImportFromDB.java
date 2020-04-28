@@ -76,7 +76,8 @@ public class ImportFromDB {
 		else{
 			Routes.hideAll();
 		}
-
+//		// yiwei
+//		UserList.reset();
 		UserList.openFromDB(userData);
 		CupCarbon.cupCarbonController.displayShortGoodMessage_th("Default workspace loaded");
 

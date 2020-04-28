@@ -2,7 +2,7 @@ getpos p
 atget id id
 led v1 v2
 vget x v1 0
-if($x==0)
+if($x==1)
     goto 128
 end
 set round 0
@@ -30,95 +30,95 @@ for i 1 $x
     if(($type==B) && ($round==$rd))
     	mark 1
 	if($nums==0)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb \
 	end
 	if($nums==1)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb Event value: $v1
+		printdb \
 	end
 	if($nums==2)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile Event: $s2
-		printfile Event value: $v2
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb Event value: $v1
+		printdb Event: $s2
+		printdb Event value: $v2
+		printdb \
 	end
 	if($nums==3)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile Event: $s2
-		printfile Event value: $v2
-		printfile Event: $s3
-		printfile Event value: $v3
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb Event value: $v1
+		printdb Event: $s2
+		printdb Event value: $v2
+		printdb Event: $s3
+		printdb Event value: $v3
+		printdb \
 	end
 	if($nums==4)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile Event: $s2
-		printfile Event value: $v2
-		printfile Event: $s3
-		printfile Event value: $v3
-		printfile Event: $s4
-		printfile Event value: $v4
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb Event value: $v1
+		printdb Event: $s2
+		printdb Event value: $v2
+		printdb Event: $s3
+		printdb Event value: $v3
+		printdb Event: $s4
+		printdb Event value: $v4
+		printdb \
 	end
 	if($nums==5)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile Event: $s2
-		printfile Event value: $v2
-		printfile Event: $s3
-		printfile Event value: $v3
-		printfile Event: $s4
-		printfile Event value: $v4
-		printfile Event: $s5
-		printfile Event value: $v5
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb Event value: $v1
+		printdb Event: $s2
+		printdb Event value: $v2
+		printdb Event: $s3
+		printdb Event value: $v3
+		printdb Event: $s4
+		printdb Event value: $v4
+		printdb Event: $s5
+		printdb Event value: $v5
+		printdb \
 	end
 	if($nums==6)
-		printfile Simulation time: $ct s
-		printfile Sensor ID: $froid
-		printfile Sensor location: $pos1 $pos2
-		printfile Lantency: $lantency ms
-		printfile Event: $s1
-		printfile Event value: $v1
-		printfile Event: $s2
-		printfile Event value: $v2
-		printfile Event: $s3
-		printfile Event value: $v3
-		printfile Event: $s4
-		printfile Event value: $v4
-		printfile Event: $s5
-		printfile Event value: $v5
-		printfile Event: $s6
-		printfile Event value: $v6
-		printfile \
+		printdb Simulation time: $ct s
+		printdb Sensor ID: $froid
+		printdb Sensor location: $pos1 $pos2
+		printdb Lantency: $lantency ms
+		printdb Event: $s1
+		printdb le Event value: $v1
+		printdb Event: $s2
+		printdb Event value: $v2
+		printdb Event: $s3
+		printdb Event value: $v3
+		printdb Event: $s4
+		printdb Event value: $v4
+		printdb Event: $s5
+		printdb Event value: $v5
+		printdb Event: $s6
+		printdb Event value: $v6
+		printdb \
 	end
     else
 	goto 19

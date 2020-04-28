@@ -2,7 +2,7 @@ getpos p
 atget id id
 led v1 v2
 vget x v1 0
-if($x==0)
+if($x==1)
     stop
 end
 set round 0

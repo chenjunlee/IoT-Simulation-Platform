@@ -1,5 +1,5 @@
 atget id id
-led v 1
+led v z
 vget x v 0
 loop
 for i 1 $x

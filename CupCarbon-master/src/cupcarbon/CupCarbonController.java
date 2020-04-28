@@ -1021,16 +1021,17 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				try {
+//				try {
 					ImportFromDB.openProject();
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + Project.DBFilePath + "]");
-				} catch(Exception e) {
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("Error");
-					alert.setHeaderText(null);
-					alert.setContentText(e.toString());
-					alert.showAndWait();
-				}
+//				} catch(Exception e) {
+//					Alert alert = new Alert(AlertType.WARNING);
+//					alert.setTitle("Error");
+//					alert.setHeaderText(null);
+//					alert.setContentText(e.toString());
+//					alert.showAndWait();
+//					System.out.println(e);
+//				}
 
 				resetComboBoxUsers();
 
