@@ -57,7 +57,7 @@ public class User {
 	public long preferredFrequency = 0L; //1 minutes = 3600*1000 ms  - get data every seconds
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
-	
+
 	//Chenjun
 	public BaseStation userStation = null;
 	public Vector<String> userEvents = new Vector<String>();
@@ -180,11 +180,12 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int y = coord[1];
 
 		if(currentUser){
-			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/marker_rounded_light_blue.png")).getImage();
-			g.drawImage(image, x, y, null);
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/user_icon.png")).getImage();
+			g.drawImage(image, x-15, y-15, null);
 		} else {
-			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/flag_green.png")).getImage();
-			g.drawImage(image, x, y, null);
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/location-map-pin.png")).getImage();
+
+			g.drawImage(image, x-15, y-15, null);
 		}
 
 
@@ -193,7 +194,7 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 
 	/**
 	 *
-	 * This function will draw the background of rectange for Current user
+	 * This function will draw the background of rectangle for Current user
 	 */
 	public void drawBackgroundCurrentUser(Graphics2D g){
 		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
@@ -241,6 +242,7 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 
 	public BaseStation getNearestBaseStation(){
 		if(this.selectedLocation == false) return null;
+		if(DeviceList.sensors == null || DeviceList.sensors.size() == 0 ) return null;
 
 		double distance = 0;
 		Device res = null;

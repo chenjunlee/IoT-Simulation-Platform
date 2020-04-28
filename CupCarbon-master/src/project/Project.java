@@ -185,6 +185,11 @@ public final class Project {
 		MapLayer.repaint();
 		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		Routes.reset();
+
+
+		//Bang Tran added
+		UserList.users.removeAllElements();
+		CupCarbon.cupCarbonController.resetComboBoxUsers();
 	}
 
 	public static void openProject(String path, String name) {

@@ -606,6 +606,9 @@ public class CupCarbonController implements Initializable {
 				loadUserPreferrences();
 			}
 			listViewConcernedSensors.getItems().clear();
+		} else {
+			comboUsers.getItems().removeAll(comboUsers.getItems());
+			listViewConcernedSensors.getItems().clear();
 		}
 
 //		//for temporary use =======================
@@ -991,12 +994,13 @@ public class CupCarbonController implements Initializable {
 					@Override
 					public void run() {
 						try {
-							ExportToDB.saveProjectToDB();
+							/*ExportToDB.saveProjectToDB();
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Success");
 							alert.setHeaderText(null);
 							alert.setContentText("Everthing has been saved to MongoDB");
-							alert.showAndWait();
+							alert.showAndWait();*/
+							CupCarbon.cupCarbonController.displayLongMessage("Networks and users have been saved to MongoDB");
 
 						} catch(Exception e) {
 							Alert alert = new Alert(AlertType.WARNING);
@@ -4536,7 +4540,7 @@ public class CupCarbonController implements Initializable {
 				UserList.users.get(selectedUserIndex).setGeoLocation(geoLocation.getLongitude(), geoLocation.getLatitude());
 
 				BaseStation bb = UserList.users.get(selectedUserIndex).getNearestBaseStation();
-				
+
 				if(bb==null) {
 					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found, going to generate a new base station at user location");
 					BaseStation newStation = new BaseStation(geoLocation.getLongitude(), geoLocation.getLatitude(), 0, 0, 100, 20, -1);
@@ -4965,7 +4969,7 @@ public class CupCarbonController implements Initializable {
 		long newTimeStart = Long.parseLong(txtUserStartTime.getText());
 		long newTimeEnd = Long.parseLong(txtUserEndTime.getText());
 		long newTimeDelay = Long.parseLong(txtUserFrequency.getText());
-		
+
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
