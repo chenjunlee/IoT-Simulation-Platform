@@ -252,6 +252,9 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("led")) {
 			command = new Command_LED(sensorNode, inst[1], inst[2]);
 		}
+		if (inst[0].toLowerCase().equals("getu")) {
+			command = new Command_GETU(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("randb")) {
 			command = new Command_RANDB(sensorNode, inst[1], inst[2], inst[3]);
 		}

@@ -3,14 +3,14 @@ atget id id
 loop
 wait
 read m
-rdata $m rid type froid tarid
+rdata $m rid type froid tarid round
 if($type==A)
 	if($tarid==$id)
 		mark 1
 		areadsensor v
 		print $v
 		rdata $v s s1 v1 s2 v2 s3 v3 s4 v4 s5 v5 s6 v6 end
-		data d $id B $id $froid $p
+		data d $id B $id $froid $p $round
 		if($s==X)
 			data var 0
 		end

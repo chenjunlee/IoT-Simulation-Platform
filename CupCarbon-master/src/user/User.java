@@ -30,7 +30,7 @@ import java.awt.Toolkit;
 
 
 public class User {
-	public String name;
+	public String name = null;
 	public boolean selectedArea = false;
 	public boolean selectedLocation = false;
 	public Color areaBoderColor=new Color(255, 0, 0);
