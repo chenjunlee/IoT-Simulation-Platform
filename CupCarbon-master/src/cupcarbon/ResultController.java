@@ -48,20 +48,8 @@ public class ResultController implements Initializable {
 		.selectedItemProperty()
 		.addListener( (options, oldValue, newValue) -> {
 			if(oldValue != newValue)
-				loadUser(newValue);
+				loadData(newValue);
 				tmp = newValue;
-					});
-		userName.getSelectionModel()
-		.selectedItemProperty()
-		.addListener( (options, oldValue, newValue) -> {
-			if(oldValue != newValue)
-				loadSensor(tmp);
-					});
-		sensorName.getSelectionModel()
-		.selectedItemProperty()
-		.addListener( (options, oldValue, newValue) -> {
-			if(oldValue != newValue)
-				loadData(tmp, newValue);
 					});
 	}
 
@@ -70,7 +58,7 @@ public class ResultController implements Initializable {
 	 * get a list of collection name in iot db
 	 */
 	private void initProjectName() {
-		MongoDatabase db = DBMethods.getDB("iot");
+		MongoDatabase db = DBMethods.getDB("cs682");
 		MongoIterable<String> collections = DBMethods.getCollections(db);
 		MongoCursor<String> collectionsIterator = collections.iterator();
 		while(collectionsIterator.hasNext()) {
@@ -78,39 +66,20 @@ public class ResultController implements Initializable {
 		}
 	}
 
-	private void loadUser(String currentProject) {
-		userName.getItems().clear();
-		MongoCollection<Document> project = DBMethods.getDB("iot_user").getCollection(currentProject);
-		FindIterable<Document> userData = DBMethods.findWithPrefix(project, "user");
-		MongoCursor<Document> userDataIterator = userData.iterator();
-		while(userDataIterator.hasNext()) {
-			Document SelectedUser = userDataIterator.next();
-			userName.getItems().add(SelectedUser.getString("name"));
-		}
-	}
 	
-	private void loadSensor(String currentProject) {
-		sensorName.getItems().clear();
-		MongoCollection<Document> project = DBMethods.getDB("iot_result").getCollection(currentProject);
-		FindIterable<Document> sensorData = DBMethods.find(project);
-		MongoCursor<Document> sensorDataIterator = sensorData.iterator();
-		while(sensorDataIterator.hasNext()) {
-			Document SelectedSensor = sensorDataIterator.next();
-			sensorName.getItems().add(SelectedSensor.getString("sensor"));
-		}
-	}
-	
-	private void loadData(String currentProject, String sensor) {
+	private void loadData(String sensor) {
 		data.clear();
-		MongoCollection<Document> project = DBMethods.getDB("iot_result").getCollection(currentProject);
+		MongoCollection<Document> project = DBMethods.getDB("cs682").getCollection("result");
 		FindIterable<Document> sensorData = DBMethods.find(project);
 		MongoCursor<Document> sensorDataIterator = sensorData.iterator();
 		while(sensorDataIterator.hasNext()) {
 			Document SelectedSensor = sensorDataIterator.next();
-			if(SelectedSensor.getString("sensor").equals(sensor)) {
+//			if(SelectedSensor.getString("sensor").equals(sensor)) {
 //				SelectedSensor.
-//				data.appendText(SelectedSensor.toString());
-			}
+				
+				data.appendText(SelectedSensor.toString());
+				data.appendText("\n");
+//			}
 //			sensorName.getItems().add(SelectedSensor.getString("sensor"));
 		}
 	}

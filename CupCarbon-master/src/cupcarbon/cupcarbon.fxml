@@ -908,6 +908,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#CS682NUDRandomGenerator1000" text="1000" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Result">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#result" text="Show Result" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </top>

@@ -19,18 +19,11 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="userName" layoutX="107.0" layoutY="52.0" prefHeight="25.0" prefWidth="211.0" />
-                  <Label layoutX="51.0" layoutY="55.0" text="User:">
+                  <Label layoutX="51.0" layoutY="55.0">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Label layoutX="351.0" layoutY="55.0" text="Sensor:">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="sensorName" layoutX="406.0" layoutY="53.0" prefHeight="25.0" prefWidth="211.0" />
                </children>
             </AnchorPane>
          </center>
