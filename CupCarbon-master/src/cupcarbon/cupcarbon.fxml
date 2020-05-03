@@ -909,9 +909,9 @@
               </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Result">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#result" text="Show Result" />
-               </items>
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#result" text="Show Result" />
+              </items>
             </Menu>
         </menus>
       </MenuBar>
@@ -1640,7 +1640,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button fx:id="buttonClearUserLocation" alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearUserLocation" prefHeight="30.0" prefWidth="90.0" text="Clear" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                                <Button fx:id="connectBaseStation" alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connectBaseStation" prefHeight="30.0" prefWidth="90.0" text="Connetion" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2">
                                                    <font>
                                                       <Font size="11.0" />
                                                    </font>

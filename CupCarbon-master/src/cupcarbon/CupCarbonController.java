@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.bson.Document;
@@ -203,7 +204,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	private Button buttonSetUserLocation;
 	@FXML
-	private Button buttonClearUserLocation;
+	private Button connectBaseStation;
 
 
 	//=========================== Bang Tran
@@ -994,13 +995,13 @@ public class CupCarbonController implements Initializable {
 					@Override
 					public void run() {
 						try {
-							/*ExportToDB.saveProjectToDB();
+							ExportToDB.saveProjectToDB();
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Success");
 							alert.setHeaderText(null);
 							alert.setContentText("Everthing has been saved to MongoDB");
-							alert.showAndWait();*/
-							CupCarbon.cupCarbonController.displayLongMessage("Networks and users have been saved to MongoDB");
+							alert.showAndWait();
+							//CupCarbon.cupCarbonController.displayLongMessage("Networks and users have been saved to MongoDB");
 
 						} catch(Exception e) {
 							Alert alert = new Alert(AlertType.WARNING);
@@ -4542,10 +4543,7 @@ public class CupCarbonController implements Initializable {
 				BaseStation bb = UserList.users.get(selectedUserIndex).getNearestBaseStation();
 
 				if(bb==null) {
-					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found, going to generate a new base station at user location");
-					BaseStation newStation = new BaseStation(geoLocation.getLongitude(), geoLocation.getLatitude(), 0, 0, 100, 20, -1);
-					DeviceList.add(newStation);
-					UserList.users.get(selectedUserIndex).setBaseStation(newStation);
+					System.out.println(UserList.users.get(selectedUserIndex).getName() + " no BaseStation found, please generate one base station, then connect user with it");
 				} else {
 					System.out.println(UserList.users.get(selectedUserIndex).getName() + " has nearest BaseStation is: " + bb.getName());
 					UserList.users.get(selectedUserIndex).setBaseStation(bb);
@@ -4600,16 +4598,6 @@ public class CupCarbonController implements Initializable {
 					listViewConcernedSensors.getItems().clear();
 					for(SensorNode s: u.getSensorsInsideArea() )
 						listViewConcernedSensors.getItems().add(s.getName());
-
-					//Add one CloudServer to user at the corner of area
-					//you can move it to anywhere
-					//add by Chenjun
-					//commit by yiwei, since -1 for sensor id is not working, I changed it to 99 for now.
-					//CloudServer userServer = new CloudServer(MarkerList.markers.get(0).getLongitude(), MarkerList.markers.get(0).getLatitude(), 0, 0, 100, 20, 99);
-					//DeviceList.add(userServer);
-					//u.setUserServer(userServer);
-
-					  //empty markers after set area for user
 				}
 
 				MarkerList.deleteAll();
@@ -4983,5 +4971,30 @@ public class CupCarbonController implements Initializable {
 		u.setTimeStart(newTimeStart);
 		u.setTimeEnd(newTimeEnd);
 		u.setTimeDelay(newTimeDelay);
+	}
+	@FXML
+	public void connectBaseStation() {
+		if(UserList.users.isEmpty()) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText(null);
+			alert.setContentText("Should create user first!");
+			alert.showAndWait();
+			return;
+		}
+		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Vector<User> usersList = UserList.users;
+				for(User u : usersList) {
+					BaseStation b = u.getNearestBaseStation();
+					if(b != null)
+						u.setBaseStation(b);
+						System.out.println(u.getName() + " has the nearest base station is " + b.getName());
+				}
+				MapLayer.repaint();
+			}
+		});
 	}
 }

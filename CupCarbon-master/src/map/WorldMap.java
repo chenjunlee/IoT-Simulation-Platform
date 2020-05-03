@@ -83,7 +83,7 @@ public class WorldMap extends JXMapKit {
 
 				// UMass Boston
 				setCenterPosition(new GeoPosition(42.3146025, -71.0393664));
-				setZoom(4);
+				setZoom(3);
 
 				//setCenterPosition(new GeoPosition(48.39052932411496, -4.486016035079956));// Brest
 				//setZoom(2);
