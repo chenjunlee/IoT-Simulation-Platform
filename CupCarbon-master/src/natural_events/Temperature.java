@@ -146,7 +146,7 @@ public class Temperature extends MobileG {
 
 	@Override
 	public int getType() {
-		return Device.GAS;
+		return Device.TEMPERATURE;
 	}
 
 	@Override
@@ -358,11 +358,14 @@ public class Temperature extends MobileG {
 				.append("device_latitude", getLatitude())
 				.append("device_elevation", getElevation())
 				.append("device_radius", getRadius())
-				.append("device_hide", getHide());
-		if (!getGPSFileName().equals(""))
-			document.append("device_gps_file_name", getGPSFileName());
-		if (!getNatEventFileName().equals(""))
-			document.append("natural_event_file_name", getNatEventFileName());
+				.append("device_hide", getHide())
+				.append("device_draw_battery", getDrawBatteryLevel())
+				.append("device_sensor_unit_radius", getSensorUnitRadius());
+		
+		document.append("device_gps_file_name", getGPSFileName());
+		document.append("device_script_file_name", getScriptFileName());
+		document.append("natural_event_file_name", getNatEventFileName());
+		
 		documents.add(document);
 		return documents;
 	}

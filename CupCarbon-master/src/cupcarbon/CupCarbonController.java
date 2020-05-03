@@ -4986,6 +4986,14 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				
+				for(SensorNode sensorNode : DeviceList.sensors) {
+					if(sensorNode.getClass().equals(BaseStation.class)) {
+						sensorNode.getUsers().clear();
+						System.out.println("Clear all users connected with base station " + sensorNode.getName());
+					}
+				}
+				
 				Vector<User> usersList = UserList.users;
 				for(User u : usersList) {
 					BaseStation b = u.getNearestBaseStation();

@@ -270,11 +270,10 @@ public class StdSensorNode extends SensorNode {
 				.append("device_draw_battery", getDrawBatteryLevel())
 				.append("device_sensor_unit_radius", getSensorUnitRadius());
 
-		if (!getGPSFileName().equals(""))
-			document.append("device_gps_file_name", getGPSFileName());
-
-		if (!getScriptFileName().equals(""))
-			document.append("device_script_file_name", getScriptFileName());
+		document.append("device_gps_file_name", getGPSFileName());
+		document.append("device_script_file_name", getScriptFileName());
+		document.append("natural_event_file_name", getNatEventFileName());
+		
 		documents.add(document);
 		documents.add(saveRadioModuleToDB(""+getId()));
 		return documents;

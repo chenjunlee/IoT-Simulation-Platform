@@ -445,7 +445,7 @@ public class DeviceList {
 					// case6: Weather, case7: WindLevel
 					  case 1:
 						gasNumber++;
-						Gas gas = new Gas(x, y, 0, 0, -1);
+						Gas gas = new Gas(x, y, 0, 10, -1);
 						gas.setNatEventFileName("gas.evt");
 						gas.setHide(0);
 						CupAction gaction = new CupActionAddDevice(gas);
@@ -453,7 +453,7 @@ public class DeviceList {
 						break;
 					  case 2:
 						humNumber++;
-						Humidity humidity = new Humidity(x, y, 0, 0, -1);
+						Humidity humidity = new Humidity(x, y, 0, 10, -1);
 						humidity.setNatEventFileName("humidity.evt");
 						humidity.setHide(0);
 						CupAction haction = new CupActionAddDevice(humidity);
@@ -461,7 +461,7 @@ public class DeviceList {
 					    break;
 					  case 3:
 						ligNumber++;
-						Lighting lighting = new Lighting(x, y, 0, 0, -1);
+						Lighting lighting = new Lighting(x, y, 0, 10, -1);
 						lighting.setNatEventFileName("lighting.evt");
 						lighting.setHide(0);
 						CupAction laction = new CupActionAddDevice(lighting);
@@ -469,7 +469,7 @@ public class DeviceList {
 					    break;
 					  case 4:
 						temNumber++;
-						Temperature temperature = new Temperature(x, y, 0, 0, -1);
+						Temperature temperature = new Temperature(x, y, 0, 10, -1);
 						temperature.setNatEventFileName("temperature.evt");
 						temperature.setHide(0);
 						CupAction taction = new CupActionAddDevice(temperature);
@@ -477,7 +477,7 @@ public class DeviceList {
 					    break;
 					  case 5:
 						watNumber++;
-						WaterLevel waterLevel = new WaterLevel(x, y, 0, 0, -1);
+						WaterLevel waterLevel = new WaterLevel(x, y, 0, 10, -1);
 						waterLevel.setNatEventFileName("waterLevel.evt");
 						waterLevel.setHide(0);
 						CupAction waction = new CupActionAddDevice(waterLevel);
@@ -485,7 +485,7 @@ public class DeviceList {
 					    break;
 					  case 6:
 						winNumber++;
-						WindLevel windLevel = new WindLevel(x, y, 0, 0, -1);
+						WindLevel windLevel = new WindLevel(x, y, 0, 10, -1);
 						windLevel.setNatEventFileName("windLevel.evt");
 						windLevel.setHide(0);
 						CupAction wiaction = new CupActionAddDevice(windLevel);
@@ -731,10 +731,7 @@ public class DeviceList {
 					add(sensor);
 				}
 				break;
-			case MapObject.GAS:
-				add(loadGasFromDB(selectedDevice));
-				break;
-
+				
 			case MapObject.BASE_STATION:
 				if(selectedRadio.isEmpty()){
 					sensor = loadBaseStationFromDB(selectedDevice);
@@ -758,8 +755,27 @@ public class DeviceList {
 			case MapObject.MOBILE:
 				add(loadMobileFromDB(selectedDevice));
 				break;
+				
 			case MapObject.WEATHER:
 				add(loadWeatherFromDB(selectedDevice));
+				break;
+			case MapObject.GAS:
+				add(loadGasFromDB(selectedDevice));
+				break;
+			case MapObject.TEMPERATURE:
+				add(loadTempFromDB(selectedDevice));
+				break;
+			case MapObject.HUMIDITY:
+				add(loadHumFromDB(selectedDevice));
+				break;
+			case MapObject.WATER:
+				add(loadWaterFromDB(selectedDevice));
+				break;
+			case MapObject.WIND:
+				add(loadWindFromDB(selectedDevice));
+				break;
+			case MapObject.LIGHT:
+				add(loadLightFromDB(selectedDevice));
 				break;
 			}
 			//device number
@@ -1419,6 +1435,176 @@ public class DeviceList {
 			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
 		}
 		device = new Gas(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		return device;
+	}
+	
+	//Chenjun
+	public static Device loadTempFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new Temperature(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		return device;
+	}
+	
+	//Chenjun
+	public static Device loadHumFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new Humidity(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		return device;
+	}
+	
+	//Chenjun
+	public static Device loadWaterFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new WaterLevel(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		return device;
+	}
+	
+	//Chenjun
+	public static Device loadLightFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new Lighting(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+		device.setHide(Integer.parseInt(parameters[6]));
+		device.setNatEventFileName(parameters[7]);
+		return device;
+	}
+	
+	//Chenjun
+	public static Device loadWindFromDB(Document selectedDevice) {
+		Device device = null;
+		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+		if(selectedDevice.containsKey("device_longitude")) {
+			parameters[0] = "" + selectedDevice.get("device_longitude");
+		}
+		if(selectedDevice.containsKey("device_latitude")) {
+			parameters[1] = "" + selectedDevice.get("device_latitude");
+		}
+		if(selectedDevice.containsKey("device_elevation")) {
+			parameters[2] = "" + selectedDevice.get("device_elevation");
+		}
+		if(selectedDevice.containsKey("device_radius")) {
+			parameters[3] = "" + selectedDevice.get("device_radius");
+		}
+		if(selectedDevice.containsKey("device_id")) {
+			parameters[4] = "" + selectedDevice.get("device_id");
+		}
+		if(selectedDevice.containsKey("device_gps_file_name")) {
+			parameters[5] = "" + selectedDevice.get("device_gps_file_name");
+		}
+		if(selectedDevice.containsKey("device_hide")) {
+			parameters[6] = "" + selectedDevice.get("device_hide");
+		}
+		if(selectedDevice.containsKey("natural_event_file_name")) {
+			parameters[7] = "" + selectedDevice.get("natural_event_file_name");
+		}
+		device = new WindLevel(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
 		device.setHide(Integer.parseInt(parameters[6]));
 		device.setNatEventFileName(parameters[7]);
 		return device;
