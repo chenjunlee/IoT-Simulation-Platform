@@ -20,7 +20,7 @@ db = client.cs682
 collection = db.devices
 
 x = collection.delete_many({})
-print(x.deleted_count, " documents deleted.")
+print(x.deleted_count, " documents deleted in devices.")
 df = pd.read_csv("Devices.csv", na_filter=False)
 records_ = df.to_dict(orient = 'records')
 result = collection.insert_many(records_ )
@@ -30,8 +30,15 @@ records_ = df.to_dict(orient = 'records')
 result = collection.insert_many(records_ )
 
 x = db.users.delete_many({})
-print(x.deleted_count, " documents deleted.")
+print(x.deleted_count, " documents deleted in users.")
 
 df = pd.read_csv("Users.csv", na_filter=False)
 records_ = df.to_dict(orient = 'records')
 result = db.users.insert_many(records_ )
+
+x = db.proj_preferences.delete_many({})
+print(x.deleted_count, " documents deleted in proj_preferences.")
+
+df = pd.read_csv("Project.csv", na_filter=False)
+records_ = df.to_dict(orient = 'records')
+result = db.proj_preferences.insert_many(records_ )

@@ -30,6 +30,9 @@ def genSimulationUnit(longitude1, latitude1, longitude2, latitude2, deviceNumber
         
     midLong = (longitude1 + longitude2)/2
     midLati = (latitude1 + latitude2)/2
+    
+    genProject(midLong, midLati)
+    
     with open('Radio.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["prefix", "device_id", "current_radio_name", "current_radio_index", "radio_name1", "radio_standard1", "radio_my1", "radio_channel1", "radio_network_id1", "radio_radius1", "radio_etx1", "radio_erx1", "radio_esleep1", "radio_elisten1", "radio_data_rate1", "conso_tx_model1", "conso_rx_model1"])
@@ -153,6 +156,13 @@ def genUsers(longitude1, latitude1, longitude2, latitude2, num):
             writer.writerow(["user", "true", "true", userName, area1[1], area2[1], area1[0], area2[0], userPos[0], userPos[1], "false", "false", "false", "false", "false", "false", "false", 10.0, 0.0, 0.0, 0, 64000])
             userID = userID + 1
             num = num -1
+
+
+def genProject(centerLong, centerLati):
+    with open('Project.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["prefix", "CupCarbon", "name", "zoom", "centerposition_la", "centerposition_lo", "map", "display_details", "draw_radio_links", "draw_sensor_arrows", "radio_links_color", "draw_marker_arrows", "display_rl_distance", "propagation", "display_marker_distance", "display_radio_messages", "draw_script_file_name", "display_print_messages", "display_all_routes"])
+        writer.writerow(["project", "U-One 4.2", "cs682", 4, centerLati, centerLong, 0, "false", "true", "true", 0, "false", "false", "false", "false", "false", "false", "true", "false"])
 
 
 def genRanPoint(longitude1, latitude1, longitude2, latitude2):
