@@ -701,11 +701,11 @@ public class CupCarbonController implements Initializable {
 		User user = UserList.users.get(idx);
 
 		//QoS preferences
-		txtLatency.setText(String.format("%.2f", user.preferredLatency));
-		txtThroughput.setText(String.format("%.2f", user.preferredThroughput));
-		txtUserFrequency.setText(String.format("%d", user.preferredFrequency));
-		txtUserStartTime.setText(String.format("%d", user.startTime));
-		txtUserEndTime.setText(String.format("%d", user.endTime));
+		txtLatency.setText(String.valueOf(user.preferredLatency));
+		txtThroughput.setText(String.valueOf(user.preferredThroughput));
+		txtUserFrequency.setText(String.valueOf(user.preferredFrequency));
+		txtUserStartTime.setText(String.valueOf(user.startTime));
+		txtUserEndTime.setText(String.valueOf(user.endTime));
 		comboBoxEncryptedOption.getSelectionModel().select(user.dataEncrypted ? 0:1);
 
 		//sensing preferences

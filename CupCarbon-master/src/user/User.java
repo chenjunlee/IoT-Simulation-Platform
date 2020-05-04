@@ -54,7 +54,7 @@ public class User {
 
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
-	public long preferredFrequency = 0L; //1 minutes = 3600*1000 ms  - get data every seconds
+	public double preferredFrequency = 0.0; //1 minutes = 3600*1000 ms  - get data every seconds
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
 
@@ -385,10 +385,10 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	public void setPreferredThroughput(double preferredThroughput) {
 		this.preferredThroughput = preferredThroughput;
 	}
-	public long getPreferredFrequency() {
+	public double getPreferredFrequency() {
 		return preferredFrequency;
 	}
-	public void setPreferredFrequency(long preferredFrequency) {
+	public void setPreferredFrequency(double preferredFrequency) {
 		this.preferredFrequency = preferredFrequency;
 	}
 	public void setName(String name) {
@@ -456,7 +456,7 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	public void setTimeDelay(long t) {
 		preferredFrequency = t;
 	}
-	public long getTimeDelay() {
+	public double getTimeDelay() {
 		return preferredFrequency;
 	}
 }
