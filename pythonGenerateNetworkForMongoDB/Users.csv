@@ -1,0 +1,6 @@
+prefix,selectedArea,selectedLocation,name,latitude1,latitude2,longitude1,longitude2,locationLongitude,locationLatitude,temperatureSensing,humiditySensing,gasSensing,lightSensing,windLevelSensing,waterLevelSensing,dataEncrypted,preferredLatency,preferredThroughput,preferredFrequency,startTime,endTime
+user,true,true,User 1,42.318619129359234,42.31905848947692,-71.04074341068379,-71.04001809986467,-71.03753466201668,42.31674160363827,false,false,false,false,false,false,false,10.0,0.0,0.0,0,64000
+user,true,true,User 2,42.31148125868572,42.31766573262046,-71.03921921014506,-71.03815365980395,-71.04135217937491,42.317769560051175,false,false,false,false,false,false,false,10.0,0.0,0.0,0,64000
+user,true,true,User 3,42.3202250499066,42.31515804142011,-71.04083790588666,-71.03746123267726,-71.03756776767206,42.311978201520965,false,false,false,false,false,false,false,10.0,0.0,0.0,0,64000
+user,true,true,User 4,42.319153283238684,42.31115237953961,-71.03723600829974,-71.03828440479238,-71.04091984663745,42.31624652521386,false,false,false,false,false,false,false,10.0,0.0,0.0,0,64000
+user,true,true,User 5,42.31382200044314,42.320469297238404,-71.04172546379863,-71.03979668233383,-71.03840656897775,42.317366117606554,false,false,false,false,false,false,false,10.0,0.0,0.0,0,64000

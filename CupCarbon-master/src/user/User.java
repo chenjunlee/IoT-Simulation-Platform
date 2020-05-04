@@ -213,7 +213,7 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	 * Return list of sensors located in user's concerned area
 	 */
 	public Vector<SensorNode> getSensorsInsideArea(){
-		Vector<SensorNode> insidedNodes = null;
+		Vector<SensorNode> insidedNodes = new Vector<SensorNode>();
 		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int [] coord2 = MapCalc.geoToPixelMapA(latitude2, longitude2);
 
