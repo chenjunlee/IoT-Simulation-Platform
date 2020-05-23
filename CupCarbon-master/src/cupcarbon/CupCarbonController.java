@@ -171,7 +171,9 @@ public class CupCarbonController implements Initializable {
 	private TextField txtUserEndTime;
 	@FXML
 	private TextField txtUserFrequency;
-
+	
+	@FXML
+	private CheckBox checkboxHideShowArea;
 	@FXML
 	private CheckBox checkboxTemperatureSens;
 	@FXML
@@ -5004,5 +5006,15 @@ public class CupCarbonController implements Initializable {
 				MapLayer.repaint();
 			}
 		});
+	}
+	@FXML
+	public void hideShowArea() {
+		if(checkboxHideShowArea.isSelected()) {
+			UserList.hideAreas();
+			MapLayer.repaint();
+		} else {
+			UserList.showAreas();
+			MapLayer.repaint();
+		}
 	}
 }

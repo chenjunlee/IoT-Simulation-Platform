@@ -61,7 +61,7 @@ public class User {
 	//Chenjun
 	public BaseStation userStation = null;
 	public Vector<String> userEvents = new Vector<String>();
-
+	private boolean showArea = true;
 
 	public User(String uname){
 		Random r = new Random();
@@ -89,6 +89,13 @@ public class User {
 			userStation = null;
 		}
 		userEvents.clear();
+		temperatureSensing= false;
+		humiditySensing = false;
+		gasSensing = false;
+		lightSensing = false;
+		windLevelSensing = false;
+		waterLevelSensing = false;
+		showArea = true;
 	};
 
 	/**
@@ -155,7 +162,6 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		g.setColor(areaBoderColor);
 		g.setStroke(new BasicStroke(1.5f));
 		g.drawRect(x1, y1, x2-x1, y2-y1);
-
 //		//mark all nodes inside the area
 //		if( !DeviceList.sensors.isEmpty() )
 //			for (SensorNode sensor : DeviceList.sensors) {
@@ -336,36 +342,78 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 	public void setTemperatureSensing(boolean temperatureSensing) {
 		this.temperatureSensing = temperatureSensing;
+		if(temperatureSensing) {
+			if(userEvents.contains("Temperature")) {
+				return;
+			} else {
+				userEvents.add("Temperature");
+			}
+		}
 	}
 	public boolean isHumiditySensing() {
 		return humiditySensing;
 	}
 	public void setHumiditySensing(boolean humiditySensing) {
 		this.humiditySensing = humiditySensing;
+		if(humiditySensing) {
+			if(userEvents.contains("Humidity")) {
+				return;
+			} else {
+				userEvents.add("Humidity");
+			}
+		}
 	}
 	public boolean isGasSensing() {
 		return gasSensing;
 	}
 	public void setGasSensing(boolean gasSensing) {
 		this.gasSensing = gasSensing;
+		if(gasSensing) {
+			if(userEvents.contains("Gas")) {
+				return;
+			} else {
+				userEvents.add("Gas");
+			}
+		}
 	}
 	public boolean isLightSensing() {
 		return lightSensing;
 	}
 	public void setLightSensing(boolean lightSensing) {
 		this.lightSensing = lightSensing;
+		if(lightSensing) {
+			if(userEvents.contains("Light")) {
+				return;
+			} else {
+				userEvents.add("Light");
+			}
+		}
 	}
 	public boolean isWindLevelSensing() {
 		return windLevelSensing;
 	}
 	public void setWindLevelSensing(boolean windLevelSensing) {
 		this.windLevelSensing = windLevelSensing;
+		if(windLevelSensing) {
+			if(userEvents.contains("Wind")) {
+				return;
+			} else {
+				userEvents.add("Wind");
+			}
+		}
 	}
 	public boolean isWaterLevelSensing() {
 		return waterLevelSensing;
 	}
 	public void setWaterLevelSensing(boolean waterLevelSensing) {
 		this.waterLevelSensing = waterLevelSensing;
+		if(waterLevelSensing) {
+			if(userEvents.contains("Water")) {
+				return;
+			} else {
+				userEvents.add("Water");
+			}
+		}
 	}
 	public boolean isDataEncrypted() {
 		return dataEncrypted;
@@ -427,13 +475,38 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		return userStation;
 	}
 	public void addEvent(String s) {
+		if(s.equals("Temperature"))
+			temperatureSensing = true;
+		if(s.equals("Water"))
+			waterLevelSensing = true;
+		if(s.equals("Wind"))
+			windLevelSensing = true;
+		if(s.equals("Gas"))
+			gasSensing = true;
+		if(s.equals("Light"))
+			lightSensing = true;
+		if(s.equals("Humidity"))
+			humiditySensing = true;
+		
 		if(userEvents.contains(s)) {
 			return;
 		} else {
 			userEvents.add(s);
-		}
+		} 
 	}
 	public void removeEvent(String s) {
+		if(s.equals("Temperature"))
+			temperatureSensing = false;
+		if(s.equals("Water"))
+			waterLevelSensing = false;
+		if(s.equals("Wind"))
+			windLevelSensing = false;
+		if(s.equals("Gas"))
+			gasSensing = false;
+		if(s.equals("Light"))
+			lightSensing = false;
+		if(s.equals("Humidity"))
+			humiditySensing = false;
 		if(userEvents.contains(s)) {
 			userEvents.remove(s);
 		}
@@ -458,5 +531,13 @@ s		int [] coord1 = MapCalc.geoToPixelMapA(latitude1, longitude1);
 	}
 	public double getTimeDelay() {
 		return preferredFrequency;
+	}
+	
+	public boolean getShowArea() {
+		return showArea;
+	}
+	
+	public void setShowArea(boolean t) {
+		showArea = t;
 	}
 }

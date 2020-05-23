@@ -107,30 +107,31 @@ def genBaseStations(longitude1, latitude1, longitude2, latitude2, num, currentID
 
 def genNatureEvents(longitude1, latitude1, longitude2, latitude2, num, currentID):
     temp = currentID
-    eventType = random.randint(1, 6)
+    eventType = 1
     tempType = -1
     typeFile = ""
-    if(eventType == 1):
-        tempType = 2
-        typeFile = "gas.evt"
-    if(eventType == 2):
-        tempType = 13
-        typeFile = "temperature.evt"
-    if(eventType == 3):
-        tempType = 14
-        typeFile = "humidity.evt"
-    if(eventType == 4):
-        tempType = 15
-        typeFile = "windLevel.evt"
-    if(eventType == 5):
-        tempType = 16
-        typeFile = "waterLevel.evt"
-    if(eventType == 6):
-        tempType = 17
-        typeFile = "lighting.evt"
     with open('Devices.csv', 'a+', newline='') as file:
         writer = csv.writer(file)
         while(num > 0):
+            eventType = random.randint(1, 6)
+            if(eventType == 1):
+                tempType = 2
+                typeFile = "gas.evt"
+            if(eventType == 2):
+                tempType = 13
+                typeFile = "temperature.evt"
+            if(eventType == 3):
+                tempType = 14
+                typeFile = "humidity.evt"
+            if(eventType == 4):
+                tempType = 15
+                typeFile = "windLevel.evt"
+            if(eventType == 5):
+                tempType = 16
+                typeFile = "waterLevel.evt"
+            if(eventType == 6):
+                tempType = 17
+                typeFile = "lighting.evt"
             pos = genRanPoint(longitude1, latitude1, longitude2, latitude2)
             writer.writerow(["device", tempType, temp, pos[0], pos[1], 0, 10, 1, "false", 0, "", "", typeFile])
             temp = temp + 1
@@ -146,6 +147,13 @@ def genRadio(myID):
 
 def genUsers(longitude1, latitude1, longitude2, latitude2, num):
     userID = 1
+    Tem = "false"
+    Hum = "false"
+    Wat = "false"
+    Lig = "false"
+    Gas = "false"
+    Win = "false"
+    sensorType = 1
     with open('Users.csv', 'a+', newline='') as file:
         writer = csv.writer(file)
         while(num > 0):
@@ -153,7 +161,37 @@ def genUsers(longitude1, latitude1, longitude2, latitude2, num):
             userPos = genRanPoint(longitude1, latitude1, longitude2, latitude2)
             area1 = genRanPoint(longitude1, latitude1, longitude2, latitude2)
             area2 = genRanPoint(longitude1, latitude1, longitude2, latitude2)
-            writer.writerow(["user", "true", "true", userName, area1[1], area2[1], area1[0], area2[0], userPos[0], userPos[1], "false", "false", "false", "false", "false", "false", "false", 10.0, 0.0, 0.0, 0, 64000])
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Tem = "true"
+            else:
+                Tem = "false"
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Hum = "true"
+            else:
+                Hum = "false"
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Wat = "true"
+            else:
+                Wat = "false"
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Lig = "true"
+            else:
+                Lig = "false"
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Gas = "true"
+            else:
+                Gas = "false"
+            sensorType = random.randint(1, 2)
+            if(sensorType == 1):
+                Win = "true"
+            else:
+                Win = "false"
+            writer.writerow(["user", "true", "true", userName, area1[1], area2[1], area1[0], area2[0], userPos[0], userPos[1], Tem, Hum, Wat, Lig, Gas, Win, "false", 10.0, 0.0, 0.0, 0, 64000])
             userID = userID + 1
             num = num -1
 
@@ -176,4 +214,4 @@ def genRanPoint(longitude1, latitude1, longitude2, latitude2):
     return res
 
 
-genSimulationUnit(-71.04332995697504, 42.320719526540906, -71.03701192124727, 42.31091477201934, 100, 5)
+genSimulationUnit(-71.0446572303772, 42.319177010972695, -71.03641748428345, 42.31097379616, 100, 2)

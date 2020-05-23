@@ -1583,7 +1583,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button fx:id="buttonSaveUserPreferences" mnemonicParsing="false" onAction="#saveUserPreferrences" text="Save preferences" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="12">
+                                                <Button fx:id="buttonSaveUserPreferences" mnemonicParsing="false" onAction="#saveUserPreferrences" text="Save Preferences" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="12">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -1674,6 +1674,14 @@
                                                       <Font size="11.0" />
                                                    </font>
                                                 </Button>
+                                                <CheckBox fx:id="checkboxHideShowArea" mnemonicParsing="false" onAction="#hideShowArea" text="Hide Area" GridPane.columnSpan="3" GridPane.rowIndex="12">
+                                                   <font>
+                                                      <Font size="11.0" />
+                                                   </font>
+                                                   <GridPane.margin>
+                                                      <Insets left="3.0" />
+                                                   </GridPane.margin>
+                                                </CheckBox>
                                              </children>
                                           </GridPane>
                                           <Button fx:id="buttonGenerateSenScripts" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#generateSenScripts" prefHeight="34.0" text="Generate SenScript" textAlignment="CENTER">

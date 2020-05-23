@@ -34,11 +34,24 @@ public class UserList {
 		users.add(u);
 	}
 
+	public static void hideAreas() {
+		for(User u: users) {
+			u.setShowArea(false);
+		}
+	}
+	
+	public static void showAreas() {
+		for(User u: users) {
+			u.setShowArea(true);
+		}
+	}
+	
 	public static void drawUserAreas(Graphics2D g){
 		int i = -1;
 		for(User u: users){
 			i++;
-			u.drawConcernedAreaOnMap(g);
+			if(u.getShowArea())
+				u.drawConcernedAreaOnMap(g);
 			if(i == currentUser)
 				u.drawUserIcon(g, true);
 			else
