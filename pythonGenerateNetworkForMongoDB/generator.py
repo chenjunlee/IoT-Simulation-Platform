@@ -43,22 +43,22 @@ def genSimulationUnit(longitude1, latitude1, longitude2, latitude2, deviceNumber
     currentID = genSensors(longitude1, latitude1, midLong, midLati, deviceNumber/4, 1)
     currentID = genRouters(longitude1, latitude1, midLong, midLati, deviceNumber/8, currentID)
     currentID = genBaseStations(longitude1, latitude1, midLong, midLati, deviceNumber/16, currentID)
-    currentID = genNatureEvents(longitude1, latitude1, midLong, midLati, deviceNumber/16, currentID)
+    currentID = genNatureEvents(longitude1, latitude1, midLong, midLati, deviceNumber/4, currentID)
     
     currentID = genSensors(longitude1, latitude2, midLong, midLati, deviceNumber/4, currentID)
     currentID = genRouters(longitude1, latitude2, midLong, midLati, deviceNumber/8, currentID)
     currentID = genBaseStations(longitude1, latitude2, midLong, midLati, deviceNumber/16, currentID)
-    currentID = genNatureEvents(longitude1, latitude2, midLong, midLati, deviceNumber/16, currentID)   
+    currentID = genNatureEvents(longitude1, latitude2, midLong, midLati, deviceNumber/4, currentID)   
     
     currentID = genSensors(longitude2, latitude1, midLong, midLati, deviceNumber/4, currentID)
     currentID = genRouters(longitude2, latitude1, midLong, midLati, deviceNumber/8, currentID)
     currentID = genBaseStations(longitude2, latitude1, midLong, midLati, deviceNumber/16, currentID)
-    currentID = genNatureEvents(longitude2, latitude1, midLong, midLati, deviceNumber/16, currentID)
+    currentID = genNatureEvents(longitude2, latitude1, midLong, midLati, deviceNumber/4, currentID)
     
     currentID = genSensors(longitude2, latitude2, midLong, midLati, deviceNumber/4, currentID)
     currentID = genRouters(longitude2, latitude2, midLong, midLati, deviceNumber/8, currentID)
     currentID = genBaseStations(longitude2, latitude2, midLong, midLati, deviceNumber/16, currentID)
-    currentID = genNatureEvents(longitude2, latitude2, midLong, midLati, deviceNumber/16, currentID)
+    currentID = genNatureEvents(longitude2, latitude2, midLong, midLati, deviceNumber/4, currentID)
     
     with open('Users.csv', 'w', newline='') as file:
         writer = csv.writer(file)

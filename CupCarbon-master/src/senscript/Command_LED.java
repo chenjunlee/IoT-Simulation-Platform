@@ -19,9 +19,6 @@ public class Command_LED extends Command {
 	protected String arg1 = null ;
 	protected String arg2 = null ;
 	
-	// Note: arg1 is the number of the pin: not used in simulation
-	// but it is useful for the code generation to determine which pin
-	// will be used for the led
 	
 	public Command_LED(SensorNode sensor, String arg1, String arg2) {
 		this.sensor = sensor ;

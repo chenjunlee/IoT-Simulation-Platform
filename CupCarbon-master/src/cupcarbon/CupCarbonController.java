@@ -5012,9 +5012,11 @@ public class CupCarbonController implements Initializable {
 		if(checkboxHideShowArea.isSelected()) {
 			UserList.hideAreas();
 			MapLayer.repaint();
+			mapFocus();
 		} else {
 			UserList.showAreas();
 			MapLayer.repaint();
+			mapFocus();
 		}
 	}
 }

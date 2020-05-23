@@ -1,0 +1,3 @@
+prefix,selectedArea,selectedLocation,name,latitude1,latitude2,longitude1,longitude2,locationLongitude,locationLatitude,temperatureSensing,humiditySensing,gasSensing,lightSensing,windLevelSensing,waterLevelSensing,dataEncrypted,preferredLatency,preferredThroughput,preferredFrequency,startTime,endTime
+user,true,true,User 1,42.31415329276454,42.313376100541625,-71.04215387452895,-71.03832204956058,-71.03917332753092,42.317643315946015,true,false,false,false,true,false,false,10.0,0.0,0.0,0,64000
+user,true,true,User 2,42.314792293840455,42.31393770290906,-71.04281467135056,-71.04239358073548,-71.03646488882971,42.31308177649591,true,true,true,false,false,true,false,10.0,0.0,0.0,0,64000

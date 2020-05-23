@@ -30,95 +30,95 @@ for i 1 $x
     if(($type==B) && ($round==$rd))
     	mark 1
 	if($nums==0)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $lantency $ct
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==1)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb Event value: $v1
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==2)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb Event value: $v1
-		printdb Event: $s2
-		printdb Event value: $v2
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $v2 $s3 $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==3)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb Event value: $v1
-		printdb Event: $s2
-		printdb Event value: $v2
-		printdb Event: $s3
-		printdb Event value: $v3
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $v2 $s3 $v3 $s4 $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==4)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb Event value: $v1
-		printdb Event: $s2
-		printdb Event value: $v2
-		printdb Event: $s3
-		printdb Event value: $v3
-		printdb Event: $s4
-		printdb Event value: $v4
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $v2 $s3 $v3 $s4 $v4 $s5 $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==5)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb Event value: $v1
-		printdb Event: $s2
-		printdb Event value: $v2
-		printdb Event: $s3
-		printdb Event value: $v3
-		printdb Event: $s4
-		printdb Event value: $v4
-		printdb Event: $s5
-		printdb Event value: $v5
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $v2 $s3 $v3 $s4 $v4 $s5 $v5 $s6 $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
 	if($nums==6)
-		printdb Simulation time: $ct s
-		printdb Sensor ID: $froid
-		printdb Sensor location: $pos1 $pos2
-		printdb Lantency: $lantency ms
-		printdb Event: $s1
-		printdb le Event value: $v1
-		printdb Event: $s2
-		printdb Event value: $v2
-		printdb Event: $s3
-		printdb Event value: $v3
-		printdb Event: $s4
-		printdb Event value: $v4
-		printdb Event: $s5
-		printdb Event value: $v5
-		printdb Event: $s6
-		printdb Event value: $v6
-		printdb \
+		data res $rid $type $froid $tarid $pos1 $pos2 $rd $nums $s1 $v1 $s2 $v2 $s3 $v3 $s4 $v4 $s5 $v5 $s6 $v6 $end $lantency $ct
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 0
+		mark 1
+		printdb $res
 	end
     else
 	goto 19

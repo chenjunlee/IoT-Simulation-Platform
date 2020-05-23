@@ -733,7 +733,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						if (!first) {
 							s += "#";
 						}
-						s += "Lighting" + "#" + device.getValue();
+						s += "Light" + "#" + device.getValue();
 						first = false;
 						lighting = false;
 						count++;
