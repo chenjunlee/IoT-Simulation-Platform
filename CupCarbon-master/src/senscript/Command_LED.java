@@ -8,11 +8,13 @@ import device.SensorNode;
 import simulation.WisenSimulation;
 import user.User;
 
-/**
+/** return sensors in selectArea.
+ * LED V1 V2
+ * V1 returns an array of all sensor ID which all connected users have an interest in.
+ * V1[0] is the number of sensors.
+ * V2 returns an array of all connected users¡¯ concerned sensing values.
+ * V2[0] is the number of values.
  * @author Chenjun
- * 
- * return sensors in selectArea.
- *
  */
 public class Command_LED extends Command {
 

@@ -23,7 +23,9 @@ import user.User;
 import user.UserList;
 
 /**
+ * This Class is used to import data to database from Client, now deprecated.
  * @author Yiwei Yao
+ * @deprecated use bang's Export To DB.
  *
  */
 public class ImportToDB {

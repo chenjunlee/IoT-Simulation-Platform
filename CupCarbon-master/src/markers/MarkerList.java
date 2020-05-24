@@ -337,7 +337,7 @@ public class MarkerList {
 	}
 	
 	
-	/**
+	/** saveGpsCoordsForDB save gps to the file required by database project
 	 * @author Yiwei Yao
 	 * @param fileName
 	 * @param title
@@ -346,7 +346,7 @@ public class MarkerList {
 	 * @param loop
 	 * @param delay
 	 * @param nLoop
-	 * saveGpsCoordsForDB save gps to the file required by database project
+	 * 
 	 */
 	public static void saveGpsCoordsForDB(String fileName, String title, String from, String to, boolean loop, int delay, int nLoop) {
 		try {

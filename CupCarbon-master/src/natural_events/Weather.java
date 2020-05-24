@@ -276,10 +276,10 @@ public class Weather extends MobileG {
 		}
 	}
 
-	/**
+	/** saveToDB return a list of Document that contains the informs of Weather with prefix device.
 	 *@author Yiwei Yao
 	 *@return List<Document>
-	 *saveToDB return a list of Document that contains the informs of Weather with prefix device.
+	 *
 	 */
 	@Override
 	public List<Document> saveToDB() {

@@ -19,6 +19,7 @@ import user.User;
 import user.UserList;
 
 /**
+ * This class is used to export data to database from client.
  * @author Bang Tran
  *
  */
@@ -52,7 +53,9 @@ public class ExportToDB {
 	}
 
 
-	//save every user preferences to database
+	/**
+	 * save every user preferences to database
+	 */
 	public static void saveUsersToDB() {
 		if(UserList.users.size() == 0)		return;
 		MongoCollection<Document> usersCollection = DBMethods.getDB(defaultDBName).getCollection(defaultUsersCollection);
@@ -69,7 +72,9 @@ public class ExportToDB {
 		usersCollection.insertMany(userDocument);
 	}
 
-	//save every sensors and devices to databases
+	/**
+	 * save every sensors and devices to databases
+	 */
 	public static void saveDevicesAndSensorsToDB() {
 		if(DeviceList.sensors.size() <= 0) return;
 
@@ -95,7 +100,9 @@ public class ExportToDB {
 		devicesCollection.insertMany(documents);
 	}
 
-	//Save the simulation parameters to database
+	/**
+	 * Save the simulation parameters to database
+	 */
 	public static void saveSimulationParams() {
 		MongoCollection<Document> simulPreferencesCollection = DBMethods.getDB(defaultDBName).getCollection(defaultSimulPreferencesCollection);
 

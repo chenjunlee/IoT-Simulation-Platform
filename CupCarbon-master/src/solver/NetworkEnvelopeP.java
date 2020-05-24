@@ -48,7 +48,7 @@ public class NetworkEnvelopeP extends Thread {
 	public void run() {
 
 		int k = 1 ; // Number of visible sensors
-		double m = 1 ; // Angle of the zone (1=90�, 2=45� ...)
+		double m = 1 ; // Angle of the zone (1=90, 2=45 ...)
 		
 		SensorNode n1, n2;
 		

@@ -15,7 +15,7 @@ import user.UserList;
 
 
 /**
- *
+ * This is the Controller Class for New User creation Window
  * @author Bang Tran
  *
  */

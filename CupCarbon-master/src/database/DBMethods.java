@@ -13,6 +13,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 
 /**
+ * help methods for database operations
  * @author Yiwei Yao
  *
  */
@@ -21,32 +22,58 @@ public class DBMethods {
 
 	static MongoClient  mongo = ConnectToDB.mongoClient;
 
-	//get db
+	/** get Database
+	 * @param dbName
+	 * @return
+	 */
 	public static MongoDatabase getDB(String dbName) {
 		return mongo.getDatabase(dbName);
 	}
 
-	//get a list of collections
+	/**
+	 * get a list of collections in database
+	 * @param db
+	 * @return
+	 */
 	public static MongoIterable<String> getCollections(MongoDatabase db) {
 		return db.listCollectionNames();
 	}
 
-	//	get the number of results in a collection
+
+	/** 
+	 * get the number of results in a collection
+	 * @param collection
+	 * @return
+	 */
 	public static long collectionsCount(MongoCollection<Document> collection) {
 		return collection.count();
 	}
 
-	// get a collection
+	/**
+	 * select a collection base on name and return it
+	 * @param db
+	 * @param collection
+	 * @return
+	 */
 	public static MongoCollection<Document> getCollection(MongoDatabase db, String collection) {
 		return db.getCollection(collection);
 	}
 
-	// read operation
+	/**
+	 * read collections document base on collection name and return it.
+	 * @param collection
+	 * @return
+	 */
 	public static FindIterable<Document> find(MongoCollection<Document> collection) {
 		return collection.find();
 	}
 
-	// find document with prefix
+	/**
+	 * Find document with certain prefix with certain collection name, prefix name
+	 * @param collection
+	 * @param prefix
+	 * @return
+	 */
 	public static FindIterable<Document> findWithPrefix(MongoCollection<Document> collection, String prefix) {
 		BasicDBObject query = new BasicDBObject();
 		query.put("prefix", prefix);
@@ -54,14 +81,17 @@ public class DBMethods {
 		return data;
 	}
 
-	// drop collection
+	/**
+	 * drop collection
+	 * @param collection
+	 */
 	public static void dropCollection(MongoCollection<Document> collection) {
 		collection.drop();
 	}
 
 
 	/**
-	 *
+	 * Empty collection
 	 * @author Bang Tran
 	 */
 	// empty collection

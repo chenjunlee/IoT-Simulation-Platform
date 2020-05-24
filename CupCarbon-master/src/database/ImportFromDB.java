@@ -18,6 +18,7 @@ import user.UserList;
 import visibility.VisibilityLauncher;
 
 /**
+ * This Class is used to import data from database to client
  * @author Bang Tran
  *
  */
@@ -30,6 +31,11 @@ public class ImportFromDB {
 	static String defaultPrjPreferencesCollection = "proj_preferences";
 	static String defaultSimulPreferencesCollection = "simul_preferences";
 
+	/**
+	 * Open project form database. 
+	 * It will get deviceData, radioData, projectData, simulationData, userData, buildingData, markerData from database and call each openFromDB method.
+	 * 
+	 */
 	public static void openProject() {
 		CupCarbon.cupCarbonController.displayPermanentMessage_th("Reading database...");
 

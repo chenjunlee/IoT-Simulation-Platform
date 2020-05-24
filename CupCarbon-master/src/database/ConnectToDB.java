@@ -3,6 +3,7 @@ package database;
 import com.mongodb.MongoClient;
 
 /**
+ * Connect Database on 127.0.0.1
  * @author Yiwei Yao
  *
  */

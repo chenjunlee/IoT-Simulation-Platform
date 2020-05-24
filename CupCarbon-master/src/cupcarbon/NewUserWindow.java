@@ -8,6 +8,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * This is the Window Class for New User creation Window
+ * @author Bang Tran
+ *
+ */
 public class NewUserWindow {
 	public NewUserWindow() throws IOException {
 		Stage stage = new Stage();

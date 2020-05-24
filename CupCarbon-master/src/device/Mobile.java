@@ -245,10 +245,10 @@ public class Mobile extends MobileG {
 		}
 	}
 	
-	/**
+	/** saveToDB return a list of Document contains the informs of Mobile
 	 * @author Yiwei Yao
 	 * @return List<Document>
-	 * saveToDB return a list of Document contains the informs of Mobile
+	 * 
 	 */
 	@Override
 	public List<Document> saveToDB() {

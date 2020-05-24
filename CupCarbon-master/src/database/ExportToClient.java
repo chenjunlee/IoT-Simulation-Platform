@@ -21,7 +21,9 @@ import user.UserList;
 import visibility.VisibilityLauncher;
 
 /**
+ * This class is used to export data from database to client. Now deprecated 
  * @author Yiwei Yao
+ * @deprecated use bang's ImportFrom DB.
  *
  */
 public class ExportToClient {

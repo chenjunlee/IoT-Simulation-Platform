@@ -14,8 +14,9 @@ import javafx.stage.Stage;
 import project.Project;
 
 /**
- * @author Yiwei Yao
  * DBProjectCreateController control the windows of dbprojectcreate.fxml
+ * @author Yiwei Yao
+ * @deprecated It is deprecated, database now does not support muti-projects.
  */
 public class DBProjectCreateController implements Initializable {
 

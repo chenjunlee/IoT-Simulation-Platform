@@ -89,9 +89,12 @@ public class DeviceList {
 	}
 
 	/**
+	 * add random BaseStation with Uniform distribution
+	 * We set number of base station to SensorNumber/4
+	 * To add base station we divide network into 4 parts, and use random method to generate base station in each block.
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
-	 * add random BaseStation with Uniform distribution
+	 * 
 	 */
 	public static void addRandomUDBaseStationCS682(int generateSensorNumber) {
 		// the number of sensors should bigger than 100, less than 1000
@@ -156,10 +159,13 @@ public class DeviceList {
 	}
 
 	/**
+	 * add random routers with Uniform distribution.
+	 * we generate number of routers to sensorNumber/2.
+	 * In order to generate routers we divide network into 16 parts and use random method to generate routers in each block.
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
 	 *
-	 * add random routers with Uniform distribution
+	 * 
 	 */
 	public static void addRandomUDRouterCS682(int generateSensorNumber) {
 		// the number of sensors should bigger than 100, less than 1000
@@ -220,10 +226,11 @@ public class DeviceList {
 		}
 	}
 
-	/**
+	/** This method to generator random sensor for network, and return generate number
+	 * We use random method to generate sensors in the network.
 	 * @author Yiwei Yao
 	 *
-	 * method to generator random sensor for network, and return generate number
+	 * 
 	 */
 	public static void addRandomSensorsCS682(int generateNumber) {
 		// the number of sensors should bigger than 100, less than 1000
@@ -287,6 +294,11 @@ public class DeviceList {
 		}
 	}
 
+	/** This method is used to generate random base station in the network
+	 * the number of base station is sensor number/4
+	 * we use random method to generate base station in the network.
+	 * @param generateSensorNumber
+	 */
 	public static void addRandomBaseStationCS682(int generateSensorNumber) {
 		// the number of sensors should bigger than 100, less than 1000
 		int generateNumber = generateSensorNumber / 4;
@@ -340,7 +352,9 @@ public class DeviceList {
 		}
 	}
 
-	/**
+	/** This method is to generate routers in network randomly
+	 * the number of routers is sensor number/2
+	 * We use random method to generate routers in the network.
 	 * @author Yiwei Yao
 	 *
 	 */
@@ -397,11 +411,13 @@ public class DeviceList {
 		}
 	}
 
-	/**
+	/** This method to generate random nature Event
+	 * the number of nature events is 50.
+	 * We use random method to generate nature event into network.
 	 * @author Yiwei Yao
 	 * @param generateSensorNumber
 	 *
-	 * method to generate random nature Event
+	 * 
 	 */
 	public static void addRandomNatEventCS682(int generateSensorNumber) {
 		// the number of Nature Event should bigger than 50, less than 100
@@ -683,13 +699,12 @@ public class DeviceList {
 		}
 	}
 
-	/**
+	/**	This method receives device data and radio data from Mongodb parse
+	 * first check if device id is device data has its corresponding radio data.
+	 * it parses device data with its deviceType, in different device type call its particular document parse method.
 	 * @author Yiwei Yao
 	 * @param deviceData
 	 * @param radioData
-	 * This method receives device data and radio data from Mongodb parse
-	 * first check if device id is device data has its corresponding radio data.
-	 * it parses device data with its deviceType, in different device type call its particular document parse method.
 	 */
 	public static void openFromDB(FindIterable<Document> deviceData, FindIterable<Document> radioData) {
 		SensorNode sensor;
@@ -786,11 +801,11 @@ public class DeviceList {
 		MapLayer.repaint();
 	}
 
-	/**
+	/** when device type is sensor and has no radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return SensorNode
-	 * when device type is sensor and has no radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadSensorFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
@@ -847,12 +862,12 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is sensor and has radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @param selectedRadio
 	 * @return SensorNode
-	 * when device type is sensor and has radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadSensorFromDB(Document selectedDevice, Document selectedRadio) {
 
@@ -981,11 +996,11 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is DirectionalSensor and has no radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return SensorNode
-	 * when device type is DirectionalSensor and has no radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
@@ -1037,11 +1052,11 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is DirectionalSensor and has radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return SensorNode
-	 * when device type is DirectionalSensor and has radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadDirectionalSensorFromDB(Document selectedDevice, Document selectedRadio) {
 		SensorNode sensor = null;
@@ -1159,11 +1174,11 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is baseStation and has no radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return SensorNode
-	 * when device type is baseStation and has no radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadBaseStationFromDB(Document selectedDevice) {
 		SensorNode sensor = null;
@@ -1204,11 +1219,11 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is baseStation and has radio data, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return SensorNode
-	 * when device type is baseStation and has radio data, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static SensorNode loadBaseStationFromDB(Document selectedDevice, Document selectedRadio) {
 		SensorNode sensor = null;
@@ -1313,11 +1328,11 @@ public class DeviceList {
 		return sensor;
 	}
 
-	/**
+	/** when device type is Device, parse the Document return a sensorNode Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return Device
-	 * when device type is Device, parse the Document return a sensorNode Object
+	 * 
 	 */
 	public static Device loadMobileFromDB(Document selectedDevice) {
 		Device device = null;
@@ -1400,12 +1415,12 @@ public class DeviceList {
 		}
 		return device;
 	}
-
-	/**
+ 
+	/** when device type is gas, parse the Document return a Device Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return Device
-	 * when device type is gas, parse the Document return a Device Object
+	 * 
 	 */
 	public static Device loadGasFromDB(Document selectedDevice) {
 		Device device = null;
@@ -1474,7 +1489,11 @@ public class DeviceList {
 		return device;
 	}
 	
-	//Chenjun
+	/** load humidity from database
+	 * @param selectedDevice
+	 * @author Chenjun Li
+	 * @return
+	 */
 	public static Device loadHumFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -1508,7 +1527,11 @@ public class DeviceList {
 		return device;
 	}
 	
-	//Chenjun
+	/** load water level from database
+	 * @param selectedDevice
+	 * @author Chenjun Li
+	 * @return
+	 */
 	public static Device loadWaterFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -1542,7 +1565,11 @@ public class DeviceList {
 		return device;
 	}
 	
-	//Chenjun
+	/** load light from database
+	 * @author Chenjun
+	 * @param selectedDevice
+	 * @return
+	 */
 	public static Device loadLightFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -1576,7 +1603,11 @@ public class DeviceList {
 		return device;
 	}
 	
-	//Chenjun
+	/** Load Wind level from database
+	 * @param selectedDevice
+	 * @author Chenjun Li
+	 * @return
+	 */
 	public static Device loadWindFromDB(Document selectedDevice) {
 		Device device = null;
 		String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
@@ -1661,11 +1692,10 @@ public class DeviceList {
 		return device;
 	}
 
-	/**
+	/** when device type is Weather, parse the Document return a Device Object
 	 * @author Yiwei Yao
 	 * @param selectedDevice
 	 * @return Device
-	 * when device type is Weather, parse the Document return a Device Object
 	 */
 	public static Device loadWeatherFromDB(Document selectedDevice) {
 		Weather device = null;
@@ -1754,6 +1784,9 @@ public class DeviceList {
 	}
 
 	//old version
+	/** old version of open
+	 * @param fileName
+	 */
 	public static void open1(String fileName) {
 		fileName = Project.projectPath + File.separator + "config/nodes.cfg";
 
@@ -2829,13 +2862,11 @@ public class DeviceList {
 		}
 	}
 
-	/**
+	/** Parse Radio Document, check up to 10 radio name, if it exists use openRadioModuleFromDBHelper to parse, after that set currentRadio.
 	 * @author Yiwei Yao
 	 * @param selectedRadio
 	 * @param sensor
-	 *
-	 * Parse Radio Document, check up to 10 radio name, if it exists use openRadioModuleFromDBHelper
-	 * to parse, after that set currentRadio.
+
 	 */
 	public static void openRadioModuleFromDB(Document selectedRadio, SensorNode sensor) {
 
@@ -2883,12 +2914,12 @@ public class DeviceList {
 		sensor.selectCurrentRadioModule(currentRadioName);
 	}
 
-	/**
+	/** openRadioModuleFromDBHelper parse radio document and add to sensor.
 	 * @author Yiwei Yao
 	 * @param selectedRadio
 	 * @param index
 	 * @param sensor
-	 * openRadioModuleFromDBHelper parse radio document and add to sensor.
+	 * 
 	 */
 	public static void openRadioModuleFromDBHelper(Document selectedRadio, int index, SensorNode sensor) {
 		String name = selectedRadio.getString("radio_name"+index);

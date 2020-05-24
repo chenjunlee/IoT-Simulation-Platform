@@ -47,6 +47,9 @@ import map.MapLayer;
 import markers.Routes;
 import project.Project;
 
+/** This class is used to run simulation
+ *
+ */
 public class WisenSimulation implements Runnable {
 
 	public static double time = 0.0;

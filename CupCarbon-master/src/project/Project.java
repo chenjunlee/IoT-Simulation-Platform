@@ -61,7 +61,9 @@ public final class Project {
 	public static String projectPath = "";
 	public static String projectName = "";
 
-	//add by Yiwei Yao for db file path
+	/**
+	 * add by Yiwei Yao for db file path
+	 */
 	public static String DBFilePath = cupcarbon.CupCarbon.DBFilePath;
 
 	public static void setProjectName(String path, String name) {
@@ -69,24 +71,33 @@ public final class Project {
 		projectName = name;
 	}
 
-	// add by Yiwei Yao file path for database mode
-	// ***************************************************************************
+	/** add by Yiwei Yao file path for database mode
+	 * @return
+	 */
 	public static String getProjectGpsPathForDB() {
 		return DBFilePath + File.separator + "gps";
 	}
-
+	
+	/** add by Yiwei Yao file path for database mode
+	 * @return
+	 */
 	public static String getProjectScriptPathForDB() {
 		return DBFilePath + File.separator + "scripts";
 	}
-
+	
+	/** add by Yiwei Yao file path for database mode
+	 * @return
+	 */
 	public static String getProjectNatEventPathForDB() {
 		return DBFilePath + File.separator + "natevents";
 	}
-
+	
+	/** add by Yiwei Yao file path for database mode
+	 * @return
+	 */
 	public static String getProjectLogPathForDB() {
 		return DBFilePath + File.separator + "logs";
 	}
-	// ***************************************************************************
 
 	public static String getProjectPathName() {
 		return projectPath + File.separator + projectName;
@@ -391,10 +402,10 @@ public final class Project {
 		}
 	}
 
-	/**
+	/** loadParametersFromDB parse project data and set it to project properties.
 	 * @author Yiwei Yao
 	 * @param projectData
-	 * loadParametersFromDB parse project data and set it to project properties.
+	 * 
 	 */
 	public static void loadParametersFromDB(FindIterable<Document> projectData) {
 		MongoCursor<Document> projectDataIterator = projectData.iterator();
@@ -514,10 +525,10 @@ public final class Project {
 		}
 	}
 
-	/**
+	/** saveParametersToDB save properties of project into document with a prefix project.
 	 * @author Yiwei Yao
 	 * @return Document
-	 * saveParametersToDB save properties of project into document with a prefix project.
+	 * 
 	 */
 	public static Document saveParametersToDB() {
 		Document document = new Document();
@@ -591,16 +602,17 @@ public final class Project {
 			return name + ".evt";
 	}
 
-	// add by Yiwei Yao
-	// ******************************************************************************
+	/**
+	 * get nature event from database
+	 * @param name
+	 * @return
+	 */
 	public static String getNatEventFileFromNameForDB(String name) {
 		if (name.endsWith(".evt"))
 			return getProjectNatEventPathForDB() + File.separator + name;
 		else
 			return getProjectNatEventPathForDB() + File.separator + name + ".evt";
 	}
-	// ******************************************************************************
-
 
 	public static String getGpsFileFromName(String name) {
 		if (name.endsWith(".gps"))
@@ -608,16 +620,18 @@ public final class Project {
 		else
 			return getProjectGpsPath() + File.separator + name + ".gps";
 	}
-
-	// add by Yiwei Yao
-	// ******************************************************************************
+	
+	/**
+	 * get gps file from database
+	 * @param name
+	 * @return
+	 */
 	public static String getGpsFileFromNameForDB(String name) {
 		if (name.endsWith(".gps"))
 			return getProjectGpsPathForDB() + File.separator + name;
 		else
 			return getProjectGpsPathForDB() + File.separator + name + ".gps";
 	}
-	// ******************************************************************************
 
 	public static String getGpsFileExtension(String name) {
 		if (name.endsWith(".gps"))
@@ -633,15 +647,18 @@ public final class Project {
 			return getProjectScriptPath() + File.separator + name + ".csc";
 	}
 
-	// add by Yiwei Yao
-	// ******************************************************************************
+	
+	/**
+	 * get script file from database
+	 * @param name
+	 * @return
+	 */
 	public static String getScriptFileFromNameForDB(String name) {
 		if (name.endsWith(".csc"))
 			return getProjectScriptPathForDB() + File.separator + name;
 		else
 			return getProjectScriptPathForDB() + File.separator + name + ".csc";
 	}
-	// ******************************************************************************
 
 	public static String getScriptFileExtension(String name) {
 		if (name.endsWith(".csc"))

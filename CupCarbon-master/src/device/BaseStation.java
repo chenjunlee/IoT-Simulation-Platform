@@ -39,6 +39,7 @@ import utilities.MapCalc;
 import utilities.UColor;
 
 /**
+ * BaseStation is used connect user and the network. User receives data from base station and sensors return data to base station.
  * @author Ahcene Bounceur
  * @version 1.0
  */
@@ -177,10 +178,10 @@ public class BaseStation extends StdSensorNode {
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "basestation_"+ref);
 	}
 	
-	/**
+	/** saveToDB returns a list of document so that can insert into db.
 	 *@author Yiwei Yao
-	 *return List<Document>
-	 *saveToDB returns a list of document so that can insert into db.
+	 *@return List<Document>
+	 *
 	 */
 	@Override
 	public List<Document> saveToDB() {

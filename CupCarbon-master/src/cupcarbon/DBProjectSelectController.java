@@ -21,10 +21,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
-/**
+/** DBProjectSelectController control the windows of dbprojectselect.fxml
  * @author Yiwei Yao
- *
- *DBProjectSelectController control the windows of dbprojectselect.fxml
+ * 
  */
 public class DBProjectSelectController implements Initializable {
 

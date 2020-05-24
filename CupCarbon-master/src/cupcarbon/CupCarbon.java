@@ -65,7 +65,12 @@ public class CupCarbon extends Application {
 	public static CupCarbonController cupCarbonController;
 	public static boolean macos = false;
 
-	// Add by Yiwei Yao
+	/**
+	 * This variable is used to store files need to run when project is load from database.
+	 * default is "/root_dir/files_for_database"
+	 * 
+	 * @author Yiwei Yao
+	 */
 	public static String DBFilePath = "";
 
 	@Override
@@ -172,9 +177,12 @@ public class CupCarbon extends Application {
 		System.exit(0);
 	}
 
-	/**
+	/** This method is used to generate source folders where users can put their senscript files in when the project is load from database. 
+	 * it creates one folder under root directory named "files_for_database", then in "files_for_database", it creates "scripts" folder to
+	 * store script files, "gps" folder to store gps script files, "logs" to store log files. "natevents" to store nature event script files.
+	 * 
 	 * @author Yiwei Yao
-	 * initial DB Script, nature event, GPS file path;
+	 * 
 	 */
 	public static void initDBProjectFiles() {
 		String file = "files_for_database";

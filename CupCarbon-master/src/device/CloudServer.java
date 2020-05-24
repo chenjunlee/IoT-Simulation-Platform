@@ -2,6 +2,10 @@ package device;
 
 import sensorunit.StdSensorUnit;
 
+/**
+ * @deprecated we no loner use CloudServer anymore, instead we use Base Station to do the job of cloud server
+ *
+ */
 public class CloudServer extends StdSensorNode {
 	private boolean temperatureSensing= false;
 	private boolean humiditySensing = false;

@@ -3,6 +3,13 @@ package senscript;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
+/**
+ * this class is used to return a string in format below to X
+ * 5#Temperature#25.333#Gas#84.333бн#end
+ * The first number is all nature events this sensor detected. Mostly one for each type, max number will be 6. The order of nature events is not guaranteed.
+ * @author Chenjun Li
+ *
+ */
 public class Command_AREADSENSOR extends Command {
 
 	protected String arg =  "";

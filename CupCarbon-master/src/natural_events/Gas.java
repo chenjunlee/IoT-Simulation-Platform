@@ -283,10 +283,10 @@ public class Gas extends MobileG {
 		}
 	}
 	
-	/**
+	/** saveToDB return a list of Document that contains the informs of Gas with prefix device.
 	 *@author Yiwei Yao
 	 *@return List<Document>
-	 *saveToDB return a list of Document that contains the informs of Gas with prefix device.
+	 *
 	 */
 	@Override
 	public List<Document> saveToDB() {

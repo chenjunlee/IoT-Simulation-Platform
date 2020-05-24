@@ -86,7 +86,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected boolean bufferReady = false;
 	protected double drssi = 0; // rssi in distance (meter)
 	
-	//Chenjun
+	/** User vector to store all users
+	 * @author Chenjun Li
+	 */
 	private Vector<User> users = new Vector<User>();
 	
 	/**
@@ -908,11 +910,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}	
 	}
 	
-	/**
+	/** saveRadioModuleToDB iterate each Module and call saveToDB.
 	 * @author Yiwei Yao
 	 * @param deviceId
 	 * @return Document
-	 * saveRadioModuleToDB iterate each Module and call saveToDB.
+	 * 
 	 */
 	public Document saveRadioModuleToDB(String deviceId) {
 		Document document = new Document();
@@ -945,7 +947,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return getSensorUnit().getDirection();
 	}
 	
-	//Chenjun
+	/** add user to user vector
+	 * @author Chenjun Li
+	 * @param user
+	 */
 	public void addUser(User user) {
 		if(users.contains(user))
 			return;
@@ -953,15 +958,24 @@ public abstract class SensorNode extends DeviceWithRadio {
 			users.add(user);
 	}
 	
+	/** get Users from user vector
+	 * @return
+	 */
 	public Vector<User> getUsers() {
 		return users;
 	}
 	
+	/** remove user from user vector
+	 * @param user
+	 */
 	public void removeUser(User user) {
 		if(users.contains(user))
 			users.remove(user);
 	}
 	
+	/**
+	 * clear all users in user vector
+	 */
 	public void clearUser() {
 		users.clear();
 	}

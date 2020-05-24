@@ -132,11 +132,17 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	private int cy ;
 
 
-	//??? Bang Tran - Begin
+	/**
+	 * stored marks used to select user selected area.
+	 * @author Bang Tran
+	 */
+	/**
+	 * stored marks used to select user selected area.
+	 * @author Bang Tran
+	 */
 	public static Marker concernedMarker1, concernedMarker2;
 	public static boolean displayUserAreas = true;
 	//public static UserList usersList = null;
-	//??? Bang Tran - End
 
 
 
@@ -328,6 +334,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 
 	/**
+	 * this method used to draw user selected area
 	 * @author Bang Tran UMB
 	 *
 	 *
@@ -1418,8 +1425,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 	}
 
-	/**
-	 * @param device
+	/***
+	 * @param x1, y1, x2, y2
+	 * 
 	 * @return the distance in meters between the current device and the one
 	 *         given as a parameter
 	 */

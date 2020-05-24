@@ -626,9 +626,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 
-	/**
+	/** This function takes reaction when the comboboxUsers change its selected index
 	 * @author Bang Tran
-	 * This function takes reaction when the comboboxUsers change its selected index
+	 * 
 	 */
 	private void onChangeComboBoxUsers(){
 		if (comboUsers.getItems().size() <= 0 )	return;
@@ -646,6 +646,10 @@ public class CupCarbonController implements Initializable {
 	}
 
 
+	/**
+	 * This method initial all comboBoxes
+	 * 
+	 */
 	public void initComboBoxes() {
 		radio_spreading_factor.getItems().removeAll(radio_spreading_factor.getItems());
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
@@ -691,8 +695,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
-	 *@author Bang Tran
 	 * This method load preferences of current user
+	 * @author Bang Tran
+	 * 
 	 */
 	private void loadUserPreferrences(){
 		if(UserList.users.size() == 0)	return;
@@ -720,8 +725,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
-	 *@author Bang Tran
 	 * This method save user's preferences
+	 * @author Bang Tran
 	 */
 	public void saveUserPreferrences(){
 		int userIdx = comboUsers.getSelectionModel().getSelectedIndex();
@@ -986,6 +991,7 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This method saves current netwoek to database.
 	 * @author Bang Tran
 	 */
 	@FXML
@@ -1021,6 +1027,7 @@ public class CupCarbonController implements Initializable {
 
 
 	/**
+	 * this method load network from database
 	 * @author Bang Tran
 	 */
 	@FXML
@@ -1085,8 +1092,11 @@ public class CupCarbonController implements Initializable {
 
 	public WisenSimulation wisenSimulation;
 
-	//Add by Yiwei Yao
-	//for run from db
+	/**
+	 * This variable is used to start simulation thread when the project is load from database
+	 * @author Yiwei Yao
+	 * @deprecated it is deprecated, we use wisenSimulation instead.
+	 */
 	public WisenSimulationDB wisenSimulationDB;
 
 
@@ -1364,6 +1374,9 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
+	/**
+	 * This method is used to create new project with file system.
+	 */
 	@FXML
 	public void newProject() {
 		Stage stage = new Stage();
@@ -1381,6 +1394,9 @@ public class CupCarbonController implements Initializable {
 		initScriptGpsEventComboBoxes();
 	}
 
+	/**
+	 * This method is used to create new project without initial eventComboBoxes.
+	 */
 	@FXML
 	public void newProjectFromCurrent() {
 		FileChooser fileChooser = new FileChooser();
@@ -1397,6 +1413,9 @@ public class CupCarbonController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method is used to open project from file system.
+	 */
 	@FXML
 	public void openProject() {
 		Platform.runLater(new Runnable() {
@@ -1497,9 +1516,10 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This method is used to show the result window.
+	 * 
 	 * @author Yiwei Yao
 	 *
-	 * open result window
 	 */
 	public void result() {
 		Platform.runLater(new Runnable() {
@@ -1513,9 +1533,10 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to set simulation parameters when open project from database
 	 * @author Yiwei Yao
-	 * @param simulationData
-	 * set simulation params when open from database
+	 * @param simulationData the object of simulation data that output from database
+	 * 
 	 */
 	public void loadSimulationParamsFromDB(FindIterable<Document> simulationData) {
 		MongoCursor<Document> simulationDataIterator = simulationData.iterator();
@@ -1577,6 +1598,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 
+	/**
+	 * This Method is used to set simulation parameters when open project from file System
+	 */
 	public void loadSimulationParams() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -2576,6 +2600,12 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
+	/**
+	 * This method is used to initial Script Gps NatureEvent combo boxes.
+	 * Changed by Yiwei Yao to add support for database mode(when open project from database)
+	 * when projectPath in Project is "DataBase" then load all scripts files from preset folder 
+	 * "files_for_database" in root directory.  
+	 */
 	public void initScriptGpsEventComboBoxes() {
 		// add by yiwei, add supoort for database mode.
 		// ******************************************************************************
@@ -3165,6 +3195,11 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
+	/**
+	 * This Method is used to get list of Gps files
+	 * changed by Yiwei Yao to support database mode(when open project from database)
+	 * now it can search files from "files_for_database/gps" when the project is open from database
+	 */
 	@FXML
 	public void getListOfRoutes() {
 		gpsListView.getItems().removeAll(gpsListView.getItems());
@@ -3186,8 +3221,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This method is used when project is in database mode(when open project from database) to search gps files and put into Gps Combo box
 	 * @author Yiwei Yao
-	 * return a list of gps file from database gps folder.
 	 */
 	public void getListOfRoutesForDB() {
 		gpsListView.getItems().removeAll(gpsListView.getItems());
@@ -3292,8 +3327,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 100 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 100 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator100() {
@@ -3317,8 +3352,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 200 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 200 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator200() {
@@ -3342,8 +3377,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 300 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 300 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator300() {
@@ -3367,8 +3402,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 400 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 400 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator400() {
@@ -3392,8 +3427,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 500 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 500 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator500() {
@@ -3417,8 +3452,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 600 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 600 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator600() {
@@ -3442,8 +3477,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 700 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 700 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator700() {
@@ -3467,8 +3502,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 800 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 800 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator800() {
@@ -3492,8 +3527,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 900 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 900 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator900() {
@@ -3517,8 +3552,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 1000 sensor nodes in traditional way.
 	 * @author Yiwei Yao
-	 * Not Uniform distribution generate random network 1000 sensor nodes.
 	 */
 	@FXML
 	public void CS682NUDRandomGenerator1000() {
@@ -3542,8 +3577,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 100 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 100 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator100() {
@@ -3567,8 +3602,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 200 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 200 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator200() {
@@ -3592,8 +3627,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 300 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 300 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator300() {
@@ -3617,8 +3652,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 400 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 400 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator400() {
@@ -3642,8 +3677,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 500 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 500 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator500() {
@@ -3667,8 +3702,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 600 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 600 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator600() {
@@ -3692,8 +3727,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 700 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 700 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator700() {
@@ -3717,8 +3752,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 800 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 800 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator800() {
@@ -3742,8 +3777,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 900 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 900 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator900() {
@@ -3767,8 +3802,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to generate random network with 1000 sensor nodes in uniform distribution way.
 	 * @author Yiwei Yao
-	 * Uniform distribution generate random network 1000 sensor nodes.
 	 */
 	@FXML
 	public void CS682UDRandomGenerator1000() {
@@ -4192,7 +4227,6 @@ public class CupCarbonController implements Initializable {
 		initRecentProjectMenu();
 	}
 
-	// changed by Yiwei Yao
 	@FXML
 	public void saveProject() {
 		Platform.runLater(new Runnable() {
@@ -4201,20 +4235,20 @@ public class CupCarbonController implements Initializable {
 				// add DataBase mode support, if projectPath equals DataBase mode
 				// then find a new place to store in the file system.
 				// after that open the project by the old way.
-				if(Project.projectPath.equals("DataBase Mode")) {
-					Stage stage = new Stage();
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.setTitle("Save Project to File System");
-					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon", "*.*"));
-					File file = fileChooser.showSaveDialog(stage);
-					if (file != null) {
-						Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
-								file.getName().toString(), false);
-						CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
-						Project.saveProject();
-					}
-				}
-				else if (Project.projectPath.equals("") || Project.projectName.equals("")) {
+//				if(Project.projectPath.equals("DataBase Mode")) {
+//					Stage stage = new Stage();
+//					FileChooser fileChooser = new FileChooser();
+//					fileChooser.setTitle("Save Project to File System");
+//					fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon", "*.*"));
+//					File file = fileChooser.showSaveDialog(stage);
+//					if (file != null) {
+//						Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
+//								file.getName().toString(), false);
+//						CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
+//						Project.saveProject();
+//					}
+//				}
+				if (Project.projectPath.equals("") || Project.projectName.equals("")) {
 					Alert alert = new Alert(AlertType.WARNING);
 					alert.setTitle("Warning!");
 					alert.setHeaderText(null);
@@ -4229,9 +4263,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 	/**
+	 * This Method is used to save project to database.
 	 * @author Yiwei Yao
-	 * save project to DB. if projectPath or project name is not set, create a new
-	 * project make project into database mode. otherwise save the project.
+	 * @deprecated it is deprecated now, we use saveNetworkToDatabase instead
 	 */
 	@FXML
 	public void saveProjectToDB() {
@@ -4256,8 +4290,9 @@ public class CupCarbonController implements Initializable {
 
 
 	/**
+	 * This Method is used to open Project from database.
 	 * @author Yiwei Yao
-	 * openProjectFromDB Call DBProjectSelectWindow().
+	 * @deprecated it is deprecated now, we use reloadFromDatabase instead
 	 */
 	@FXML
 	public void openProjectFromDB() {
@@ -4353,7 +4388,9 @@ public class CupCarbonController implements Initializable {
 
 
 	/**
+	 * This Method is used to generate SenScripts for Routers, Users, and BaseStations
 	 * @author Bang Tran UMB
+	 * @deprecated It is deprecated now, we use fixed Router User BaseStation scripts instead.
 	 *
 	 */
 	public void generateSenScripts(){
@@ -4386,12 +4423,8 @@ public class CupCarbonController implements Initializable {
 
 
 	/**
-	 * @author Bang Tran UMB
-	 *
-	 * changed by Yiwei Yao
-	 * it will run two threads one is use wisenSimulation used to log
-	 * one is wisenSimulationDB used to run simulation.
-	 *
+	 * @author Bang Tran 
+	 * @deprecated Now use runSimulation
 	 */
 	public void runSimulationCs682(){
 		if (!Project.projectName.equals(""))
@@ -4439,7 +4472,7 @@ public class CupCarbonController implements Initializable {
 	}
 
 
-	/**
+	/** button to add User
 	 * @author Bang Tran UMB
 	 */
 	@FXML
@@ -4455,7 +4488,7 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
-	/**
+	/** button to add remove User
 	 * @author Bang Tran
 	 */
 	@FXML
@@ -4486,9 +4519,9 @@ public class CupCarbonController implements Initializable {
 
 
 
-	/**
+	/** This method will clear the location of User
 	 * @author Bang Tran
-	 * This method will clear the location of User
+	 * 
 	 */
 	public void clearUserLocation(){
 		if (UserList.users.size() == 0 || comboUsers.getSelectionModel().getSelectedIndex() < 0 ){
@@ -4512,9 +4545,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 
-	/**
+	/** This method will set the location of User
 	 * @author Bang Tran
-	 * This method will set the location of User
+	 * 
 	 */
 	public void setUserLocation(){
 		if(MarkerList.markers.size() == 0 ){
@@ -4558,9 +4591,8 @@ public class CupCarbonController implements Initializable {
 
 
 	/**
-	 * @author Bang Tran UMB
-	 *
 	 * This method set concerned area for an user. Needs place 2 markers to determine the area
+	 * @author Bang Tran UMB
 	 *
 	 */
 	public void setConcernedArea(){
@@ -4609,11 +4641,9 @@ public class CupCarbonController implements Initializable {
 	}
 
 
-	/**
-	 * @author Bang Tran UMB
-	 *
-	 * This method remove concerned area for an user.
+	/** This method remove concerned area for an user.
 	 * clear the rectangle on the map and unmark all devices inside the rectangle
+	 * @author Bang Tran UMB
 	 *
 	 */
 	public void clearConcernedArea(){
@@ -4865,35 +4895,54 @@ public class CupCarbonController implements Initializable {
  * Chenjun Li edited
  **************************/
 
+	/** Add temperature nature event on the network
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void addTemp() {
 		WorldMap.addNodeInMap('c');
 		mapFocus();
 	}
-
+	
+	/** Add Water Level nature event on the network
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void addWat() {
 		WorldMap.addNodeInMap('d');
 		mapFocus();
 	}
-
+	
+	/** Add wind level nature event on the network
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void addWin() {
 		WorldMap.addNodeInMap('e');
 		mapFocus();
 	}
-
+	
+	/** Add Humdilty nature event on the network
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void addHum() {
 		WorldMap.addNodeInMap('a');
 		mapFocus();
 	}
-
+	
+	/** Add Light nature event on the network
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void addLig() {
 		WorldMap.addNodeInMap('b');
 		mapFocus();
 	}
+	
+	/** select temperature nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectTemp() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4904,6 +4953,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Temperature");
 		}
 	}
+	
+	/** select water level nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectWater() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4914,6 +4967,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Water");
 		}
 	}
+	
+	/** select wind level nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectWind() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4924,6 +4981,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Wind");
 		}
 	}
+	
+	/** select gas nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectGas() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4934,6 +4995,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Gas");
 		}
 	}
+	
+	/** select light nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectLight() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4944,6 +5009,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Light");
 		}
 	}
+
+	/** select humdilty nature event for selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void selectHum() {
 		int selectedUserIndex = comboUsers.getSelectionModel().getSelectedIndex();
@@ -4954,6 +5023,10 @@ public class CupCarbonController implements Initializable {
 			u.removeEvent("Humidity");
 		}
 	}
+	
+	/** apply user start time, end time, frequency to get message to selected user.
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void infoApply() {
 		long newTimeStart = Long.parseLong(txtUserStartTime.getText());
@@ -4974,6 +5047,11 @@ public class CupCarbonController implements Initializable {
 		u.setTimeEnd(newTimeEnd);
 		u.setTimeDelay(newTimeDelay);
 	}
+	
+	/**
+	 * This method connect Base Station to selected user
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void connectBaseStation() {
 		if(UserList.users.isEmpty()) {
@@ -5007,6 +5085,11 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
+	
+	/** This method used to hide board for all users' selected area 
+	 * 
+	 * @author Chenjun Li
+	 */
 	@FXML
 	public void hideShowArea() {
 		if(checkboxHideShowArea.isSelected()) {

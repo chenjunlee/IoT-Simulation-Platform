@@ -8,9 +8,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/**
+/** DBProjectSelectWindow Link dbprojectselect.fxml and construct the window.
  * @author Yiwei Yao
- * DBProjectSelectWindow Link dbprojectselect.fxml and construct the window.
+ * @deprecated It is deprecated, database now does not support muti-projects.
  *
  */
 public class DBProjectSelectWindow {

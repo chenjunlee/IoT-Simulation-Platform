@@ -47,6 +47,11 @@ import map.MapLayer;
 import markers.Routes;
 import project.Project;
 
+/**
+ * @author Yiwei Yao
+ * @deprecated it is deprecated now, use WisenSimulation instead.
+ *
+ */
 public class WisenSimulationDB implements Runnable {
 	
 	public static double time = 0.0;

@@ -16,8 +16,8 @@ import device.SensorNode;
 import simulation.WisenSimulation;
 import user.User;
 
-/**
- * @author Yiwei Yao
+/** This method is used to print data to database in "result" collection
+ * 
  * edited by Chenjun
  * 
  * handle printdb command
@@ -28,6 +28,7 @@ import user.User;
  * in Mongodb:
  * sensorid: XXX
  * 12:31:00 4/19/20: hello 12 23 34
+ * @author Yiwei Yao
  */
 public class Command_PRINTDB extends Command {
 	

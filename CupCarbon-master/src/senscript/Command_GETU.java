@@ -7,6 +7,13 @@ import device.SensorNode;
 import simulation.WisenSimulation;
 import user.User;
 
+/** GETU will generate a table which represents all connected users with its concerned area sensors, active/end time and latency.
+ * GETU is a new command.
+ * GETU X
+ * GETU will generate a table which represents all connected users with its concerned area sensors, active/end time and latency.
+ * @author Chenjun Li
+ *
+ */
 public class Command_GETU extends Command {
 	
 	protected String arg1 = "";
