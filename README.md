@@ -1,13 +1,13 @@
 # IoT-Simulation-Platform
 Please go to CupCarbon official site download user guide, learn the basic CupCarbon first.
 
-[IoT-Simulation-Platform User Document.pdf](IoT-Simulation-Platform User Document.pdf)
+### Our IoT-Simulation-Platform User Document is 'IoT-Simulation-Platform User Document.pdf'
 
-There is the our API document that includes our modification [API Document](doc\index.html) 
+### Our API document that includes our modification is under doc folder
 
-There is our database schema [Database Schema.html](Database Schema.html) 
+### Our database schema is 'Database Schema.html'
 
- Here is the CupCarbon official site: https://cupcarbon.com/
+Here is the CupCarbon official site: https://cupcarbon.com/
 
 Installation (Java party)
 
