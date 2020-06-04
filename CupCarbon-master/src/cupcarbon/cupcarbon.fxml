@@ -1684,6 +1684,7 @@
                                                 </CheckBox>
                                              </children>
                                           </GridPane>
+                                          <Label text="Get data every not working" />
                                           <Button fx:id="buttonGenerateSenScripts" alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#generateSenScripts" prefHeight="34.0" text="Generate SenScript" textAlignment="CENTER">
                                              <font>
                                                 <Font size="11.0" />

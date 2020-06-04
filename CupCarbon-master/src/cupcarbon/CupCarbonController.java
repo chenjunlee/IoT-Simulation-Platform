@@ -5031,7 +5031,7 @@ public class CupCarbonController implements Initializable {
 	public void infoApply() {
 		long newTimeStart = Long.parseLong(txtUserStartTime.getText());
 		long newTimeEnd = Long.parseLong(txtUserEndTime.getText());
-		long newTimeDelay = Long.parseLong(txtUserFrequency.getText());
+		double newFrequency = Double.parseDouble(txtUserFrequency.getText());
 
 		if(UserList.users.isEmpty()) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -5045,7 +5045,14 @@ public class CupCarbonController implements Initializable {
 		User u = UserList.users.get(selectedUserIndex);
 		u.setTimeStart(newTimeStart);
 		u.setTimeEnd(newTimeEnd);
-		u.setTimeDelay(newTimeDelay);
+		u.setPreferredFrequency(newFrequency);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation");
+		alert.setHeaderText(null);
+		alert.setContentText("Time applied");
+		alert.showAndWait();
+		
+		
 	}
 	
 	/**

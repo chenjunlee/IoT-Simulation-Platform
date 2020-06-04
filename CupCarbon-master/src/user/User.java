@@ -54,9 +54,17 @@ public class User {
 
 	public double preferredLatency = 10.0; //>= 10 ms
 	public double preferredThroughput = 0.0; //>= 0kbit
-	public double preferredFrequency = 0.0; //1 minutes = 3600*1000 ms  - get data every seconds
+	public double preferredFrequency = 0; //1 minutes = 3600*1000 ms  - get data every seconds
 	public long startTime = 0;					//start time to be activated (on simulation timeline)
 	public long endTime = 64000;				//end time to be deactivated (on simulation timeline)
+	public double lastReceivedTime = 0; // last received data time
+
+	public double getLastReceivedTime() {
+		return lastReceivedTime;
+	}
+	public void setLastReceivedTime(double lastReceivedTime) {
+		this.lastReceivedTime = lastReceivedTime;
+	}
 
 	//Chenjun
 	public BaseStation userStation = null;

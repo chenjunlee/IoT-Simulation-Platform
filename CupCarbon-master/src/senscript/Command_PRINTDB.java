@@ -68,9 +68,27 @@ public class Command_PRINTDB extends Command {
 		}
 		
 		for(User u : users) {
+			// duration
+			if(WisenSimulation.time < u.getTimeStart() || WisenSimulation.time > u.getTimeEnd()) {
+				System.out.println(u.getName() + " is not ready for time: " + WisenSimulation.time+ " Reason: Not in the duration.");
+				continue;
+			}
+			// frequency
+			if(WisenSimulation.time - u.getLastReceivedTime() < u.getPreferredFrequency() && u.getLastReceivedTime() > 0) {
+				System.out.println(u.getName() + " is not ready for time: " + WisenSimulation.time + " Reason: frequency is not satisfied.");
+				continue;
+			}
+			
+			
+			u.setLastReceivedTime(WisenSimulation.time);
 			Vector<SensorNode> nodes = u.getSensorsInsideArea();
 			int sensorID = Integer.parseInt(tab[2]);
 			SensorNode s = DeviceList.getSensorNodeById(sensorID);
+			// get rid of routers
+			if(!s.getScriptFileName().contains("Sensor")) {
+				System.out.println("ignore routers " + "name: " + s.getName());
+				continue;
+			}
 			if(nodes.contains(s)) {
 				MongoCollection<Document> project = DBMethods.getDB("cs682").getCollection("result");
 				Document document = new Document();
