@@ -98,8 +98,8 @@ public class UserList {
 			user.setPreferredLatency(SelectedUser.getDouble("preferredLatency"));
 			user.setPreferredThroughput(SelectedUser.getDouble("preferredThroughput"));
 			user.setPreferredFrequency(SelectedUser.getDouble("preferredFrequency"));
-			user.startTime = SelectedUser.getLong("startTime");
-			user.endTime = SelectedUser.getLong("endTime");
+			user.startTime = (long)SelectedUser.getInteger("startTime");
+			user.endTime = (long)SelectedUser.getInteger("endTime");
 
 
 			users.add(user);

@@ -191,7 +191,10 @@ def genUsers(longitude1, latitude1, longitude2, latitude2, num):
                 Win = "true"
             else:
                 Win = "false"
-            writer.writerow(["user", "true", "true", userName, area1[1], area2[1], area1[0], area2[0], userPos[0], userPos[1], Tem, Hum, Wat, Lig, Gas, Win, "false", 10.0, 0.0, 0.0, 0, 64000])
+            
+            freq = random.randint(2, 10)
+            freq = freq * 1.0
+            writer.writerow(["user", "true", "true", userName, area1[1], area2[1], area1[0], area2[0], userPos[0], userPos[1], Tem, Hum, Wat, Lig, Gas, Win, "false", 10.0, 0.0, freq, 0, 64000])
             userID = userID + 1
             num = num -1
 
@@ -214,4 +217,4 @@ def genRanPoint(longitude1, latitude1, longitude2, latitude2):
     return res
 
 
-genSimulationUnit(-71.0446572303772, 42.319177010972695, -71.03641748428345, 42.31097379616, 100, 2)
+genSimulationUnit(-71.0446572303772, 42.319177010972695, -71.03641748428345, 42.31097379616, 100, 6)

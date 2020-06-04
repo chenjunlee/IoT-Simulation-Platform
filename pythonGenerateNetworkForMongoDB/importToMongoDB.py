@@ -42,3 +42,6 @@ print(x.deleted_count, " documents deleted in proj_preferences.")
 df = pd.read_csv("Project.csv", na_filter=False)
 records_ = df.to_dict(orient = 'records')
 result = db.proj_preferences.insert_many(records_ )
+
+x = db.result.delete_many({})
+print(x.deleted_count, " documents deleted in result.")
