@@ -100,10 +100,12 @@ public class UserList {
 			user.setPreferredFrequency(SelectedUser.getDouble("preferredFrequency"));
 //			user.startTime = (long)SelectedUser.getInteger("startTime");
 //			user.endTime = (long)SelectedUser.getInteger("endTime");
-			Object endTime = SelectedUser.get("endTime");
-			Object startTime = SelectedUser.get("startTime");
-			user.endTime = (long) endTime;
-			user.startTime = (long) startTime;
+			Object endTime = SelectedUser.get("endTime"); 
+			Object startTime = SelectedUser.get("startTime"); // if any error happened , startTime may extend the limit of interger
+			int temp = (int) endTime;
+			user.endTime = (long) temp;
+			temp = (int) startTime;
+			user.startTime = (long) temp;
 
 
 			users.add(user);
