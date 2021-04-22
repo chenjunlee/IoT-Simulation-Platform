@@ -1,4 +1,9 @@
 # IoT-Simulation-Platform
+
+This research project is partially supported by the US National Science Foundation award number CNS-161889.
+
+We studied an existing IoT Simulator which allows user simulating the activities of sharing data in multiple scenarios. Particularly, we customized the simulator for simulating the autonomous vehicle (AV) time-sharing services. The simulator was built with the geographic map database of Google and enables us to evaluate the proposed technique with or without privacy-preserving techniques using real-time traffic. In other IoT scenarios, we evaluated the data communication of simulated IoT devices based on different metrics such as delay, packet lost, useful payload in scenarios of encrypted or unencrypted communication.
+
 Please go to CupCarbon official site download user guide, learn the basic CupCarbon first.
 
 ### Our IoT-Simulation-Platform User Document is 'IoT-Simulation-Platform User Document.pdf'
